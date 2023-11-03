@@ -1,0 +1,30 @@
+{
+  "name": "docker-project-boilerplate",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "turbo run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akbarnafisa/docker-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akbarnafisa/docker-project/issues"
+  },
+  "homepage": "https://github.com/akbarnafisa/docker-project#readme",
+  "devDependencies": {
+    "prettier": "^2.8.8",
+    "turbo": "^1.9.8"
+  }
+}
