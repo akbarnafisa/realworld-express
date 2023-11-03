@@ -11,14 +11,14 @@ export default function createUserToken(user: Pick<User, 'id' | 'email' | 'usern
   }
 
   return jwt.sign(
-    JSON.stringify({
+    {
       id: user.id,
       username: user.username,
       email: user.email,
-    }),
+    },
     secret,
     {
-      expiresIn: '2d'
-    }
+      expiresIn: '7d',
+    },
   );
 }

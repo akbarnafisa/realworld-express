@@ -35,12 +35,15 @@
 
 import express from 'express';
 import usersRoute from './routes/api/users';
+import userRoute from './routes/api/user';
+
 import { generalErrorHandler } from './middleware/errorHandling';
 
 const app = express();
 app.use(express.json());
 
 app.use('/api/users', usersRoute);
+app.use('/api/user', userRoute);
 
 app.get('/', (_req, res) => {
   return res.send('hello world');
