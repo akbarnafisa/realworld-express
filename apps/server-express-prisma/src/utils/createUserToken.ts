@@ -17,5 +17,8 @@ export default function createUserToken(user: Pick<User, 'id' | 'email' | 'usern
       email: user.email,
     }),
     secret,
+    {
+      expiresIn: '2d'
+    }
   );
 }
