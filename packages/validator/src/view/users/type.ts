@@ -7,3 +7,12 @@ export interface UserAuthResponseType {
     username: string; // String!
   };
 }
+
+export interface ProfileResponseType {
+  user: {
+    bio: string | null; // String
+    following: boolean; // Boolean!
+    image: string | null; // String
+    username: string; // String!
+  };
+}
