@@ -8,3 +8,10 @@ export interface UserLoginInputType {
   email: string;
   password: string;
 }
+
+
+export interface TokenPayload {
+  id: number,
+  username: string
+  email: string
+}

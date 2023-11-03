@@ -6,6 +6,7 @@ import {
   userViewer,
   usersLoginInputSchema,
   UserLoginInputType,
+  TokenPayload,
 } from 'validator';
 import { prismaClient } from '../../application/database';
 import { checkPassword, createUserToken, hashPassword } from '../../utils/auth';
@@ -25,7 +26,7 @@ export const registerService = async (request: Request) => {
     });
 
     const { id, username, email } = res;
-    const payload = { id, username, email };
+    const payload: TokenPayload = { id, username, email };
 
     return userViewer(res, createUserToken(payload));
   } catch (e) {
@@ -55,9 +56,9 @@ export const loginService = async (request: Request) => {
   if (!isPasswordCorrect) {
     throw new ResponseError(422, 'Email or password is not correct!');
   }
-  
+
   const { id, username, email } = user;
-  const tokenPayload = { id, username, email };
+  const tokenPayload: TokenPayload = { id, username, email };
 
   return userViewer(user, createUserToken(tokenPayload));
 };

@@ -18,6 +18,9 @@ export const createUserToken = (user: Pick<User, 'id' | 'email' | 'username'>) =
       email: user.email,
     }),
     secret,
+    {
+      expiresIn: '2d'
+    }
   );
 };
 

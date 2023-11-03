@@ -1,3 +1,9 @@
 export interface UserAuthResponseType {
-  user: { email: string; token: string; username: string; bio: string | null; image: string | null };
+  user: {
+    bio?: string | null; // String
+    email: string; // String!
+    image?: string | null; // String
+    token?: string | null; // String
+    username: string; // String!
+  };
 }

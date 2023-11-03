@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { registerService } from '../../service/users';
+import { registerService, loginService } from '../../service/users';
 
 export const registerController: RequestHandler = async (req, res, next) => {
   try {
@@ -15,7 +15,7 @@ export const registerController: RequestHandler = async (req, res, next) => {
 
 export const loginController: RequestHandler = async (req, res, next) => {
   try {
-    const result = await registerService(req.body);
+    const result = await loginService(req.body);
     res.status(200).json({
       data: result,
     });
