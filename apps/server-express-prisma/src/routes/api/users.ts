@@ -16,5 +16,6 @@ import { Router } from 'express';
 const router = Router();
 
 router.post('/', usersRegister);
+router.post('/login', usersRegister);
 
 export default router;
