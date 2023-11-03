@@ -38,6 +38,11 @@ const authenticator = (req: Request, _: Response, next: NextFunction) => {
 
   const payload = verifyToken(token) as TokenPayload;
 
+  if (!payload || !payload.id) {
+    next(new Error('Invalid token'));
+    return;
+  }
+
   req.auth = payload;
   next();
 };

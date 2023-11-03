@@ -37,7 +37,8 @@ import express from 'express';
 import usersRoute from './routes/api/users';
 import userRoute from './routes/api/user';
 
-import { generalErrorHandler } from './middleware/errorHandling';
+import { generalErrorHandler, prismaErrorHandler } from './middleware/errorHandling';
+
 
 const app = express();
 app.use(express.json());
@@ -49,6 +50,6 @@ app.get('/', (_req, res) => {
   return res.send('hello world');
 });
 
-app.use(generalErrorHandler);
+app.use(prismaErrorHandler, generalErrorHandler);
 
 export default app;
