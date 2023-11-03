@@ -12,15 +12,15 @@ export const createUserToken = (user: Pick<User, 'id' | 'email' | 'username'>) =
   }
 
   return jwt.sign(
-    JSON.stringify({
+    {
       id: user.id,
       username: user.username,
       email: user.email,
-    }),
+    },
     secret,
     {
-      expiresIn: '2d'
-    }
+      expiresIn: '7d',
+    },
   );
 };
 
@@ -29,7 +29,6 @@ export const hashPassword = (password: string) => {
   return bcrypt.hashSync(password, saltRounds);
 };
 
-
 export const checkPassword = (password: string, hash: string) => {
-  return bcrypt.compareSync(password, hash)
-}
+  return bcrypt.compareSync(password, hash);
+};
