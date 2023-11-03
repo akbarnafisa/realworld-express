@@ -1,31 +1,33 @@
-// register
+// register or login
 
-# POST http://localhost:5000/api/users
-# Content-Type: application/json
-# Accept: application/json
-
-# {
-#   "username" : "boedhi",
-#   "email" : "boedhi@boedhi.com",
-#   "password" : "rahasia"
-# }
-
-
-# POST http://localhost:4000/api/users
-# Content-Type: application/json
-# Accept: application/json
-
-# {
-#   "username" : "boedhi",
-#   "email" : "boedhi@boedhi.com"
-# }
-
-POST http://localhost:3000/api/users
+POST http://localhost:5000/api/users/login
 Content-Type: application/json
 Accept: application/json
 
 {
-  "username" : "wew",
-  "email" : "boedhi@asd.com",
+  "email" : "boedhi@boedhi.com",
   "password" : "boedhi"
+}
+
+// get
+
+GET http://localhost:5000/api/user/current
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSJ9.4NKyEEEmlGH3vu_LkZ0hvQBQr2lccBDQETfrOS-Pu5Q
+
+
+
+// user
+
+PATCH http://localhost:5000/api/user/current
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSJ9.4NKyEEEmlGH3vu_LkZ0hvQBQr2lccBDQETfrOS-Pu5Q
+
+{
+  "email" : "boedhi@boedhi.com",
+  "username" : "boedhi",
+  "password": "boedhi",
+  "bio": "bio"
 }

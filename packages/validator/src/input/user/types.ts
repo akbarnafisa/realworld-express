@@ -1,7 +1,7 @@
 export interface UserUpdateInputType {
-  bio: String;
-  email?: String;
-  image: String;
-  password: String;
-  username?: String;
+  bio?: string | null; // String
+  email: string; // String!
+  image?: string | null; // String
+  password?: string | null; // String
+  username: string; // String!
 }
