@@ -18,17 +18,38 @@ model User {
   username   String    @unique
   followedBy Follows[] @relation("following")
   following  Follows[] @relation("follower")
+  articles   Article[]
+  // comments   Comment[]
+  // favorites  Favorites[]
 
   @@map("blog_user")
 }
 
 model Follows {
-  followerId Int @map("follower_id")
+  followerId  Int @map("follower_id")
   followingId Int @map("following_id")
 
-  follower User @relation("follower", fields: [followerId], references: [id])
+  follower  User @relation("follower", fields: [followerId], references: [id])
   following User @relation("following", fields: [followingId], references: [id])
 
   @@id([followerId, followingId])
   @@map("blog_follows")
+}
+
+model Article {
+  id             Int      @id @default(autoincrement())
+  slug           String   @unique
+  title          String
+  description    String
+  body           String
+  createdAt      DateTime @default(now()) @map("created_at")
+  updateAt       DateTime @default(now()) @map("updated_at")
+  // tags           ArticlesTags[]
+  author         User     @relation(fields: [authorId], references: [id])
+  authorId       Int      @map("author_id")
+  // favoritedBy    Favorites[]
+  // comments       Comment[]
+  favoritesCount Int      @default(0) @map("favorites_count")
+
+  @@map("blog_article")
 }
