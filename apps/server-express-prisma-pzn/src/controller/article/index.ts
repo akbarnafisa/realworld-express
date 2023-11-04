@@ -9,7 +9,7 @@ import {
 export const createArticleController: RequestHandler = async (req, res, next) => {
   try {
     const data = await createArticleService(req);
-    res.status(200).json({
+    res.status(201).json({
       data,
     });
   } catch (error) {

@@ -21,8 +21,6 @@ export const createArticleService = async (request: Request) => {
     throw new ResponseError(401, 'User unauthenticated!');
   }
 
-  console.log({ body: request.body });
-
   const { body, description, title } = await validate<ArticleCreateInputType>(articleInputSchema, request.body);
 
   const data = await prismaClient.article.create({
@@ -43,9 +41,49 @@ export const getArticleService = async (request: Request) => {
 };
 
 export const deleteArticleService = async (request: Request) => {
-  console.log(request);
+  const auth = request?.auth as TokenPayload | undefined;
+
+  if (!auth || !auth.id) {
+    throw new ResponseError(401, 'User unauthenticated!');
+  }
+
+  const { slug } = request.params;
+
+  const originArticle = await checkArticle(slug)
+  checkArticleOwner(auth.id, originArticle.authorId)
+
+  await prismaClient.article.delete({
+    where: {
+      slug,
+    },
+  });
+
+  return {
+    success: true,
+  };
 };
 
 export const updateArticleService = async (request: Request) => {
   console.log(request);
 };
+
+const checkArticle = async (slug: string) => {
+  const data = await prismaClient.article.findUnique({
+    where: {
+      slug
+    }
+  })
+
+  if (!data) {
+    throw new ResponseError(404, 'Article not found!')
+  }
+
+  return data
+}
+
+
+const checkArticleOwner = (currentUserId: number, authorId: number) => {
+  if (currentUserId !== authorId) {
+    throw new ResponseError(401, "User unauthorized!")
+  }
+}
