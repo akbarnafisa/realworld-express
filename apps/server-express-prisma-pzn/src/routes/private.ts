@@ -1,7 +1,14 @@
 import express from 'express';
 import { getUserController, updateUserController } from '../controller/user';
 import { getProfileController, followController, unFollowController } from '../controller/profile';
-import { createArticleController, deleteArticleController, updateArticleController } from '../controller/article';
+import {
+  createArticleController,
+  deleteArticleController,
+  updateArticleController,
+  favoriteArticleController,
+  unFavoriteArticleController,
+  getArticleController,
+} from '../controller/article';
 import { authenticate, optionalAuthenticate } from '../middleware/authMiddleware';
 
 const privateRouter = express.Router();
@@ -13,9 +20,11 @@ privateRouter.get('/api/user/:username', optionalAuthenticate, getProfileControl
 privateRouter.post('/api/user/:username/follow', authenticate, followController);
 privateRouter.post('/api/user/:username/unfollow', authenticate, unFollowController);
 
-privateRouter.post('/api/article', authenticate, createArticleController)
-privateRouter.delete('/api/article/:slug', authenticate, deleteArticleController)
-privateRouter.patch('/api/article/:slug', authenticate, updateArticleController)
-
+privateRouter.post('/api/article', authenticate, createArticleController);
+privateRouter.delete('/api/article/:slug', authenticate, deleteArticleController);
+privateRouter.patch('/api/article/:slug', authenticate, updateArticleController);
+privateRouter.get('/api/article/:slug', optionalAuthenticate, getArticleController)
+privateRouter.post('/api/article/:slug/favorite', authenticate, favoriteArticleController);
+privateRouter.post('/api/article/:slug/unfavorite', authenticate, unFavoriteArticleController);
 
 export { privateRouter };

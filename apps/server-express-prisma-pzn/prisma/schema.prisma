@@ -10,17 +10,18 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   bio        String?
-  email      String    @unique
+  email      String      @unique
   image      String?
   password   String
-  username   String    @unique
-  followedBy Follows[] @relation("following")
-  following  Follows[] @relation("follower")
+  username   String      @unique
+  followedBy Follows[]   @relation("following")
+  following  Follows[]   @relation("follower")
   articles   Article[]
   // comments   Comment[]
   // favorites  Favorites[]
+  Favorites  Favorites[]
 
   @@map("blog_user")
 }
@@ -37,19 +38,30 @@ model Follows {
 }
 
 model Article {
-  id             Int      @id @default(autoincrement())
-  slug           String   @unique
+  id             Int         @id @default(autoincrement())
+  slug           String      @unique
   title          String
   description    String
   body           String
-  createdAt      DateTime @default(now()) @map("created_at")
-  updateAt       DateTime @default(now()) @map("updated_at")
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updateAt       DateTime    @default(now()) @map("updated_at")
   // tags           ArticlesTags[]
-  author         User     @relation(fields: [authorId], references: [id])
-  authorId       Int      @map("author_id")
-  // favoritedBy    Favorites[]
+  author         User        @relation(fields: [authorId], references: [id])
+  authorId       Int         @map("author_id")
+  favoritedBy    Favorites[]
   // comments       Comment[]
-  // favoritesCount Int      @default(0) @map("favorites_count")
+  // favoritesCount Int         @default(0) @map("favorites_count")
 
   @@map("blog_article")
+}
+
+model Favorites {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId Int @map("article_id")
+
+  @@id([userId, articleId])
+  @@map("blog_favorites")
 }
