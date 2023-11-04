@@ -37,7 +37,13 @@ export const createArticleService = async (request: Request) => {
 };
 
 export const getArticleService = async (request: Request) => {
-  console.log(request);
+  const { slug } = request.params;
+  await checkArticle(slug);
+  return await prismaClient.article.findUnique({
+    where: {
+      slug,
+    },
+  });
 };
 
 export const deleteArticleService = async (request: Request) => {
@@ -49,8 +55,8 @@ export const deleteArticleService = async (request: Request) => {
 
   const { slug } = request.params;
 
-  const originArticle = await checkArticle(slug)
-  checkArticleOwner(auth.id, originArticle.authorId)
+  const originArticle = await checkArticle(slug);
+  checkArticleOwner(auth.id, originArticle.authorId);
 
   await prismaClient.article.delete({
     where: {
@@ -70,20 +76,19 @@ export const updateArticleService = async (request: Request) => {
 const checkArticle = async (slug: string) => {
   const data = await prismaClient.article.findUnique({
     where: {
-      slug
-    }
-  })
+      slug,
+    },
+  });
 
   if (!data) {
-    throw new ResponseError(404, 'Article not found!')
+    throw new ResponseError(404, 'Article not found!');
   }
 
-  return data
-}
-
+  return data;
+};
 
 const checkArticleOwner = (currentUserId: number, authorId: number) => {
   if (currentUserId !== authorId) {
-    throw new ResponseError(401, "User unauthorized!")
+    throw new ResponseError(401, 'User unauthorized!');
   }
-}
+};
