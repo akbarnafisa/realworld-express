@@ -13,9 +13,9 @@ privateRouter.get('/api/user/:username', optionalAuthenticate, getProfileControl
 privateRouter.post('/api/user/:username/follow', authenticate, followController);
 privateRouter.post('/api/user/:username/unfollow', authenticate, unFollowController);
 
-privateRouter.post('/api/aritcle/:slug', authenticate, createArticleController)
-privateRouter.delete('/api/aritcle/:slug', authenticate, deleteArticleController)
-privateRouter.patch('/api/aritcle/:slug', authenticate, updateArticleController)
-privateRouter.delete('/api/aritcle/:slug', optionalAuthenticate, getArticleController)
+privateRouter.post('/api/article', authenticate, createArticleController)
+privateRouter.delete('/api/article/:slug', authenticate, deleteArticleController)
+privateRouter.patch('/api/article/:slug', authenticate, updateArticleController)
+privateRouter.delete('/api/article/:slug', optionalAuthenticate, getArticleController)
 
 export { privateRouter };

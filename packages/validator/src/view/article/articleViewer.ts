@@ -1,7 +1,7 @@
 import { Article } from '@prisma/client';
 import type { ArticleResponseType } from './type';
 
-export const userViewer = (article: Article): ArticleResponseType => {
+export const articleViewer = (article: Article): ArticleResponseType => {
   return  {
     article: {
       body: article.body,
