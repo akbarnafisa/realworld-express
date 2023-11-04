@@ -10,12 +10,25 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  bio      String?
-  email    String  @unique
-  image    String?
-  password String
-  username String  @unique
+  id         Int       @id @default(autoincrement())
+  bio        String?
+  email      String    @unique
+  image      String?
+  password   String
+  username   String    @unique
+  followedBy Follows[] @relation("following")
+  following  Follows[] @relation("follower")
 
   @@map("blog_user")
+}
+
+model Follows {
+  followerId Int @map("follower_id")
+  followingId Int @map("following_id")
+
+  follower User @relation("follower", fields: [followerId], references: [id])
+  following User @relation("following", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+  @@map("blog_follows")
 }

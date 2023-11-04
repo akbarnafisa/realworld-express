@@ -1,11 +1,15 @@
 import express from 'express';
 import { getUserController, updateUserController } from '../controller/user';
-import { authenticate } from '../middleware/authMiddleware';
+import { getProfileController, followController, unFollowController } from '../controller/profile';
+import { authenticate, optionalAuthenticate } from '../middleware/authMiddleware';
 
 const privateRouter = express.Router();
 
-privateRouter.use(authenticate);
-privateRouter.get('/api/user/current', getUserController);
-privateRouter.patch('/api/user/current', updateUserController);
+privateRouter.get('/api/user/current', authenticate, getUserController);
+privateRouter.patch('/api/user/current', authenticate, updateUserController);
+
+privateRouter.get('/api/user/:username', optionalAuthenticate, getProfileController);
+privateRouter.post('/api/user/:username/follow', authenticate, followController);
+privateRouter.post('/api/user/:username/unfollow', authenticate, unFollowController);
 
 export { privateRouter };

@@ -1,13 +1,21 @@
 import { User } from '@prisma/client';
+
 import type { ProfileResponseType } from './type';
 
-export const userViewer = (user: User): ProfileResponseType => {
-  return  {
+export const profileViewer = (
+  user: User,
+  {
+    following,
+  }: {
+    following: boolean;
+  },
+): ProfileResponseType => {
+  return {
     user: {
-      following: false,
+      following,
       username: user.username,
       bio: user.bio,
       image: user.image,
     },
-  };;
+  };
 };

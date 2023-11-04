@@ -24,3 +24,11 @@ export const authenticate = jwt({
   secret,
   getToken: getTokenInHeader,
 });
+
+
+export const optionalAuthenticate = jwt({
+  algorithms: ['HS256'],
+  secret,
+  credentialsRequired: false,
+  getToken: getTokenInHeader,
+});
