@@ -70,7 +70,32 @@ export const deleteArticleService = async (request: Request) => {
 };
 
 export const updateArticleService = async (request: Request) => {
-  console.log(request);
+  const auth = request?.auth as TokenPayload | undefined;
+
+  if (!auth || !auth.id) {
+    throw new ResponseError(401, 'User unauthenticated!');
+  }
+
+  const { slug } = request.params;
+
+  const originArticle = await checkArticle(slug);
+  checkArticleOwner(auth.id, originArticle.authorId);
+
+  const { body, description, title } = await validate<ArticleCreateInputType>(articleInputSchema, request.body);
+  const isTitleChanged = title !== originArticle.title
+  const data = await prismaClient.article.update({
+    where: {
+      slug
+    },
+    data: {
+      title: isTitleChanged ? title: undefined,
+      slug: isTitleChanged ? slugify(title) : undefined,
+      body,
+      description,
+    },
+  });
+
+  return articleViewer(data);
 };
 
 const checkArticle = async (slug: string) => {
