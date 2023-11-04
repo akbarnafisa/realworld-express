@@ -10,24 +10,53 @@ Accept: application/json
 }
 
 // get
-
-GET http://localhost:5000/api/user/current
+GET http://localhost:4000/api/user/current
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSJ9.4NKyEEEmlGH3vu_LkZ0hvQBQr2lccBDQETfrOS-Pu5Q
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5ODk5NTA2NCwiZXhwIjoxNjk5NTk5ODY0fQ.jQ6KhWK2cCkdTmIqJOsH3iJwuvIy1PJQLAYUTG6kQ84
 
 
 // user
-
-PATCH http://localhost:5000/api/user/current
+PATCH http://localhost:4000/api/user/current
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSJ9.4NKyEEEmlGH3vu_LkZ0hvQBQr2lccBDQETfrOS-Pu5Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5ODk5NTA2NCwiZXhwIjoxNjk5NTk5ODY0fQ.jQ6KhWK2cCkdTmIqJOsH3iJwuvIy1PJQLAYUTG6kQ84
 
 {
   "email" : "boedhi@boedhi.com",
-  "username" : "boedhi",
-  "password": "boedhi",
-  "bio": "bio"
+  "username" : "wew",
+  "bio": "moengngn"
 }
+
+
+// profile yourself
+GET http://localhost:5000/api/user/boedhi
+Content-Type: application/json
+Accept: application/json
+
+// profile other
+GET http://localhost:5000/api/user/wew
+Content-Type: application/json
+Accept: application/json
+
+
+// profile other with login
+GET http://localhost:5000/api/user/wew
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA3NDA4MSwiZXhwIjoxNjk5Njc4ODgxfQ.2zaeN-HGe79rs8Cpv9GNx4uYkhT1AUhEaWwmjSLeKxI
+
+
+
+// follow
+POST http://localhost:5000/api/user/wew/follow
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA3NDA4MSwiZXhwIjoxNjk5Njc4ODgxfQ.2zaeN-HGe79rs8Cpv9GNx4uYkhT1AUhEaWwmjSLeKxI
+
+// unfollow
+POST http://localhost:5000/api/user/wew/unfollow
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA3NDA4MSwiZXhwIjoxNjk5Njc4ODgxfQ.2zaeN-HGe79rs8Cpv9GNx4uYkhT1AUhEaWwmjSLeKxI
+

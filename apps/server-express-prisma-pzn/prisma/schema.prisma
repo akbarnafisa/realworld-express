@@ -49,7 +49,7 @@ model Article {
   authorId       Int      @map("author_id")
   // favoritedBy    Favorites[]
   // comments       Comment[]
-  favoritesCount Int      @default(0) @map("favorites_count")
+  // favoritesCount Int      @default(0) @map("favorites_count")
 
   @@map("blog_article")
 }
