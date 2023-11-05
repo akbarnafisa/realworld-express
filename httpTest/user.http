@@ -1,5 +1,4 @@
-// register or login
-
+// login
 POST http://localhost:5000/api/users/login
 Content-Type: application/json
 Accept: application/json
@@ -7,6 +6,17 @@ Accept: application/json
 {
   "email" : "boedhi@boedhi.com",
   "password" : "boedhi"
+}
+
+// register
+POST http://localhost:5000/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "ojin",
+  "email" : "ojin@ojin.com",
+  "password" : "ojin"
 }
 
 // get
@@ -47,7 +57,6 @@ Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA3NDA4MSwiZXhwIjoxNjk5Njc4ODgxfQ.2zaeN-HGe79rs8Cpv9GNx4uYkhT1AUhEaWwmjSLeKxI
 
 
-
 // follow
 POST http://localhost:5000/api/user/wew/follow
 Content-Type: application/json
@@ -60,3 +69,101 @@ Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA3NDA4MSwiZXhwIjoxNjk5Njc4ODgxfQ.2zaeN-HGe79rs8Cpv9GNx4uYkhT1AUhEaWwmjSLeKxI
 
+
+
+// create article
+POST http://localhost:5000/api/article
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInVzZXJuYW1lIjoib2ppbiIsImVtYWlsIjoib2ppbkBvamluLmNvbSIsImlhdCI6MTY5OTA4NDAyNSwiZXhwIjoxNjk5Njg4ODI1fQ.WywiyPpZkZPNCq2lZ0NqoFYgEgcHfX2SYXoT8ADq18E
+
+{
+  "title" : "title",
+  "description" : "description",
+  "body": "body"
+}
+
+POST http://localhost:5000/api/article
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA4NDEwOSwiZXhwIjoxNjk5Njg4OTA5fQ.qkuyApHbQUd2NFqaxy8YnbsBjXqfD3XomRwIlo7PdWY
+
+{
+  "title" : "title",
+  "description" : "description",
+  "body": "body"
+}
+
+// delete article
+DELETE http://localhost:5000/api/article/title-i5ohos
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA3NDA4MSwiZXhwIjoxNjk5Njc4ODgxfQ.2zaeN-HGe79rs8Cpv9GNx4uYkhT1AUhEaWwmjSLeKxI
+
+// get article
+GET http://localhost:5000/api/article/title-i5ohos
+Content-Type: application/json
+Accept: application/json
+
+
+// favorite article
+POST http://localhost:5000/api/article/title-fxc2mm/favorite
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInVzZXJuYW1lIjoib2ppbiIsImVtYWlsIjoib2ppbkBvamluLmNvbSIsImlhdCI6MTY5OTA4NDAyNSwiZXhwIjoxNjk5Njg4ODI1fQ.WywiyPpZkZPNCq2lZ0NqoFYgEgcHfX2SYXoT8ADq18E
+
+
+POST http://localhost:5000/api/article/title-fxc2mm/favorite
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA4NDEwOSwiZXhwIjoxNjk5Njg4OTA5fQ.qkuyApHbQUd2NFqaxy8YnbsBjXqfD3XomRwIlo7PdWY
+
+
+GET http://localhost:5000/api/article/title-fxc2mm
+Content-Type: application/json
+Accept: application/json
+
+GET http://localhost:5000/api/article/title-fxc2mm
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA4NDEwOSwiZXhwIjoxNjk5Njg4OTA5fQ.qkuyApHbQUd2NFqaxy8YnbsBjXqfD3XomRwIlo7PdWY
+
+
+// unfavorite article
+POST http://localhost:5000/api/article/title-fxc2mm/unfavorite
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsInVzZXJuYW1lIjoib2ppbiIsImVtYWlsIjoib2ppbkBvamluLmNvbSIsImlhdCI6MTY5OTA4NDAyNSwiZXhwIjoxNjk5Njg4ODI1fQ.WywiyPpZkZPNCq2lZ0NqoFYgEgcHfX2SYXoT8ADq18E
+
+
+POST http://localhost:5000/api/article/title-fxc2mm/unfavorite
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA4NDEwOSwiZXhwIjoxNjk5Njg4OTA5fQ.qkuyApHbQUd2NFqaxy8YnbsBjXqfD3XomRwIlo7PdWY
+
+
+GET http://localhost:5000/api/article/title-fxc2mm
+Content-Type: application/json
+Accept: application/json
+
+
+// comment
+POST http://localhost:5000/api/article/title-fxc2mm/comments
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA4NDEwOSwiZXhwIjoxNjk5Njg4OTA5fQ.qkuyApHbQUd2NFqaxy8YnbsBjXqfD3XomRwIlo7PdWY
+
+{
+  "body": "asozzzi"
+}
+
+// delete comment
+
+DELETE  http://localhost:5000/api/article/title-fxc2mm/comments/2
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5OTA4NDEwOSwiZXhwIjoxNjk5Njg4OTA5fQ.qkuyApHbQUd2NFqaxy8YnbsBjXqfD3XomRwIlo7PdWY
+
+{
+  "body": "asozzzi"
+}
