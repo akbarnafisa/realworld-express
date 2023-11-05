@@ -1,21 +1,33 @@
 import { Comment, User } from '@prisma/client';
 
-import type { CommentResponseType } from './type';
+import type { CommentResponseType, CommentsResponseType } from './type';
 
-interface CommentType extends Comment {
-  username: User['username']
-  image: User['image']
-}
+type CommentType = Comment & {
+  author: {
+    username: string;
+    image: string | null;
+  };
+};
 
-export const commentViewer = (comments: CommentType[]): CommentResponseType => {
+export const commentViewer = (comment: CommentType): CommentResponseType => {
   return {
-    comments: comments.map((comment) => ({
+    comment: {
       body: comment.body,
       createdAt: comment.createdAt,
       id: comment.id,
       updatedAt: comment.updatedAt,
-      username: comment.username,
-      image: comment.image,
-    })),
+      user: {
+        username: comment.author.username,
+        image: comment.author.image,
+      },
+    },
+  };
+};
+
+export const commentsViewer = (comments: CommentType[]): CommentsResponseType => {
+  return {
+    comments: comments.map((comment) => {
+      return commentViewer(comment).comment;
+    }),
   };
 };

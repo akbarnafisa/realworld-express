@@ -20,7 +20,7 @@ export const articleViewer = (article: ArticleExtendInfo): ArticleResponseType =
       id: article.id,
       slug: article.slug,
       title: article.title,
-      updateAt: article.updateAt,
+      updatedAt: article.updatedAt,
       authorId: article.authorId,
       favoritesCount,
       favorited: article.favorited || false,

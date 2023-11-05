@@ -30,7 +30,7 @@ export const createArticleService = async (request: Request) => {
       description,
       title,
       slug: slugify(title),
-      authorId: auth.id,
+      author: { connect: { id: auth.id } },
     },
   });
 
@@ -42,8 +42,6 @@ export const getArticleService = async (request: Request) => {
   const auth = request?.auth as TokenPayload | undefined;
   let favorited = false;
 
-  console.log({ auth })
-
   if (auth) {
     const isArticleFavorited = await prismaClient.article
       .findUnique({
@@ -51,10 +49,10 @@ export const getArticleService = async (request: Request) => {
       })
       .favoritedBy({
         select: {
-          articleId: true
+          articleId: true,
         },
         where: {
-          userId: auth.id
+          userId: auth.id,
         },
       });
 
@@ -66,6 +64,14 @@ export const getArticleService = async (request: Request) => {
       slug,
     },
     include: {
+      // favoritedBy: {
+      //   select: {
+      //     userId: true,
+      //   },
+      //   where: {
+      //     userId: auth?.id,
+      //   },
+      // },
       _count: {
         select: {
           favoritedBy: true,
@@ -78,7 +84,7 @@ export const getArticleService = async (request: Request) => {
     throw new ResponseError(404, 'Article not found!');
   }
 
-  return articleViewer({...data, favorited});
+  return articleViewer({ ...data, favorited });
 };
 
 export const deleteArticleService = async (request: Request) => {
@@ -208,7 +214,7 @@ export const unFavoriteArticleService = async (request: Request) => {
   }
 };
 
-const checkArticle = async (slug: string) => {
+export const checkArticle = async (slug: string) => {
   const data = await prismaClient.article.findUnique({
     where: {
       slug,

@@ -7,7 +7,7 @@ export interface ArticleResponseType {
     id: number; // Int!
     slug: string; // String!
     title: string; // String!
-    updateAt: Date; // DateTime!
+    updatedAt: Date; // DateTime!
     authorId: number;
     favorited: boolean;
     // tagList
