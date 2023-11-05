@@ -22,6 +22,7 @@ model User {
   // comments   Comment[]
   // favorites  Favorites[]
   Favorites  Favorites[]
+  Comment    Comment[]
 
   @@map("blog_user")
 }
@@ -38,18 +39,18 @@ model Follows {
 }
 
 model Article {
-  id             Int         @id @default(autoincrement())
-  slug           String      @unique
-  title          String
-  description    String
-  body           String
-  createdAt      DateTime    @default(now()) @map("created_at")
-  updateAt       DateTime    @default(now()) @map("updated_at")
+  id          Int         @id @default(autoincrement())
+  slug        String      @unique
+  title       String
+  description String
+  body        String
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @default(now()) @map("updated_at")
   // tags           ArticlesTags[]
-  author         User        @relation(fields: [authorId], references: [id])
-  authorId       Int         @map("author_id")
-  favoritedBy    Favorites[]
-  // comments       Comment[]
+  author      User        @relation(fields: [authorId], references: [id])
+  authorId    Int         @map("author_id")
+  favoritedBy Favorites[]
+  comments    Comment[]
   // favoritesCount Int         @default(0) @map("favorites_count")
 
   @@map("blog_article")
@@ -60,8 +61,21 @@ model Favorites {
   userId Int  @map("user_id")
 
   article   Article @relation(fields: [articleId], references: [id])
-  articleId Int @map("article_id")
+  articleId Int     @map("article_id")
 
   @@id([userId, articleId])
   @@map("blog_favorites")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  articleId Int      @map("article_id")
+  aritcle   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId  Int      @map("author_id")
+  author    User     @relation(fields: [authorId], references: [id])
+
+  @@map("blog_comment")
 }
