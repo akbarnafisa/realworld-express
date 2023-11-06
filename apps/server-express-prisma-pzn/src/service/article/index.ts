@@ -32,6 +32,13 @@ export const createArticleService = async (request: Request) => {
       slug: slugify(title),
       author: { connect: { id: auth.id } },
     },
+    include: {
+      _count: {
+        select: {
+          favoritedBy: true,
+        },
+      },
+    },
   });
 
   return articleViewer(data);
@@ -134,6 +141,13 @@ export const updateArticleService = async (request: Request) => {
       body,
       description,
     },
+    include: {
+      _count: {
+        select: {
+          favoritedBy: true,
+        },
+      },
+    },
   });
 
   return articleViewer(data);
@@ -184,9 +198,10 @@ export const unFavoriteArticleService = async (request: Request) => {
     throw new ResponseError(401, 'User unauthenticated!');
   }
 
+  const { slug } = request.params;
+  const originArticle = await checkArticle(slug);
+
   try {
-    const { slug } = request.params;
-    const originArticle = await checkArticle(slug);
     await prismaClient.article.update({
       where: {
         slug,

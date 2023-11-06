@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt';
 import supertest from 'supertest';
 
 export const app = web;
-export const NOT_FOUND_USER_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY1LCJ1c2VybmFtZSI6InRlc3RpZC11c2VybmFtZSIsImVtYWlsIjoidGVzdGlkQHRlc3RpZHouY29tIiwiaWF0IjoxNjk5MjQ1MjYwLCJleHAiOjE2OTk4NTAwNjB9.jgU6BSB0B9cx_oIsnJjogf-zTUvh6T0yBlle-soBWVg'
+export const NOT_FOUND_USER_TOKEN =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY1LCJ1c2VybmFtZSI6InRlc3RpZC11c2VybmFtZSIsImVtYWlsIjoidGVzdGlkQHRlc3RpZHouY29tIiwiaWF0IjoxNjk5MjQ1MjYwLCJleHAiOjE2OTk4NTAwNjB9.jgU6BSB0B9cx_oIsnJjogf-zTUvh6T0yBlle-soBWVg';
 
 export const removeTestUser = async (id?: string) => {
   await prismaClient.user.deleteMany({
@@ -28,7 +29,6 @@ export const createTestUser = async (id?: string) => {
         password: bcrypt.hashSync('password', 10),
       },
     });
-
   } catch (error) {}
 };
 
@@ -42,4 +42,14 @@ export const getToken = async (id: string) => {
       password: 'password',
     });
   return result.body?.data?.user?.token;
+};
+
+export const createArticles = async (token: string) => {
+  const result = await supertest(app).post('/api/article').set('Authorization', `Bearer ${token}`).send({
+    description: 'test-description',
+    body: 'test-body',
+    title: 'test-title',
+  });
+
+  return result.body?.data
 };
