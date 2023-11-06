@@ -60,7 +60,7 @@ export const followService = async (request: Request) => {
     }
 
     if (followingUser.id === auth.id) {
-      throw new ResponseError(422, 'Unable to unfollow yourself');
+      throw new ResponseError(422, 'Unable to follow yourself');
     }
 
     await prismaClient.user.update({

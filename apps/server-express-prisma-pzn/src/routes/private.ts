@@ -18,6 +18,7 @@ const privateRouter = express.Router();
 // user
 privateRouter.get('/api/user/current', authenticate, getUserController);
 privateRouter.patch('/api/user/current', authenticate, updateUserController);
+// profie
 privateRouter.get('/api/user/:username', optionalAuthenticate, getProfileController);
 privateRouter.post('/api/user/:username/follow', authenticate, followController);
 privateRouter.post('/api/user/:username/unfollow', authenticate, unFollowController);
