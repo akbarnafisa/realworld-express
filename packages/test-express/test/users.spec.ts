@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import { app, removeTestUser, createTestUser } from './utils';
 
-describe('POST /api/users', () => {
+describe('POST /api/users - register', () => {
   afterEach(async () => {
     await removeTestUser();
   });
@@ -165,7 +165,7 @@ describe('POST /api/users', () => {
   });
 });
 
-describe('POST /api/users/login', () => {
+describe('POST /api/users/login - login', () => {
   const API = '/api/users/login';
   beforeEach(async () => {
     await createTestUser();
