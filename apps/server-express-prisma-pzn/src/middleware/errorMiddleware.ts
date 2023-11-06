@@ -18,7 +18,7 @@ export const errorMiddleware: ErrorRequestHandler = async (err, _, res, next) =>
   } else {
     logger.error(err);
     res
-      .status(500)
+      .status(err.status || 500)
       .json({
         errors: err.message,
       })
