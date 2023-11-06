@@ -35,7 +35,7 @@ export const registerService = async (request: Request) => {
         throw new ResponseError(422, 'Username or email had been used');
       }
     }
-    return null;
+    throw new Error(e as string);
   }
 };
 

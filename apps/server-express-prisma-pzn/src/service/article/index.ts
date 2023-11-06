@@ -173,6 +173,7 @@ export const favoriteArticleService = async (request: Request) => {
         throw new ResponseError(422, 'Article had been favorited!');
       }
     }
+    throw new Error(e as string);
   }
 };
 

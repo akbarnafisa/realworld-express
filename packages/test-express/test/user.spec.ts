@@ -10,6 +10,10 @@ describe('GET /api/user/current - get current user', () => {
     token = await getToken(userId);
   });
 
+  afterAll(async () => {
+    await removeTestUser(userId);
+  });
+
   it('should error if token is not provided', async () => {
     const result = await supertest(app).get(TEST_API).send();
     expect(result.status).toEqual(401);
@@ -47,6 +51,10 @@ describe('PATCH /api/user/current - update current user', () => {
   beforeAll(async () => {
     await removeTestUser(userId);
     token = await getToken(userId);
+  });
+
+  afterAll(async () => {
+    await removeTestUser(userId);
   });
 
   describe('should error ', () => {

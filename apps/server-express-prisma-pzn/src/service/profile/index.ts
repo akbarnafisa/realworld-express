@@ -54,15 +54,15 @@ export const followService = async (request: Request) => {
     throw new ResponseError(404, 'User not found!');
   }
 
+  if (!auth || !auth.id) {
+    throw new ResponseError(401, 'User unauthenticated!');
+  }
+
+  if (followingUser.id === auth.id) {
+    throw new ResponseError(422, 'Unable to follow yourself');
+  }
+
   try {
-    if (!auth || !auth.id) {
-      throw new ResponseError(401, 'User unauthenticated!');
-    }
-
-    if (followingUser.id === auth.id) {
-      throw new ResponseError(422, 'Unable to follow yourself');
-    }
-
     await prismaClient.user.update({
       where: {
         id: followingUser.id,
@@ -88,9 +88,10 @@ export const followService = async (request: Request) => {
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2017') {
-        throw new ResponseError(422, 'User unauthenticated!');
+        throw new ResponseError(422, 'User already followed');
       }
     }
+    throw new Error(e as string);
   }
 };
 
@@ -104,15 +105,15 @@ export const unFollowService = async (request: Request) => {
     throw new ResponseError(404, 'User not found!');
   }
 
+  if (!auth || !auth.id) {
+    throw new ResponseError(401, 'User unauthenticated!');
+  }
+
+  if (followingUser.id === auth.id) {
+    throw new ResponseError(422, 'Unable to unfollow yourself');
+  }
+
   try {
-    if (!auth || !auth.id) {
-      throw new ResponseError(401, 'User unauthenticated!');
-    }
-
-    if (followingUser.id === auth.id) {
-      throw new ResponseError(422, 'Unable to unfollow yourself');
-    }
-
     await prismaClient.user.update({
       where: {
         id: followingUser.id,
@@ -138,6 +139,7 @@ export const unFollowService = async (request: Request) => {
         throw new ResponseError(422, 'User already unfollowed');
       }
     }
+    throw new Error(e as string);
   }
 };
 
