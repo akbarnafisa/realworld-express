@@ -125,13 +125,11 @@ describe('POST /api/users - register', () => {
   });
 
   describe('should error', () => {
-    it('if username is alreay registered', async () => {
-      await supertest(app).post('/api/users').send({
-        username: 'testid-username',
-        email: 'testid@testid.com',
-        password: 'password',
-      });
+    beforeEach(async () => {
+      await createTestUser();
+    });
 
+    it('if username is alreay registered', async () => {
       const result = await supertest(app).post('/api/users').send({
         username: 'testid-username',
         email: 'testid@testidzz.com',
@@ -145,12 +143,6 @@ describe('POST /api/users - register', () => {
     });
 
     it('if email is alreay registered', async () => {
-      await supertest(app).post('/api/users').send({
-        username: 'testid-username',
-        email: 'testid@testid.com',
-        password: 'password',
-      });
-
       const result = await supertest(app).post('/api/users').send({
         username: 'testid-usernamezz',
         email: 'testid@testid.com',
