@@ -69,6 +69,10 @@ describe('POST /api/user/:username/follow - follow user', () => {
     token = await getToken(userId);
   });
 
+  afterAll(async () => {
+    await removeTestUser(userId);
+  })
+
   describe('should error', () => {
     it('if user not logged in', async () => {
       const result = await supertest(app).post(TEST_API('123xx'));
@@ -112,6 +116,11 @@ describe('POST /api/user/:username/unfollow - unfollow user', () => {
     await createTestUser(secondUser);
     token = await getToken(userId);
   });
+
+  afterAll(async () => {
+    await removeTestUser(userId);
+  })
+  
   describe('should error', () => {
     it('if user not logged in', async () => {
       const result = await supertest(app).post(TEST_API('123xx'));
