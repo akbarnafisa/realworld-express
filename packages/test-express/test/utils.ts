@@ -49,6 +49,7 @@ export const createArticles = async (token: string) => {
     description: 'test-description',
     body: 'test-body',
     title: 'test-title',
+    tagList: ['test-tag']
   });
 
   return result.body?.data;

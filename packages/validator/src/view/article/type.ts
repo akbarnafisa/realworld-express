@@ -10,6 +10,6 @@ export interface ArticleResponseType {
     updatedAt: Date; // DateTime!
     authorId: number;
     favorited: boolean;
-    // tagList
+    tags?: string[]
   };
 }

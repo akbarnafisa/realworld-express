@@ -1,17 +1,21 @@
 import { Article } from '@prisma/client';
 import type { ArticleResponseType } from './type';
 
-
 type ArticleExtendInfo = Article & {
   _count?: {
-      favoritedBy: number;
+    favoritedBy: number;
   };
-  favorited?: boolean
-}
-
+  favorited?: boolean;
+  tags?: {
+    tag: {
+      name: string;
+    };
+  }[];
+};
 
 export const articleViewer = (article: ArticleExtendInfo): ArticleResponseType => {
   const favoritesCount = article?._count?.favoritedBy;
+  const tags = article.tags?.map((data) => data.tag.name)
   return {
     article: {
       body: article.body,
@@ -24,6 +28,7 @@ export const articleViewer = (article: ArticleExtendInfo): ArticleResponseType =
       authorId: article.authorId,
       favoritesCount,
       favorited: article.favorited || false,
+      tags,
     },
   };
 };

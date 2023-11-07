@@ -22,7 +22,10 @@ export const createArticleService = async (request: Request) => {
     throw new ResponseError(401, 'User unauthenticated!');
   }
 
-  const { body, description, title } = await validate<ArticleCreateInputType>(articleInputSchema, request.body);
+  const { body, description, title, tagList } = await validate<ArticleCreateInputType>(
+    articleInputSchema,
+    request.body,
+  );
 
   const data = await prismaClient.article.create({
     data: {
@@ -31,8 +34,29 @@ export const createArticleService = async (request: Request) => {
       title,
       slug: slugify(title),
       author: { connect: { id: auth.id } },
+      tags: {
+        create: tagList?.map((name: string) => {
+          return {
+            tag: {
+              connectOrCreate: {
+                where: { name },
+                create: { name },
+              },
+            },
+          };
+        }),
+      },
     },
     include: {
+      tags: {
+        select: {
+          tag: {
+            select: {
+              name: true,
+            }
+          }
+        }
+      },
       _count: {
         select: {
           favoritedBy: true,
@@ -79,6 +103,15 @@ export const getArticleService = async (request: Request) => {
       //     userId: auth?.id,
       //   },
       // },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              name: true,
+            }
+          }
+        }
+      },
       _count: {
         select: {
           favoritedBy: true,
@@ -146,6 +179,15 @@ export const updateArticleService = async (request: Request) => {
         select: {
           favoritedBy: true,
         },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              name: true,
+            }
+          }
+        }
       },
     },
   });

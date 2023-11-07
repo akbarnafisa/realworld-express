@@ -25,6 +25,7 @@ describe('POST /api/article - create article', () => {
       const result = await supertest(app).post(TEST_API).set('Authorization', `Bearer ${token}`).send({
         description: 'description',
         body: 'body',
+        tagList: ['test-tag']
       });
 
       expect(result.status).toEqual(400);
@@ -37,6 +38,7 @@ describe('POST /api/article - create article', () => {
   it('should allow me to create article', async () => {
     const result = await supertest(app).post(TEST_API).set('Authorization', `Bearer ${token}`).send({
       description: 'description',
+      tagList: ['test-tag'],
       body: 'body',
       title: 'title',
     });
@@ -49,6 +51,7 @@ describe('POST /api/article - create article', () => {
           body: 'body',
           createdAt: expect.any(String),
           description: 'description',
+          tags: ['test-tag'],
           favorited: false,
           favoritesCount: 0,
           id: expect.any(Number),
@@ -94,6 +97,7 @@ describe('GET /api/article/:slug - get article', () => {
           body: 'test-body',
           createdAt: expect.any(String),
           description: 'test-description',
+          tags: ['test-tag'],
           id: expect.any(Number),
           slug: expect.stringContaining('test-title-'),
           title: 'test-title',
@@ -118,6 +122,7 @@ describe('GET /api/article/:slug - get article', () => {
           body: 'test-body',
           createdAt: expect.any(String),
           description: 'test-description',
+          tags: ['test-tag'],
           id: expect.any(Number),
           slug: expect.stringContaining('test-title-'),
           title: 'test-title',
@@ -184,6 +189,7 @@ describe('PATCH /api/article/:slug - update article', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({
         description: 'description-123',
+        tagList: ['test-tag'],
         body: 'body-123',
         title: 'title-332',
       });
@@ -196,6 +202,7 @@ describe('PATCH /api/article/:slug - update article', () => {
           body: 'body-123',
           createdAt: expect.any(String),
           description: 'description-123',
+          tags: ['test-tag'],
           favorited: false,
           favoritesCount: 0,
           id: data?.article?.id,
@@ -320,6 +327,7 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
           authorId: expect.any(Number),
           favorited: false,
           favoritesCount: 0,
+          tags: ['test-tag'],
         },
       },
     });
