@@ -45,12 +45,15 @@ export const getToken = async (id: string) => {
 };
 
 export const createArticles = async (token: string) => {
-  const result = await supertest(app).post('/api/article').set('Authorization', `Bearer ${token}`).send({
-    description: 'test-description',
-    body: 'test-body',
-    title: 'test-title',
-    tagList: ['test-tag']
-  });
+  const result = await supertest(app)
+    .post('/api/article')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      description: 'test-description',
+      body: 'test-body',
+      title: 'test-title',
+      tagList: ['test-tag'],
+    });
 
   return result.body?.data;
 };
@@ -74,4 +77,14 @@ export const createComments = (slug: string, token: string) => {
         return await createComment(slug, token, String(i));
       }),
   );
+};
+
+export const removeTags = async (name = 'test-') => {
+  await prismaClient.tags.deleteMany({
+    where: {
+      name: {
+        contains: name,
+      },
+    },
+  });
 };
