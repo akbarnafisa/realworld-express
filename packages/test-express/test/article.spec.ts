@@ -83,7 +83,7 @@ describe('GET /api/article/:slug - get article', () => {
     });
   });
 
-  it('should return favorited info if the article logged in', async () => {
+  it('should return favorited is false if the article is not logged in', async () => {
     const data = await createArticles(token);
     const result = await supertest(app).get(TEST_API(data?.article?.slug));
 
@@ -106,7 +106,7 @@ describe('GET /api/article/:slug - get article', () => {
     });
   });
 
-  it('should return favorited is false if the article is not logged in', async () => {
+  it('should return favorited info if the article logged in', async () => {
     const data = await createArticles(token);
     await supertest(app).post(`/api/article/${data?.article?.slug}/favorite`).set('Authorization', `Bearer ${token}`);
     const result = await supertest(app).get(TEST_API(data?.article?.slug)).set('Authorization', `Bearer ${token}`);
@@ -264,26 +264,64 @@ describe('DELETE /api/article/:slug - delete article', () => {
   });
 });
 
-describe('POST /api/article/:slug/favorite - favorite article', () => {
-  describe('should error', () => {
-    it('if article not found', async () => {});
+describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
+  let token = '';
+  const TEST_API = (slug: string) => `/api/article/${slug}/unfavorite`;
+  const userId = 'user-unvaforite-article';
 
-    it('if article not logged in', async () => {});
-
-    it('if article already favorited', async () => {});
+  beforeAll(async () => {
+    await removeTestUser(userId);
+    token = await getToken(userId);
   });
 
-  it('should allow me to favorite article', async () => {});
-});
+  afterAll(async () => {
+    await removeTestUser(userId);
+  });
 
-describe('POST /api/article/:slug/unfavorite - favorite article', () => {
   describe('should error', () => {
-    it('if article not found', async () => {});
+    it('if user not logged in', async () => {
+      const result = await supertest(app).post(TEST_API('123'));
+      expect(result.status).toEqual(401);
+      expect(result.body).toEqual({
+        errors: 'No authorization token was found',
+      });
+    });
 
-    it('if article not logged in', async () => {});
+    it('should error if article not found', async () => {
+      const result = await supertest(app).post(TEST_API('123')).set('Authorization', `Bearer ${token}`);
+      expect(result.status).toEqual(404);
+      expect(result.body).toEqual({
+        errors: 'Article not found!',
+      });
+    });
 
     it('if article already unfavorited', async () => {});
   });
 
-  it('should allow me to unfavorite article', async () => {});
+  it('should allow me to unfavorite article', async () => {
+    const data = await createArticles(token);
+    await supertest(app).post(`/api/article/${data?.article?.slug}/favorite`).set('Authorization', `Bearer ${token}`);
+    await supertest(app).post(`/api/article/${data?.article?.slug}/unfavorite`).set('Authorization', `Bearer ${token}`);
+    const result = await supertest(app)
+      .get(`/api/article/${data?.article?.slug}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(result.status).toEqual(200);
+    expect(result.body).toEqual({
+      data: {
+        article: {
+          body: 'test-body',
+          createdAt: expect.any(String),
+          description: 'test-description',
+          id: expect.any(Number),
+          slug: expect.stringContaining('test-title-'),
+          title: 'test-title',
+          updatedAt: expect.any(String),
+          authorId: expect.any(Number),
+          favorited: false,
+          favoritesCount: 0,
+        },
+      },
+    });
+  });
 });
