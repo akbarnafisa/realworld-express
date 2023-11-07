@@ -51,5 +51,26 @@ export const createArticles = async (token: string) => {
     title: 'test-title',
   });
 
-  return result.body?.data
+  return result.body?.data;
+};
+
+export const createComment = async (slug: string, token: string, text: string) => {
+  const result = await supertest(app)
+    .post(`/api/article/${slug}/comments`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      body: `test-comment-${text}`,
+    });
+
+  return result.body?.data;
+};
+
+export const createComments = (slug: string, token: string) => {
+  return Promise.all(
+    Array(15)
+      .fill('')
+      .map(async (_, i) => {
+        return await createComment(slug, token, String(i));
+      }),
+  );
 };
