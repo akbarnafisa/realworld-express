@@ -14,7 +14,7 @@ export interface ArticleResponseType {
     author?: {
       username: string;
       image: string | null;
-      following: any[];
+      following: boolean;
     };
   };
 }

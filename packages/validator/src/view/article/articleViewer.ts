@@ -16,14 +16,21 @@ type ArticleExtendInfo = Article & {
   author?: {
     username: string;
     image: string | null;
-    following: any[];
+    followedBy: {
+      followerId: number;
+    }[];
   };
 };
 
 export const articleViewer = (article: ArticleExtendInfo): ArticleResponseType => {
   const favoritesCount = article?._count?.favoritedBy;
   const tags = article.tags?.map((data) => data.tag.name);
-  const favorited = article.favoritedBy?.some((data) => data.userId === article.authorId);
+  const favorited = article.favoritedBy ? article.favoritedBy.length > 0 : false;
+  const author = article.author ? {
+    username: article.author.username,
+    image: article.author.image,
+    following: article.author.followedBy ? article.author.followedBy.length > 0 : false
+  } : undefined
 
   return {
     article: {
@@ -38,7 +45,7 @@ export const articleViewer = (article: ArticleExtendInfo): ArticleResponseType =
       favoritesCount,
       favorited: favorited || false,
       tags,
-      author: article.author,
+      author,
     },
   };
 };

@@ -71,15 +71,19 @@ describe('POST /api/article - create article', () => {
 
 describe('GET /api/article/:slug - get article', () => {
   let token = '';
+  let secondToken = ''
   const TEST_API = (slug: string) => `/api/article/${slug}`;
   const userId = 'user-get-article';
+  const secondUserId = 'user-get-article-2'
 
   beforeAll(async () => {
     token = await getToken(userId);
+    secondToken = await getToken(secondUserId);
   });
 
   afterAll(async () => {
     await removeTestUser(userId);
+    await removeTestUser(secondUserId);
   });
 
   it('should error if article not found', async () => {
@@ -110,7 +114,7 @@ describe('GET /api/article/:slug - get article', () => {
           favorited: false,
           favoritesCount: 0,
           author: {
-            following: expect.any(Array),
+            following: false,
             image: null,
             username: expect.any(String),
           },
@@ -120,8 +124,10 @@ describe('GET /api/article/:slug - get article', () => {
   });
 
   it('should return favorited info if the article logged in', async () => {
-    const data = await createArticles(token);
+    const data = await createArticles(secondToken);
     await supertest(app).post(`/api/article/${data?.article?.slug}/favorite`).set('Authorization', `Bearer ${token}`);
+    await supertest(app).post(`/api/user/${secondUserId}/follow`).set('Authorization', `Bearer ${token}`);
+
     const result = await supertest(app).get(TEST_API(data?.article?.slug)).set('Authorization', `Bearer ${token}`);
 
     expect(result.status).toEqual(200);
@@ -140,7 +146,7 @@ describe('GET /api/article/:slug - get article', () => {
           favorited: true,
           favoritesCount: 1,
           author: {
-            following: expect.any(Array),
+            following: true,
             image: null,
             username: expect.any(String),
           },
@@ -148,6 +154,8 @@ describe('GET /api/article/:slug - get article', () => {
       },
     });
   });
+
+  it('should return favorited info if the article logged in', async () => {})
 });
 
 describe('PATCH /api/article/:slug - update article', () => {
@@ -340,7 +348,7 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
           favoritesCount: 0,
           tags: ['test-tag'],
           author: {
-            following: expect.any(Array),
+            following: false,
             image: null,
             username: expect.any(String),
           },

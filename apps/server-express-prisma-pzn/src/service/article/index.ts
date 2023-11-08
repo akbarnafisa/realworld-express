@@ -87,7 +87,14 @@ export const getArticleService = async (request: Request) => {
     include: {
       author: {
         select: {
-          following: true,
+          followedBy: {
+            select: {
+              followerId: true,
+            },
+            where: {
+              followerId: auth?.id,
+            },
+          },
           username: true,
           image: true,
         },
@@ -148,7 +155,14 @@ export const getArticlesService = async (request: Request) => {
     include: {
       author: {
         select: {
-          following: true,
+          followedBy: {
+            select: {
+              followerId: true,
+            },
+            where: {
+              followerId: auth?.id,
+            },
+          },
           username: true,
           image: true,
         },

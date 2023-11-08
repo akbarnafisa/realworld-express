@@ -42,7 +42,7 @@ describe('GET /api/articles - get article', () => {
         title: 'test-articles-2',
         updatedAt: expect.any(String),
         author: {
-          following: expect.any(Array),
+          following: false,
           image: null,
           username: expect.any(String),
         },
@@ -60,7 +60,7 @@ describe('GET /api/articles - get article', () => {
         title: 'test-articles-1',
         updatedAt: expect.any(String),
         author: {
-          following: expect.any(Array),
+          following: false,
           image: null,
           username: expect.any(String),
         },
