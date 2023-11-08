@@ -357,3 +357,30 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
     });
   });
 });
+
+
+describe('GET /api/articles - get article author', () => {
+  let token = '';
+  const TEST_API = `/api/articles`;
+  const userId = 'user-get-author-articles';
+
+  beforeAll(async () => {
+    token = await getToken(userId);
+  });
+
+  afterAll(async () => {
+    await removeTestUser(userId);
+  });
+
+  describe('should return data by using query', () => {
+    it('author', async () => {
+      await createArticles(token, {
+        title: 'test-author-articles',
+      });
+
+      const result = await supertest(app).get(`${TEST_API}?limit=10&offset=0&author=${userId}`);
+      expect(result.status).toEqual(200);
+      expect(result.body.data.articlesCount).toEqual(1);
+    });
+  });
+});

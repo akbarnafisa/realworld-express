@@ -3,19 +3,15 @@ import { app, removeTestUser, getToken, createArticles, NOT_FOUND_USER_TOKEN, re
 
 describe('GET /api/articles - get article', () => {
   let token = '';
-  let secondToken = '';
   const TEST_API = `/api/articles`;
   const userId = 'user-get-articles';
-  const secondUserId = 'user-2-get-articles';
 
   beforeAll(async () => {
     token = await getToken(userId);
-    secondToken = await getToken(secondUserId);
   });
 
   afterAll(async () => {
     await removeTestUser(userId);
-    await removeTestUser(secondUserId);
   });
 
   it('should return articles data', async () => {
@@ -115,16 +111,6 @@ describe('GET /api/articles - get article', () => {
       expect(result.status).toEqual(200);
       expect(result.body.data.articles.length).toEqual(0);
       expect(result.body.data.articlesCount > 1).toEqual(true);
-    });
-
-    it('author', async () => {
-      await createArticles(secondToken, {
-        title: 'test-author-articles',
-      });
-
-      const result = await supertest(app).get(`${TEST_API}?limit=10&offset=0&author=${secondUserId}`);
-      expect(result.status).toEqual(200);
-      expect(result.body.data.articlesCount).toEqual(1);
     });
 
     it('favorite', async () => {
