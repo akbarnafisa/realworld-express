@@ -6,6 +6,7 @@ import {
   updateArticleService,
   favoriteArticleService,
   unFavoriteArticleService,
+  getArticlesService,
 } from '../../service/article';
 
 export const createArticleController: RequestHandler = async (req, res, next) => {
@@ -22,6 +23,17 @@ export const createArticleController: RequestHandler = async (req, res, next) =>
 export const getArticleController: RequestHandler = async (req, res, next) => {
   try {
     const data = await getArticleService(req);
+    res.status(200).json({
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getArticlesController: RequestHandler = async (req, res, next) => {
+  try {
+    const data = await getArticlesService(req);
     res.status(200).json({
       data,
     });

@@ -21,11 +21,14 @@ describe('POST /api/article - create article', () => {
     });
 
     it('if title is not provided', async () => {
-      const result = await supertest(app).post(TEST_API).set('Authorization', `Bearer ${token}`).send({
-        description: 'description',
-        body: 'body',
-        tagList: ['test-tag']
-      });
+      const result = await supertest(app)
+        .post(TEST_API)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          description: 'description',
+          body: 'body',
+          tagList: ['test-tag'],
+        });
 
       expect(result.status).toEqual(400);
       expect(result.body).toEqual({
@@ -35,12 +38,15 @@ describe('POST /api/article - create article', () => {
   });
 
   it('should allow me to create article', async () => {
-    const result = await supertest(app).post(TEST_API).set('Authorization', `Bearer ${token}`).send({
-      description: 'description',
-      tagList: ['test-tag'],
-      body: 'body',
-      title: 'title',
-    });
+    const result = await supertest(app)
+      .post(TEST_API)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        description: 'description',
+        tagList: ['test-tag'],
+        body: 'body',
+        title: 'title',
+      });
 
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
@@ -103,6 +109,11 @@ describe('GET /api/article/:slug - get article', () => {
           authorId: expect.any(Number),
           favorited: false,
           favoritesCount: 0,
+          author: {
+            following: expect.any(Array),
+            image: null,
+            username: expect.any(String),
+          },
         },
       },
     });
@@ -128,6 +139,11 @@ describe('GET /api/article/:slug - get article', () => {
           authorId: expect.any(Number),
           favorited: true,
           favoritesCount: 1,
+          author: {
+            following: expect.any(Array),
+            image: null,
+            username: expect.any(String),
+          },
         },
       },
     });
@@ -323,6 +339,11 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
           favorited: false,
           favoritesCount: 0,
           tags: ['test-tag'],
+          author: {
+            following: expect.any(Array),
+            image: null,
+            username: expect.any(String),
+          },
         },
       },
     });
