@@ -12,6 +12,7 @@ describe('GET /api/tags', () => {
 
   afterAll(async () => {
     await removeTestUser(userId);
+    await removeTags('data-');
   });
 
   it('should return me tags data', async () => {
@@ -45,14 +46,11 @@ describe('GET /api/tags', () => {
         }),
     ]);
 
-    await removeTags();
-
-
     const result = await supertest(app).get(TEST_API);
 
     expect(result.body).toEqual({
       data: {
-        tags: ['data-2', 'data-1'],
+        tags: expect.arrayContaining(['data-1', 'data-2']),
       },
     });
 

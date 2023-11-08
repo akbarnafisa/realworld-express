@@ -6,6 +6,7 @@ import {
   ArticleCreateInputType,
   articleInputSchema,
   articleViewer,
+  articlesViewer,
 } from 'validator';
 import { prismaClient } from '../../application/database';
 import slug from 'slug';
@@ -48,14 +49,21 @@ export const createArticleService = async (request: Request) => {
       },
     },
     include: {
+      // author: {
+      //   select: {
+      //     username: true,
+      //     following: true,
+      //     image: true,
+      //   }
+      // },
       tags: {
         select: {
           tag: {
             select: {
               name: true,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       _count: {
         select: {
@@ -71,46 +79,35 @@ export const createArticleService = async (request: Request) => {
 export const getArticleService = async (request: Request) => {
   const { slug } = request.params;
   const auth = request?.auth as TokenPayload | undefined;
-  let favorited = false;
-
-  if (auth) {
-    const isArticleFavorited = await prismaClient.article
-      .findUnique({
-        where: { slug },
-      })
-      .favoritedBy({
-        select: {
-          articleId: true,
-        },
-        where: {
-          userId: auth.id,
-        },
-      });
-
-    favorited = !!isArticleFavorited?.length;
-  }
 
   const data = await prismaClient.article.findUnique({
     where: {
       slug,
     },
     include: {
-      // favoritedBy: {
-      //   select: {
-      //     userId: true,
-      //   },
-      //   where: {
-      //     userId: auth?.id,
-      //   },
-      // },
+      author: {
+        select: {
+          following: true,
+          username: true,
+          image: true,
+        }
+      },
+      favoritedBy: {
+        select: {
+          userId: true,
+        },
+        where: {
+          userId: auth?.id,
+        },
+      },
       tags: {
         select: {
           tag: {
             select: {
               name: true,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       _count: {
         select: {
@@ -124,7 +121,79 @@ export const getArticleService = async (request: Request) => {
     throw new ResponseError(404, 'Article not found!');
   }
 
-  return articleViewer({ ...data, favorited });
+  return articleViewer(data);
+};
+
+export const getArticlesService = async (request: Request) => {
+  // const { slug } = request.params;
+  // const { limit, offset, cursor, favorited, tag, author } = request.query;
+
+  const auth = request?.auth as TokenPayload | undefined;
+  const { limit, offset, cursor, ...restQuery } = request.query;
+
+  let skip, take;
+
+  if (cursor) {
+    skip = 1;
+    take = Number(limit);
+  } else {
+    skip = Number(offset) || undefined;
+    take = Number(limit) || undefined;
+  }
+
+  const data = await prismaClient.article.findMany({
+    skip: skip || 0,
+    take: take || 10,
+    where: articlesQueryFilter(restQuery),
+    include: {
+      author: {
+        select: {
+          following: true,
+          username: true,
+          image: true,
+        }
+      },
+      favoritedBy: {
+        select: {
+          userId: true,
+        },
+        where: {
+          userId: auth?.id,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          favoritedBy: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  let articlesCount;
+
+  if (!cursor) {
+    articlesCount = (
+      await prismaClient.article.findMany({
+        where: articlesQueryFilter(restQuery),
+      })
+    ).length;
+  }
+
+  return articlesViewer(data, {
+    articlesCount,
+  });
 };
 
 export const deleteArticleService = async (request: Request) => {
@@ -185,9 +254,9 @@ export const updateArticleService = async (request: Request) => {
           tag: {
             select: {
               name: true,
-            }
-          }
-        }
+            },
+          },
+        },
       },
     },
   });
@@ -290,4 +359,23 @@ const checkArticleOwner = (currentUserId: number, authorId: number) => {
   if (currentUserId !== authorId) {
     throw new ResponseError(401, 'User unauthorized!');
   }
+};
+
+const articlesQueryFilter = ({ tag, author }: { tag?: string; author?: string }) => {
+
+  return Prisma.validator<Prisma.ArticleWhereInput>()({
+    AND: [
+      // { del: false },
+      { author: { username: author || undefined } },
+      { tags: tag ? { some: { tag: { name: tag } } } : undefined },
+      // {
+      //   favoritedBy: {
+      //     // this "some" operator somehow could not work with the nested undefined value in an "AND" array
+      //     some: query?.favorited && {
+      //       favoritedBy: { username: query.favorited },
+      //     },
+      //   },
+      // },
+    ],
+  });
 };

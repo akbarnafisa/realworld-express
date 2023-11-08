@@ -10,6 +10,18 @@ export interface ArticleResponseType {
     updatedAt: Date; // DateTime!
     authorId: number;
     favorited: boolean;
-    tags?: string[]
+    tags?: string[];
+    author?: {
+      username: string;
+      image: string | null;
+      following: any[];
+    };
   };
+}
+
+export interface ArticlesResponseType {
+  articles: ArticleResponseType['article'][];
+  hasMore?: boolean;
+  nextCursor?: ArticleResponseType['article']['id'];
+  articlesCount?: number;
 }

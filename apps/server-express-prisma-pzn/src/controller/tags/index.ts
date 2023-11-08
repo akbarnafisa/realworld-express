@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
-import { getTagssService } from '../../service/tags';
+import { getTagsService } from '../../service/tags';
 
-export const getTagsController: RequestHandler = async (req, res, next) => {
+export const getTagsController: RequestHandler = async (_, res, next) => {
   try {
-    const data = await getTagssService(req);
+    const data = await getTagsService();
     res.status(200).json({
       data,
     });

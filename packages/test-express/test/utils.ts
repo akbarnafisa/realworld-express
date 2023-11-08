@@ -2,6 +2,7 @@ import { web } from 'server-express-prisma-pzn/src/application/web';
 import { prismaClient } from 'server-express-prisma-pzn/src/application/database';
 import bcrypt from 'bcrypt';
 import supertest from 'supertest';
+import { ArticleCreateInputType } from 'validator';
 
 export const app = web;
 export const NOT_FOUND_USER_TOKEN =
@@ -44,7 +45,7 @@ export const getToken = async (id: string) => {
   return result.body?.data?.user?.token;
 };
 
-export const createArticles = async (token: string) => {
+export const createArticles = async (token: string, payload?: Partial<ArticleCreateInputType>) => {
   const result = await supertest(app)
     .post('/api/article')
     .set('Authorization', `Bearer ${token}`)
@@ -53,6 +54,7 @@ export const createArticles = async (token: string) => {
       body: 'test-body',
       title: 'test-title',
       tagList: ['test-tag'],
+      ...payload,
     });
 
   return result.body?.data;

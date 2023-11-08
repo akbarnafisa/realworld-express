@@ -1,7 +1,7 @@
 import { prismaClient } from '../../application/database';
 import { tagsViewer } from 'validator';
 
-export const getTagssService = async () => {
+export const getTagsService = async () => {
   const tags = await prismaClient.tags.findMany({
     include: {
       _count: {
