@@ -6,7 +6,6 @@ describe('GET /api/user/current - get current user', () => {
   const TEST_API = '/api/user/current';
   const userId = 'user-current';
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
@@ -49,7 +48,6 @@ describe('PATCH /api/user/current - update current user', () => {
   const TEST_API = '/api/user/current';
   const userId = 'user-current-update';
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 

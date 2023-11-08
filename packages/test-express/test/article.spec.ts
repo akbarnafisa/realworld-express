@@ -7,7 +7,6 @@ describe('POST /api/article - create article', () => {
   const userId = 'user-create-article';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
@@ -70,7 +69,6 @@ describe('GET /api/article/:slug - get article', () => {
   const userId = 'user-get-article';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
@@ -142,7 +140,6 @@ describe('PATCH /api/article/:slug - update article', () => {
   const userId = 'user-update-article';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
@@ -221,7 +218,6 @@ describe('DELETE /api/article/:slug - delete article', () => {
   const userId = 'user-delete-article';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
@@ -277,7 +273,6 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
   const userId = 'user-unvaforite-article';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 

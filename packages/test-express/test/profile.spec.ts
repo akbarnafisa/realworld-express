@@ -9,7 +9,6 @@ describe('GET /api/user/:username - get user profile', () => {
   const TEST_API = (user = userId) => `/api/user/${user}`;
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     await createTestUser(secondUser);
     token = await getToken(userId);
   });
@@ -64,7 +63,6 @@ describe('POST /api/user/:username/follow - follow user', () => {
   const TEST_API = (user = userId) => `/api/user/${user}/follow `;
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     await createTestUser(secondUser);
     token = await getToken(userId);
   });
@@ -112,7 +110,6 @@ describe('POST /api/user/:username/unfollow - unfollow user', () => {
   const TEST_API = (user = userId) => `/api/user/${user}/unfollow `;
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     await createTestUser(secondUser);
     token = await getToken(userId);
   });

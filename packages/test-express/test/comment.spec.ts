@@ -7,7 +7,6 @@ describe('POST /api/article/:slug/comments - create comments', () => {
   const userId = 'user-create-comment';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
@@ -78,7 +77,6 @@ describe('GET /api/article/:slug/comments - get comments', () => {
   const userId = 'user-get-comment';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
@@ -143,7 +141,6 @@ describe('DELETE /api/article/:slug/comments/:commentId - delete comment', () =>
   const userId = 'user-delete-comment';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 

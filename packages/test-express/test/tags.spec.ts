@@ -7,7 +7,6 @@ describe('GET /api/tags', () => {
   const userId = 'user-create-tags';
 
   beforeAll(async () => {
-    await removeTestUser(userId);
     token = await getToken(userId);
   });
 
