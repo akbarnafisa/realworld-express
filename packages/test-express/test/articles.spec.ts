@@ -3,22 +3,22 @@ import { app, removeTestUser, getToken, createArticles, NOT_FOUND_USER_TOKEN, re
 
 describe('GET /api/articles - get article', () => {
   let token = '';
-  // let secondToken = '';
+  let secondToken = '';
   const TEST_API = `/api/articles`;
   const userId = 'user-get-articles';
-  // const secondUserId = 'user-2-get-articles';
+  const secondUserId = 'user-2-get-articles';
 
   beforeAll(async () => {
     token = await getToken(userId);
-    // secondToken = await getToken(secondUserId);
+    secondToken = await getToken(secondUserId);
   });
 
   afterAll(async () => {
     await removeTestUser(userId);
-    // await removeTestUser(secondUserId);
+    await removeTestUser(secondUserId);
   });
 
-  it.only('should return articles data', async () => {
+  it('should return articles data', async () => {
     await createArticles(token, {
       title: 'test-articles-1',
     });
@@ -117,14 +117,25 @@ describe('GET /api/articles - get article', () => {
       expect(result.body.data.articlesCount > 1).toEqual(true);
     });
 
-    // it('author', async () => {
-    //   const data = await createArticles(secondToken, {
-    //     title: 'test-author-articles',
-    //   });
+    it('author', async () => {
+      await createArticles(secondToken, {
+        title: 'test-author-articles',
+      });
 
-    //   const result = await supertest(app).get(`${TEST_API}?limit=10&offset=0&author=${secondToken}`);
-    //   expect(result.status).toEqual(200);
-    //   // expect(result.body.data.articlesCount).toEqual();
-    // });
+      const result = await supertest(app).get(`${TEST_API}?limit=10&offset=0&author=${secondUserId}`);
+      expect(result.status).toEqual(200);
+      expect(result.body.data.articlesCount).toEqual(1);
+    });
+
+    it('favorite', async () => {
+      const data = await createArticles(token, {
+        title: 'test-articles-favorite',
+      });
+
+      await supertest(app).post(`/api/article/${data?.article?.slug}/favorite`).set('Authorization', `Bearer ${token}`);
+      const result = await supertest(app).get(`${TEST_API}?limit=10&offset=0&favorited=${userId}`);
+      expect(result.status).toEqual(200);
+      expect(result.body.data.articlesCount).toEqual(1);
+    });
   });
 });

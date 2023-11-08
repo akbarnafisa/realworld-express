@@ -90,7 +90,7 @@ export const getArticleService = async (request: Request) => {
           following: true,
           username: true,
           image: true,
-        }
+        },
       },
       favoritedBy: {
         select: {
@@ -151,7 +151,7 @@ export const getArticlesService = async (request: Request) => {
           following: true,
           username: true,
           image: true,
-        }
+        },
       },
       favoritedBy: {
         select: {
@@ -361,21 +361,25 @@ const checkArticleOwner = (currentUserId: number, authorId: number) => {
   }
 };
 
-const articlesQueryFilter = ({ tag, author }: { tag?: string; author?: string }) => {
-
+const articlesQueryFilter = ({ tag, author, favorited }: { tag?: string; author?: string; favorited?: string }) => {
   return Prisma.validator<Prisma.ArticleWhereInput>()({
     AND: [
       // { del: false },
-      { author: { username: author || undefined } },
+      { author: author ? { username: author } : undefined },
       { tags: tag ? { some: { tag: { name: tag } } } : undefined },
-      // {
-      //   favoritedBy: {
-      //     // this "some" operator somehow could not work with the nested undefined value in an "AND" array
-      //     some: query?.favorited && {
-      //       favoritedBy: { username: query.favorited },
-      //     },
-      //   },
-      // },
+      {
+        favoritedBy: favorited
+          ? {
+              // this "some" operator somehow could not work with the nested undefined value in an "AND" array
+              some: {
+                // favoritedBy: { username: favorited },
+                user: {
+                  username: favorited,
+                },
+              },
+            }
+          : undefined,
+      },
     ],
   });
 };
