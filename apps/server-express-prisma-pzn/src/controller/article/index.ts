@@ -7,6 +7,7 @@ import {
   favoriteArticleService,
   unFavoriteArticleService,
   getArticlesService,
+  getFeedService,
 } from '../../service/article';
 
 export const createArticleController: RequestHandler = async (req, res, next) => {
@@ -42,6 +43,17 @@ export const getArticlesController: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getFeedController: RequestHandler = async (req, res, next) => {
+  try {
+    const data = await getFeedService(req);
+    res.status(200).json({
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteArticleController: RequestHandler = async (req, res, next) => {
   try {
     const data = await deleteArticleService(req);
@@ -63,7 +75,6 @@ export const updateArticleController: RequestHandler = async (req, res, next) =>
     next(error);
   }
 };
-
 
 export const favoriteArticleController: RequestHandler = async (req, res, next) => {
   try {

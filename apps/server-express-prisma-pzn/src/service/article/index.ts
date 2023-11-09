@@ -210,6 +210,86 @@ export const getArticlesService = async (request: Request) => {
   });
 };
 
+export const getFeedService = async (request: Request) => {
+  // const { slug } = request.params;
+  // const { limit, offset, cursor, favorited, tag, author } = request.query;
+
+  const auth = request?.auth as TokenPayload | undefined;
+  const { limit, offset, cursor, ...restQuery } = request.query;
+
+  let skip, take;
+
+  if (cursor) {
+    skip = 1;
+    take = Number(limit);
+  } else {
+    skip = Number(offset) || undefined;
+    take = Number(limit) || undefined;
+  }
+
+  const data = await prismaClient.article.findMany({
+    skip: skip || 0,
+    take: take || 10,
+    where: articlesQueryFilter(restQuery),
+    include: {
+      author: {
+        select: {
+          followedBy: {
+            select: {
+              followerId: true,
+            },
+            where: {
+              followerId: auth?.id,
+            },
+          },
+          username: true,
+          image: true,
+        },
+      },
+      favoritedBy: {
+        select: {
+          userId: true,
+        },
+        where: {
+          userId: auth?.id,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          favoritedBy: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  let articlesCount;
+
+  if (!cursor) {
+    articlesCount = (
+      await prismaClient.article.findMany({
+        where: articlesQueryFilter(restQuery),
+      })
+    ).length;
+  }
+
+  return articlesViewer(data, {
+    articlesCount,
+  });
+};
+
+
 export const deleteArticleService = async (request: Request) => {
   const auth = request?.auth as TokenPayload | undefined;
 

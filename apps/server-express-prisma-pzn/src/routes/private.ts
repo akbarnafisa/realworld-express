@@ -8,6 +8,7 @@ import {
   favoriteArticleController,
   unFavoriteArticleController,
   getArticleController,
+  getFeedController,
 } from '../controller/article';
 import { createCommentController, deleteCommentController, getCommentController } from '../controller/comment';
 
@@ -28,6 +29,8 @@ privateRouter.post('/api/article', authenticate, createArticleController);
 privateRouter.delete('/api/article/:slug', authenticate, deleteArticleController);
 privateRouter.patch('/api/article/:slug', authenticate, updateArticleController);
 privateRouter.get('/api/article/:slug', optionalAuthenticate, getArticleController)
+privateRouter.get('/api/feed', authenticate, getFeedController)
+
 // article favorite
 privateRouter.post('/api/article/:slug/favorite', authenticate, favoriteArticleController);
 privateRouter.post('/api/article/:slug/unfavorite', authenticate, unFavoriteArticleController);
