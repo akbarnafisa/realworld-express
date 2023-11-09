@@ -193,4 +193,30 @@ describe('GET /api/feed - get article', () => {
     expect(result.body.data.articles.length).toEqual(1);
     expect(result.body.data.articlesCount).toEqual(1);
   });
+
+  it('cursor', async () => {
+    await Promise.all([
+      createArticles(secondToken, {
+        title: 'test-articles-1',
+      }),
+      createArticles(secondToken, {
+        title: 'test-articles-2',
+      }),
+      // supertest(app).post(`/api/user/${secondUserId}/follow`).set('Authorization', `Bearer ${token}`),
+    ]);
+
+    const resultPage1 = await supertest(app).get(`${TEST_API}?limit=1`).set('Authorization', `Bearer ${token}`);
+    const resultPage2 = await supertest(app)
+      .get(`${TEST_API}?limit=1&cursor=${resultPage1.body.data.articles[0].id}`)
+      .set('Authorization', `Bearer ${token}`);
+    const resultPage3 = await supertest(app)
+      .get(`${TEST_API}?limit=100&cursor=${resultPage2.body.data.nextCursor}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(resultPage2.body.data.nextCursor).toBeTruthy();
+    expect(resultPage2.body.data.hasMore).toEqual(true);
+
+    expect(resultPage3.body.data.nextCursor).toEqual(null);
+    expect(resultPage3.body.data.hasMore).toEqual(false);
+  });
 });
