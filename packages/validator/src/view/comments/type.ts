@@ -16,4 +16,6 @@ export interface CommentResponseType {
 }
 export interface CommentsResponseType {
   comments: Comment[];
+  nextCursor: CommentResponseType['comment']['id'] | null;
+  hasMore: boolean;
 }

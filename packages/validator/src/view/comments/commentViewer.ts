@@ -24,10 +24,19 @@ export const commentViewer = (comment: CommentType): CommentResponseType => {
   };
 };
 
-export const commentsViewer = (comments: CommentType[]): CommentsResponseType => {
+export const commentsViewer = (
+  comments: CommentType[],
+  opt: {
+    nextCursor: number | null;
+    hasMore: boolean;
+  },
+): CommentsResponseType => {
+  const commentsItem = comments.map((comment) => {
+    return commentViewer(comment).comment;
+  });
   return {
-    comments: comments.map((comment) => {
-      return commentViewer(comment).comment;
-    }),
+    comments: commentsItem,
+    nextCursor: opt.nextCursor,
+    hasMore: opt.hasMore,
   };
 };
