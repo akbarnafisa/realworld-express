@@ -26,11 +26,13 @@ export const articleViewer = (article: ArticleExtendInfo): ArticleResponseType =
   const favoritesCount = article?._count?.favoritedBy;
   const tags = article.tags?.map((data) => data.tag.name);
   const favorited = article.favoritedBy ? article.favoritedBy.length > 0 : false;
-  const author = article.author ? {
-    username: article.author.username,
-    image: article.author.image,
-    following: article.author.followedBy ? article.author.followedBy.length > 0 : false
-  } : undefined
+  const author = article.author
+    ? {
+        username: article.author.username,
+        image: article.author.image,
+        following: article.author.followedBy ? article.author.followedBy.length > 0 : false,
+      }
+    : undefined;
 
   return {
     article: {
@@ -54,6 +56,8 @@ export const articlesViewer = (
   articles: ArticleExtendInfo[],
   opt?: {
     articlesCount?: number;
+    nextCursor?: number | null;
+    hasMore?: boolean;
   },
 ): ArticlesResponseType => {
   const articlesData = articles.map((article) => articleViewer(article).article);
@@ -61,5 +65,7 @@ export const articlesViewer = (
   return {
     articles: articlesData,
     articlesCount: opt?.articlesCount,
+    nextCursor: opt?.nextCursor,
+    hasMore: opt?.hasMore,
   };
 };

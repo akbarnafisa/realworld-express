@@ -21,7 +21,7 @@ export interface ArticleResponseType {
 
 export interface ArticlesResponseType {
   articles: ArticleResponseType['article'][];
-  hasMore?: boolean;
-  nextCursor?: ArticleResponseType['article']['id'];
+  nextCursor?: ArticleResponseType['article']['id'] | null;
   articlesCount?: number;
+  hasMore?: boolean;
 }

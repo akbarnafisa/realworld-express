@@ -16,6 +16,8 @@ const slugify = (title: string): string => {
   return `${slug(title, { lower: true })}-${((Math.random() * Math.pow(36, 6)) | 0).toString(36)}`;
 };
 
+const DEFAULT_ARTICLES_QUERIES = 10;
+
 export const createArticleService = async (request: Request) => {
   const auth = request?.auth as TokenPayload | undefined;
 
@@ -150,7 +152,7 @@ export const getArticlesService = async (request: Request) => {
 
   const data = await prismaClient.article.findMany({
     skip: skip || 0,
-    take: take || 10,
+    take: take || DEFAULT_ARTICLES_QUERIES,
     where: articlesQueryFilter(restQuery),
     include: {
       author: {
@@ -160,7 +162,7 @@ export const getArticlesService = async (request: Request) => {
               followerId: true,
             },
             where: {
-              followerId: auth?.id,
+              followerId: auth?.id, // TODO: do not use this query if user is not logged
             },
           },
           username: true,
@@ -196,6 +198,8 @@ export const getArticlesService = async (request: Request) => {
   });
 
   let articlesCount;
+  let hasMore;
+  let nextCursor;
 
   if (!cursor) {
     articlesCount = (
@@ -203,19 +207,36 @@ export const getArticlesService = async (request: Request) => {
         where: articlesQueryFilter(restQuery),
       })
     ).length;
+  } else {
+    if (data.length > 0) {
+      const lastLinkResults = data[data.length - 1];
+      const myCursor = lastLinkResults.id;
+
+      const secondQueryResults = await prismaClient.article.findMany({
+        take: take || DEFAULT_ARTICLES_QUERIES,
+        cursor: {
+          id: myCursor,
+        },
+      });
+      (hasMore = secondQueryResults.length >= Number(take)), (nextCursor = hasMore ? myCursor : null);
+    }
   }
 
   return articlesViewer(data, {
     articlesCount,
+    hasMore,
+    nextCursor,
   });
 };
 
 export const getFeedService = async (request: Request) => {
-  // const { slug } = request.params;
-  // const { limit, offset, cursor, favorited, tag, author } = request.query;
-
   const auth = request?.auth as TokenPayload | undefined;
-  const { limit, offset, cursor, ...restQuery } = request.query;
+
+  if (!auth || !auth.id) {
+    throw new ResponseError(401, 'User unauthenticated!');
+  }
+
+  const { limit, offset, cursor } = request.query;
 
   let skip, take;
 
@@ -229,8 +250,16 @@ export const getFeedService = async (request: Request) => {
 
   const data = await prismaClient.article.findMany({
     skip: skip || 0,
-    take: take || 10,
-    where: articlesQueryFilter(restQuery),
+    take: take || DEFAULT_ARTICLES_QUERIES,
+    where: {
+      author: {
+        followedBy: {
+          some: {
+            followerId: auth.id,
+          },
+        },
+      },
+    },
     include: {
       author: {
         select: {
@@ -239,7 +268,7 @@ export const getFeedService = async (request: Request) => {
               followerId: true,
             },
             where: {
-              followerId: auth?.id,
+              followerId: auth.id,
             },
           },
           username: true,
@@ -251,7 +280,7 @@ export const getFeedService = async (request: Request) => {
           userId: true,
         },
         where: {
-          userId: auth?.id,
+          userId: auth.id,
         },
       },
       tags: {
@@ -275,20 +304,44 @@ export const getFeedService = async (request: Request) => {
   });
 
   let articlesCount;
+  let hasMore;
+  let nextCursor;
 
   if (!cursor) {
     articlesCount = (
       await prismaClient.article.findMany({
-        where: articlesQueryFilter(restQuery),
+        where: {
+          author: {
+            followedBy: {
+              some: {
+                followerId: auth.id,
+              },
+            },
+          },
+        },
       })
     ).length;
+  } else {
+    if (data.length > 0) {
+      const lastLinkResults = data[data.length - 1];
+      const myCursor = lastLinkResults.id;
+
+      const secondQueryResults = await prismaClient.article.findMany({
+        take: take || DEFAULT_ARTICLES_QUERIES,
+        cursor: {
+          id: myCursor,
+        },
+      });
+      (hasMore = secondQueryResults.length >= Number(take)), (nextCursor = hasMore ? myCursor : null);
+    }
   }
 
   return articlesViewer(data, {
     articlesCount,
+    hasMore,
+    nextCursor,
   });
 };
-
 
 export const deleteArticleService = async (request: Request) => {
   const auth = request?.auth as TokenPayload | undefined;
