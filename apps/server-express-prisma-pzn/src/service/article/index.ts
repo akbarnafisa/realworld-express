@@ -89,26 +89,30 @@ export const getArticleService = async (request: Request) => {
     include: {
       author: {
         select: {
-          followedBy: {
-            select: {
-              followerId: true,
-            },
-            where: {
-              followerId: auth?.id,
-            },
-          },
+          followedBy: auth?.id
+            ? {
+                select: {
+                  followerId: true,
+                },
+                where: {
+                  followerId: auth.id,
+                },
+              }
+            : undefined,
           username: true,
           image: true,
         },
       },
-      favoritedBy: {
-        select: {
-          userId: true,
-        },
-        where: {
-          userId: auth?.id,
-        },
-      },
+      favoritedBy: auth?.id
+        ? {
+            select: {
+              userId: true,
+            },
+            where: {
+              userId: auth.id,
+            },
+          }
+        : undefined,
       tags: {
         select: {
           tag: {
@@ -134,7 +138,7 @@ export const getArticleService = async (request: Request) => {
 };
 
 export const getArticlesService = async (request: Request) => {
-const auth = request?.auth as TokenPayload | undefined;
+  const auth = request?.auth as TokenPayload | undefined;
   const { limit, offset, cursor, ...restQuery } = request.query;
 
   let skip, take;
@@ -154,26 +158,30 @@ const auth = request?.auth as TokenPayload | undefined;
     include: {
       author: {
         select: {
-          followedBy: {
-            select: {
-              followerId: true,
-            },
-            where: {
-              followerId: auth?.id, // TODO: do not use this query if user is not logged
-            },
-          },
+          followedBy: auth?.id
+            ? {
+                select: {
+                  followerId: true,
+                },
+                where: {
+                  followerId: auth?.id, // TODO: do not use this query if user is not logged
+                },
+              }
+            : undefined,
           username: true,
           image: true,
         },
       },
-      favoritedBy: {
-        select: {
-          userId: true,
-        },
-        where: {
-          userId: auth?.id,
-        },
-      },
+      favoritedBy: auth?.id
+        ? {
+            select: {
+              userId: true,
+            },
+            where: {
+              userId: auth.id,
+            },
+          }
+        : undefined,
       tags: {
         select: {
           tag: {
@@ -428,7 +436,6 @@ export const favoriteArticleService = async (request: Request) => {
         },
       },
     });
-
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {

@@ -18,7 +18,7 @@ export const getProfileService = async (request: Request) => {
           followerId: true,
         },
         where: {
-          followerId: auth?.id,
+          followerId: auth.id,
         },
       });
 
