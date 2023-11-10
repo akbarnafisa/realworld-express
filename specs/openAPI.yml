@@ -83,6 +83,49 @@ paths:
         '200':
           description: OK
   /api/articles:
+    parameters:
+      - name: limit
+        in : query
+        required: false
+        description: "Limit the amount of data to retrieve"
+        schema:
+          default: 10
+          type: number
+      - name: offset
+        in : query
+        required: false
+        description: "Skip the amount of data; the value will be ignored if a cursor query is available."
+        schema:
+          default: 0
+          type: number
+      - name: cursor
+        in : query
+        required: false
+        description: "Article ID to reference in pagination; the offset query will be ignored if this value is set."
+        schema:
+          type: number
+      - name: tag
+        in : query
+        required: false
+        description: "Get articles based on its tag data"
+        example: "/api/articles?tag=health"
+        schema:
+          type: string
+      - name: author
+        in : query
+        required: false
+        description: "Get articles based on its author"
+        example: "/api/articles?author=bob"
+        schema:
+          type: string
+      - name: favorited
+        in : query
+        required: false
+        description: "Retrieve articles if they are favorited by the given user."
+        example: "/api/articles?favorited=bob"
+        schema:
+          type: string
+          
     get:
       description: "Get all articles data"
 
@@ -165,6 +208,27 @@ paths:
         '200':
           description: OK
     get:
+      parameters:
+        - name: limit
+          in : query
+          required: false
+          description: "Limit the amount of data to retrieve"
+          schema:
+            default: 10
+            type: number
+        - name: offset
+          in : query
+          required: false
+          description: "Skip the amount of data; the value will be ignored if a cursor query is available."
+          schema:
+            default: 0
+            type: number
+        - name: cursor
+          in : query
+          required: false
+          description: "Comment ID to reference in pagination; the offset query will be ignored if this value is set."
+          schema:
+            type: number
       description: "Get all comments in article"
       responses:
         '200':
@@ -189,6 +253,27 @@ paths:
         '200':
           description: OK
   /api/feed:
+    parameters:
+      - name: limit
+        in : query
+        required: false
+        description: "Limit the amount of data to retrieve"
+        schema:
+          default: 10
+          type: number
+      - name: offset
+        in : query
+        required: false
+        description: "Skip the amount of data; the value will be ignored if a cursor query is available."
+        schema:
+          default: 0
+          type: number
+      - name: cursor
+        in : query
+        required: false
+        description: "Article ID to reference in pagination; the offset query will be ignored if this value is set."
+        schema:
+          type: number
     get:
       description: "Get article from the user that have been followed by the current user"
 
