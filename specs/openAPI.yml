@@ -43,18 +43,39 @@ paths:
         '200':
           description: OK
   /api/user/{username}:
+    parameters:
+      - name: username
+        in : path
+        required: true
+        description: "Username of the user"
+        schema:
+          type: string
     get:
       description: "Get information about specific user"
       responses:
         '200':
           description: OK
   /api/user/{username}/follow:
+    parameters:
+      - name: username
+        in : path
+        required: true
+        description: "Username of the user"
+        schema:
+          type: string
     post:
       description: "Follow user"
       responses:
         '200':
           description: OK
   /api/user/{username}/unfollow:
+    parameters:
+      - name: username
+        in : path
+        required: true
+        description: "Username of the user"
+        schema:
+          type: string
     post:
       description: "Unfollow user"
 
@@ -81,6 +102,13 @@ paths:
         '200':
           description: OK
   /api/article/{slug}:
+    parameters:
+      - name: slug
+        in : path
+        required: true
+        description: "Slug of the article"
+        schema:
+          type: string
     delete:
       description: "Delete specific article"
       responses:
@@ -98,18 +126,39 @@ paths:
         '200':
           description: OK
   /api/article/{slug}/favorite:
+    parameters:
+      - name: slug
+        in : path
+        required: true
+        description: "Slug of the article"
+        schema:
+          type: string
     description: "Favorite article"
     post:
       responses:
         '200':
           description: OK
   /api/article/{slug}/unfavorite:
+    parameters:
+      - name: slug
+        in : path
+        required: true
+        description: "Slug of the article"
+        schema:
+          type: string
     description: "Unfavorite article"
     post:
       responses:
         '200':
           description: OK
   /api/article/{slug}/comments:
+    parameters:
+      - name: slug
+        in : path
+        required: true
+        description: "Slug of the article"
+        schema:
+          type: string
     post:
       description: "Create new comment in article"
       responses:
@@ -120,7 +169,20 @@ paths:
       responses:
         '200':
           description: OK
-  /api/article/{slug}/comments/:commentId:
+  /api/article/{slug}/comments/{commentId}:
+    parameters:
+      - name: slug
+        in : path
+        required: true
+        description: "Slug of the article"
+        schema:
+          type: string
+      - name: commentId
+        in : path
+        required: true
+        description: "ID of the comment"
+        schema:
+          type: string
     delete:
       description: "Delete comment in article"
       responses:
