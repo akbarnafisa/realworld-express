@@ -134,10 +134,7 @@ export const getArticleService = async (request: Request) => {
 };
 
 export const getArticlesService = async (request: Request) => {
-  // const { slug } = request.params;
-  // const { limit, offset, cursor, favorited, tag, author } = request.query;
-
-  const auth = request?.auth as TokenPayload | undefined;
+const auth = request?.auth as TokenPayload | undefined;
   const { limit, offset, cursor, ...restQuery } = request.query;
 
   let skip, take;
