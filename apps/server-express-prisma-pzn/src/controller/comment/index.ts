@@ -1,16 +1,17 @@
 import { RequestHandler } from 'express';
-import {
-  createCommentService,
-  deleteCommentService,
-  getCommentsService,
-} from '../../service/comment';
+import { createCommentService, deleteCommentService, getCommentsService } from '../../service/comment';
+import { responseFormat } from 'validator';
 
 export const createCommentController: RequestHandler = async (req, res, next) => {
   try {
     const data = await createCommentService(req);
-    res.status(200).json({
-      data,
-    });
+    res.status(200).json(
+      responseFormat({
+        error: null,
+        success: true,
+        data,
+      }),
+    );
   } catch (error) {
     next(error);
   }
@@ -19,9 +20,13 @@ export const createCommentController: RequestHandler = async (req, res, next) =>
 export const getCommentController: RequestHandler = async (req, res, next) => {
   try {
     const data = await getCommentsService(req);
-    res.status(200).json({
-      data,
-    });
+    res.status(200).json(
+      responseFormat({
+        error: null,
+        success: true,
+        data,
+      }),
+    );
   } catch (error) {
     next(error);
   }
@@ -29,10 +34,14 @@ export const getCommentController: RequestHandler = async (req, res, next) => {
 
 export const deleteCommentController: RequestHandler = async (req, res, next) => {
   try {
-    const data = await deleteCommentService(req);
-    res.status(200).json({
-      data,
-    });
+    await deleteCommentService(req);
+    res.status(200).json(
+      responseFormat({
+        error: null,
+        success: true,
+        data: null,
+      }),
+    );
   } catch (error) {
     next(error);
   }

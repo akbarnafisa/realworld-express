@@ -81,6 +81,8 @@ describe('POST /api/article/:slug/comments - create comments', () => {
           },
         },
       },
+      error: null,
+      success: true
     });
   });
 });
@@ -120,6 +122,8 @@ describe('GET /api/article/:slug/comments - get comments', () => {
           })),
         commentsCount: 15,
       },
+      error: null,
+      success: true
     });
   });
 
@@ -146,6 +150,8 @@ describe('GET /api/article/:slug/comments - get comments', () => {
           })),
         commentsCount: 15,
       },
+      error: null,
+      success: true
     });
   });
 
@@ -251,9 +257,9 @@ describe('DELETE /api/article/:slug/comments/:commentId - delete comment', () =>
 
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
-      data: {
-        success: true,
-      },
+      data: null,
+      error: null,
+      success: true
     });
   });
 });

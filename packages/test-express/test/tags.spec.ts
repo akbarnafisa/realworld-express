@@ -52,6 +52,8 @@ describe('GET /api/tags', () => {
       data: {
         tags: expect.arrayContaining(['data-1', 'data-2']),
       },
+      error: null,
+      success: true,
     });
 
     expect(result.status).toEqual(200);

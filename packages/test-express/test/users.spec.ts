@@ -169,6 +169,8 @@ describe('POST /api/users - register', () => {
           image: null,
         },
       },
+      error: null,
+      success: true
     });
   });
 
@@ -330,6 +332,8 @@ describe('POST /api/users/login - login', () => {
           image: null,
         },
       },
+      error: null,
+      success: true
     });
   });
 

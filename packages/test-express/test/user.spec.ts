@@ -49,6 +49,8 @@ describe('GET /api/user/current - get current user', () => {
           username: 'user-current',
         },
       },
+      error: null,
+      success: true
     });
   });
 });
@@ -197,6 +199,8 @@ describe('PATCH /api/user/current - update current user', () => {
           username: 'user-current-update-123',
         },
       },
+      error: null,
+      success: true
     });
   });
 });

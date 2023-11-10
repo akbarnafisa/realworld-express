@@ -42,6 +42,8 @@ describe('GET /api/user/:username - get user profile', () => {
           username: 'user-profile-real',
         },
       },
+      error: null,
+      success: true
     });
   });
 
@@ -57,6 +59,8 @@ describe('GET /api/user/:username - get user profile', () => {
           username: 'user-profile-real',
         },
       },
+      error: null,
+      success: true
     });
   });
 });
@@ -122,6 +126,8 @@ describe('POST /api/user/:username/follow - follow user', () => {
       data: {
         success: true,
       },
+      error: null,
+      success: true
     });
   });
 });
@@ -202,6 +208,8 @@ describe('POST /api/user/:username/unfollow - unfollow user', () => {
       data: {
         success: true,
       },
+      error: null,
+      success: true
     });
   });
 });

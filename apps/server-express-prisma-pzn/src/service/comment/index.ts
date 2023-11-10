@@ -140,10 +140,6 @@ export const deleteCommentService = async (request: Request) => {
   await prismaClient.comment.delete({
     where: { id: originComment.id },
   });
-
-  return {
-    success: true,
-  };
 };
 
 const checkComment = async (commentId: number) => {

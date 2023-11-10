@@ -60,6 +60,8 @@ describe('POST /api/article - create article', () => {
 
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
+      error: null,
+      success: true,
       data: {
         article: {
           authorId: expect.any(Number),
@@ -114,6 +116,8 @@ describe('GET /api/article/:slug - get article', () => {
 
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
+      error: null,
+      success: true,
       data: {
         article: {
           body: 'test-body',
@@ -146,6 +150,8 @@ describe('GET /api/article/:slug - get article', () => {
 
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
+      error: null,
+      success: true,
       data: {
         article: {
           body: 'test-body',
@@ -168,8 +174,6 @@ describe('GET /api/article/:slug - get article', () => {
       },
     });
   });
-
-  it('should return favorited info if the article logged in', async () => {});
 });
 
 describe('PATCH /api/article/:slug - update article', () => {
@@ -227,8 +231,6 @@ describe('PATCH /api/article/:slug - update article', () => {
     });
   });
 
-  it('should allow me to change my article', async () => {});
-
   it('should not change the article slug if the title is not changed', async () => {
     const data = await createArticles(token);
     const result = await supertest(app)
@@ -243,6 +245,8 @@ describe('PATCH /api/article/:slug - update article', () => {
 
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
+      error: null,
+      success: true,
       data: {
         article: {
           authorId: data?.article?.authorId,
@@ -322,9 +326,9 @@ describe('DELETE /api/article/:slug - delete article', () => {
     const result = await supertest(app).delete(TEST_API(data?.article?.slug)).set('Authorization', `Bearer ${token}`);
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
-      data: {
-        success: true,
-      },
+      error: null,
+      success: true,
+      data: null,
     });
   });
 });
@@ -367,7 +371,21 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
       });
     });
 
-    it('if article already unfavorited', async () => {});
+    it('if article already unfavorited', async () => {
+      const data = await createArticles(token);
+      const result = await supertest(app)
+        .post(`/api/article/${data?.article?.slug}/unfavorite`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(result.status).toEqual(422);
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'Article had been unfavorited!',
+        },
+        success: false,
+      });
+    });
   });
 
   it('should allow me to unfavorite article', async () => {
@@ -400,6 +418,8 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
           },
         },
       },
+      error: null,
+      success: true,
     });
   });
 });

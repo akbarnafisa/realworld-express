@@ -360,10 +360,6 @@ export const deleteArticleService = async (request: Request) => {
       slug,
     },
   });
-
-  return {
-    success: true,
-  };
 };
 
 export const updateArticleService = async (request: Request) => {
@@ -436,9 +432,6 @@ export const favoriteArticleService = async (request: Request) => {
       },
     });
 
-    return {
-      success: true,
-    };
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
@@ -475,10 +468,6 @@ export const unFavoriteArticleService = async (request: Request) => {
         },
       },
     });
-
-    return {
-      success: true,
-    };
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2017') {
