@@ -16,14 +16,24 @@ describe('GET /api/user/current - get current user', () => {
   it('should error if token is not provided', async () => {
     const result = await supertest(app).get(TEST_API).send();
     expect(result.status).toEqual(401);
-    expect(result.body).toEqual({ errors: 'No authorization token was found' });
+    expect(result.body).toEqual({
+      data: null,
+      error: {
+        errorMsg: 'No authorization token was found',
+      },
+      success: false,
+    });
   });
 
   it('shoul return 404 if user not found', async () => {
     const result = await supertest(app).get(TEST_API).set('Authorization', `Bearer ${NOT_FOUND_USER_TOKEN}`).send();
     expect(result.status).toEqual(404);
     expect(result.body).toEqual({
-      errors: 'User not found!',
+      data: null,
+      error: {
+        errorMsg: 'User not found!',
+      },
+      success: false,
     });
   });
 
@@ -58,7 +68,13 @@ describe('PATCH /api/user/current - update current user', () => {
   describe('should error ', () => {
     it('should error if token is not provided', async () => {
       const result = await supertest(app).patch(TEST_API).send();
-      expect(result.body).toEqual({ errors: 'No authorization token was found' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
+      });
     });
 
     it('shoul return 404 if user not found', async () => {
@@ -73,7 +89,11 @@ describe('PATCH /api/user/current - update current user', () => {
         });
       expect(result.status).toEqual(404);
       expect(result.body).toEqual({
-        errors: 'User not found',
+        data: null,
+        error: {
+          errorMsg: 'User not found',
+        },
+        success: false,
       });
     });
 
@@ -91,7 +111,11 @@ describe('PATCH /api/user/current - update current user', () => {
         });
       expect(result.status).toEqual(422);
       expect(result.body).toEqual({
-        errors: 'the field email is not unique',
+        data: null,
+        error: {
+          errorMsg: 'the field email is not unique',
+        },
+        success: false,
       });
     });
 
@@ -109,7 +133,11 @@ describe('PATCH /api/user/current - update current user', () => {
         });
       expect(result.status).toEqual(422);
       expect(result.body).toEqual({
-        errors: 'the field username is not unique',
+        data: null,
+        error: {
+          errorMsg: 'the field username is not unique',
+        },
+        success: false,
       });
     });
 
@@ -120,7 +148,11 @@ describe('PATCH /api/user/current - update current user', () => {
       });
       expect(result.status).toEqual(400);
       expect(result.body).toEqual({
-        errors: 'Email is required, Username is required',
+        data: null,
+        error: {
+          errorMsg: 'Email is required, Username is required',
+        },
+        success: false,
       });
     });
 
@@ -136,7 +168,11 @@ describe('PATCH /api/user/current - update current user', () => {
         });
       expect(result.status).toEqual(400);
       expect(result.body).toEqual({
-        errors: 'Bio is too long, Invalid URL',
+        data: null,
+        error: {
+          errorMsg: 'Bio is too long, Invalid URL',
+        },
+        success: false,
       });
     });
   });

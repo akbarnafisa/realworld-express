@@ -14,7 +14,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Password is required');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Password is required',
+          },
+          success: false,
+        });
       });
 
       it('should meet the minimum length', async () => {
@@ -25,7 +31,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Password should have 6 characters minimum');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Password should have 6 characters minimum',
+          },
+          success: false,
+        });
       });
 
       it('should meet the maximum length', async () => {
@@ -37,7 +49,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Password is too long');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Password is too long',
+          },
+          success: false,
+        });
       });
     });
 
@@ -50,7 +68,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Username is required');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Username is required',
+          },
+          success: false,
+        });
       });
 
       it('should meet the maximum length', async () => {
@@ -62,7 +86,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Username is too long');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Username is too long',
+          },
+          success: false,
+        });
       });
     });
 
@@ -75,7 +105,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Email is required');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Email is required',
+          },
+          success: false,
+        });
       });
 
       it('should meet the maximum length', async () => {
@@ -87,7 +123,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Email is too long');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Email is too long',
+          },
+          success: false,
+        });
       });
 
       it('should meet the email format', async () => {
@@ -98,7 +140,13 @@ describe('POST /api/users - register', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Invalid email');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Invalid email',
+          },
+          success: false,
+        });
       });
     });
   });
@@ -137,8 +185,15 @@ describe('POST /api/users - register', () => {
       });
 
       expect(result.status).toEqual(422);
+      // expect(result.body).toEqual({
+      //   errors: 'Username or email had been used',
+      // });
       expect(result.body).toEqual({
-        errors: 'Username or email had been used',
+        data: null,
+        error: {
+          errorMsg: 'Username or email had been used',
+        },
+        success: false,
       });
     });
 
@@ -150,8 +205,15 @@ describe('POST /api/users - register', () => {
       });
 
       expect(result.status).toEqual(422);
+      // expect(result.body).toEqual({
+      //   errors: 'Username or email had been used',
+      // });
       expect(result.body).toEqual({
-        errors: 'Username or email had been used',
+        data: null,
+        error: {
+          errorMsg: 'Username or email had been used',
+        },
+        success: false,
       });
     });
   });
@@ -173,7 +235,13 @@ describe('POST /api/users/login - login', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Password is required');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Password is required',
+          },
+          success: false,
+        });
       });
 
       it('should meet the minimum length', async () => {
@@ -183,7 +251,13 @@ describe('POST /api/users/login - login', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Password should have 6 characters minimum');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Password should have 6 characters minimum',
+          },
+          success: false,
+        });
       });
     });
 
@@ -195,7 +269,13 @@ describe('POST /api/users/login - login', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Email is required');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Email is required',
+          },
+          success: false,
+        });
       });
 
       it('should meet the maximum length', async () => {
@@ -206,7 +286,13 @@ describe('POST /api/users/login - login', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Email is too long');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Email is too long',
+          },
+          success: false,
+        });
       });
 
       it('should meet the email format', async () => {
@@ -216,7 +302,13 @@ describe('POST /api/users/login - login', () => {
         });
 
         expect(result.status).toBe(400);
-        expect(result.body.errors).toBe('Invalid email');
+        expect(result.body).toEqual({
+          data: null,
+          error: {
+            errorMsg: 'Invalid email',
+          },
+          success: false,
+        });
       });
     });
   });
@@ -250,7 +342,11 @@ describe('POST /api/users/login - login', () => {
 
       expect(result.status).toEqual(422);
       expect(result.body).toEqual({
-        errors: 'Email or password is not correct!',
+        data: null,
+        error: {
+          errorMsg: 'Email or password is not correct!',
+        },
+        success: false,
       });
     });
 
@@ -261,8 +357,15 @@ describe('POST /api/users/login - login', () => {
       });
 
       expect(result.status).toEqual(422);
+      // expect(result.body).toEqual({
+      //   errors: 'Email or password is not correct!',
+      // });
       expect(result.body).toEqual({
-        errors: 'Email or password is not correct!',
+        data: null,
+        error: {
+          errorMsg: 'Email or password is not correct!',
+        },
+        success: false,
       });
     });
   });

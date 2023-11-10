@@ -17,7 +17,13 @@ describe('POST /api/article - create article', () => {
   describe('should error', () => {
     it('if user not logged in', async () => {
       const result = await supertest(app).post(TEST_API).send();
-      expect(result.body).toEqual({ errors: 'No authorization token was found' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
+      });
     });
 
     it('if title is not provided', async () => {
@@ -32,7 +38,11 @@ describe('POST /api/article - create article', () => {
 
       expect(result.status).toEqual(400);
       expect(result.body).toEqual({
-        errors: 'Title is required',
+        data: null,
+        error: {
+          errorMsg: 'Title is required',
+        },
+        success: false,
       });
     });
   });
@@ -71,10 +81,10 @@ describe('POST /api/article - create article', () => {
 
 describe('GET /api/article/:slug - get article', () => {
   let token = '';
-  let secondToken = ''
+  let secondToken = '';
   const TEST_API = (slug: string) => `/api/article/${slug}`;
   const userId = 'user-get-article';
-  const secondUserId = 'user-get-article-2'
+  const secondUserId = 'user-get-article-2';
 
   beforeAll(async () => {
     token = await getToken(userId);
@@ -90,7 +100,11 @@ describe('GET /api/article/:slug - get article', () => {
     const result = await supertest(app).get(TEST_API('123'));
     expect(result.status).toEqual(404);
     expect(result.body).toEqual({
-      errors: 'Article not found!',
+      data: null,
+      error: {
+        errorMsg: 'Article not found!',
+      },
+      success: false,
     });
   });
 
@@ -155,7 +169,7 @@ describe('GET /api/article/:slug - get article', () => {
     });
   });
 
-  it('should return favorited info if the article logged in', async () => {})
+  it('should return favorited info if the article logged in', async () => {});
 });
 
 describe('PATCH /api/article/:slug - update article', () => {
@@ -176,7 +190,11 @@ describe('PATCH /api/article/:slug - update article', () => {
       const result = await supertest(app).patch(TEST_API('123'));
       expect(result.status).toEqual(401);
       expect(result.body).toEqual({
-        errors: 'No authorization token was found',
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
       });
     });
 
@@ -184,7 +202,11 @@ describe('PATCH /api/article/:slug - update article', () => {
       const result = await supertest(app).patch(TEST_API('123')).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(404);
       expect(result.body).toEqual({
-        errors: 'Article not found!',
+        data: null,
+        error: {
+          errorMsg: 'Article not found!',
+        },
+        success: false,
       });
     });
 
@@ -196,7 +218,11 @@ describe('PATCH /api/article/:slug - update article', () => {
         .set('Authorization', `Bearer ${NOT_FOUND_USER_TOKEN}`);
       expect(result.status).toEqual(401);
       expect(result.body).toEqual({
-        errors: 'User unauthorized!',
+        data: null,
+        error: {
+          errorMsg: 'User unauthorized!',
+        },
+        success: false,
       });
     });
   });
@@ -254,7 +280,11 @@ describe('DELETE /api/article/:slug - delete article', () => {
       const result = await supertest(app).delete(TEST_API('123'));
       expect(result.status).toEqual(401);
       expect(result.body).toEqual({
-        errors: 'No authorization token was found',
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
       });
     });
 
@@ -262,7 +292,11 @@ describe('DELETE /api/article/:slug - delete article', () => {
       const result = await supertest(app).delete(TEST_API('123')).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(404);
       expect(result.body).toEqual({
-        errors: 'Article not found!',
+        data: null,
+        error: {
+          errorMsg: 'Article not found!',
+        },
+        success: false,
       });
     });
 
@@ -274,7 +308,11 @@ describe('DELETE /api/article/:slug - delete article', () => {
         .set('Authorization', `Bearer ${NOT_FOUND_USER_TOKEN}`);
       expect(result.status).toEqual(401);
       expect(result.body).toEqual({
-        errors: 'User unauthorized!',
+        data: null,
+        error: {
+          errorMsg: 'User unauthorized!',
+        },
+        success: false,
       });
     });
   });
@@ -309,7 +347,11 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
       const result = await supertest(app).post(TEST_API('123'));
       expect(result.status).toEqual(401);
       expect(result.body).toEqual({
-        errors: 'No authorization token was found',
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
       });
     });
 
@@ -317,7 +359,11 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
       const result = await supertest(app).post(TEST_API('123')).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(404);
       expect(result.body).toEqual({
-        errors: 'Article not found!',
+        data: null,
+        error: {
+          errorMsg: 'Article not found!',
+        },
+        success: false,
       });
     });
 
@@ -357,7 +403,6 @@ describe('POST /api/article/:slug/unfavorite - unfavorite article', () => {
     });
   });
 });
-
 
 describe('GET /api/articles - get article author', () => {
   let token = '';

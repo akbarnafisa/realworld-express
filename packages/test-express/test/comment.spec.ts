@@ -20,7 +20,13 @@ describe('POST /api/article/:slug/comments - create comments', () => {
         body: '12345',
       });
       expect(result.status).toEqual(401);
-      expect(result.body).toEqual({ errors: 'No authorization token was found' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
+      });
     });
 
     it('should error if article not found', async () => {
@@ -29,7 +35,11 @@ describe('POST /api/article/:slug/comments - create comments', () => {
       });
       expect(result.status).toEqual(404);
       expect(result.body).toEqual({
-        errors: 'Article not found!',
+        data: null,
+        error: {
+          errorMsg: 'Article not found!',
+        },
+        success: false,
       });
     });
 
@@ -39,7 +49,11 @@ describe('POST /api/article/:slug/comments - create comments', () => {
       const result = await supertest(app).post(TEST_API(data?.article?.slug)).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(400);
       expect(result.body).toEqual({
-        errors: 'Comment content is required',
+        data: null,
+        error: {
+          errorMsg: 'Comment content is required',
+        },
+        success: false,
       });
     });
   });
@@ -150,7 +164,6 @@ describe('GET /api/article/:slug/comments - get comments', () => {
       .get(`/api/article/${slug}/comments?limit=20&cursor=${resultPage2.body.data.nextCursor}`)
       .set('Authorization', `Bearer ${token}`);
 
-
     expect(resultPage2.body.data.nextCursor).toBeTruthy();
     expect(resultPage2.body.data.hasMore).toEqual(true);
 
@@ -178,7 +191,13 @@ describe('DELETE /api/article/:slug/comments/:commentId - delete comment', () =>
         body: '12345',
       });
       expect(result.status).toEqual(401);
-      expect(result.body).toEqual({ errors: 'No authorization token was found' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
+      });
     });
 
     it('should error if article not found', async () => {
@@ -187,7 +206,11 @@ describe('DELETE /api/article/:slug/comments/:commentId - delete comment', () =>
       });
       expect(result.status).toEqual(404);
       expect(result.body).toEqual({
-        errors: 'Article not found!',
+        data: null,
+        error: {
+          errorMsg: 'Article not found!',
+        },
+        success: false,
       });
     });
 
@@ -201,7 +224,11 @@ describe('DELETE /api/article/:slug/comments/:commentId - delete comment', () =>
         });
       expect(result.status).toEqual(404);
       expect(result.body).toEqual({
-        errors: 'Comment not found!',
+        data: null,
+        error: {
+          errorMsg: 'Comment not found!',
+        },
+        success: false,
       });
     });
   });

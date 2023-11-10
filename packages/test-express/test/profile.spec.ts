@@ -20,7 +20,13 @@ describe('GET /api/user/:username - get user profile', () => {
   it('should error if user not found', async () => {
     const result = await supertest(app).get(TEST_API('123'));
     expect(result.status).toEqual(404);
-    expect(result.body).toEqual({ errors: 'User not found!' });
+    expect(result.body).toEqual({
+      data: null,
+      error: {
+        errorMsg: 'User not found!',
+      },
+      success: false,
+    });
   });
 
   it('should return following info if the user logged in', async () => {
@@ -75,19 +81,37 @@ describe('POST /api/user/:username/follow - follow user', () => {
     it('if user not logged in', async () => {
       const result = await supertest(app).post(TEST_API('123xx'));
       expect(result.status).toEqual(401);
-      expect(result.body).toEqual({ errors: 'No authorization token was found' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
+      });
     });
 
     it('if user not found', async () => {
       const result = await supertest(app).post(TEST_API('123xx')).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(404);
-      expect(result.body).toEqual({ errors: 'User not found!' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'User not found!',
+        },
+        success: false,
+      });
     });
 
     it('if user follow them self', async () => {
       const result = await supertest(app).post(TEST_API(userId)).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(422);
-      expect(result.body).toEqual({ errors: 'Unable to follow yourself' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'Unable to follow yourself',
+        },
+        success: false,
+      });
     });
   });
 
@@ -122,26 +146,48 @@ describe('POST /api/user/:username/unfollow - unfollow user', () => {
     it('if user not logged in', async () => {
       const result = await supertest(app).post(TEST_API('123xx'));
       expect(result.status).toEqual(401);
-      expect(result.body).toEqual({ errors: 'No authorization token was found' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'No authorization token was found',
+        },
+        success: false,
+      });
     });
 
     it('if user not found', async () => {
       const result = await supertest(app).post(TEST_API('123xx')).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(404);
-      expect(result.body).toEqual({ errors: 'User not found!' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'User not found!',
+        },
+        success: false,
+      });
     });
 
     it('if user unfollow them self', async () => {
       const result = await supertest(app).post(TEST_API(userId)).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(422);
-      expect(result.body).toEqual({ errors: 'Unable to unfollow yourself' });
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'Unable to unfollow yourself',
+        },
+        success: false,
+      });
     });
 
     it('if user already unfollowed', async () => {
       const result = await supertest(app).post(TEST_API(secondUser)).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(422);
       expect(result.body).toEqual({
-        errors: 'User already unfollowed',
+        data: null,
+        error: {
+          errorMsg: 'User already unfollowed',
+        },
+        success: false,
       });
     });
   });

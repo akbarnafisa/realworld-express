@@ -1,5 +1,5 @@
 import type { ErrorRequestHandler } from 'express';
-import { ResponseError } from 'validator';
+import { ResponseError, responseFormat } from 'validator';
 import { logger } from '../application/logging';
 
 export const errorMiddleware: ErrorRequestHandler = async (err, _, res, next) => {
@@ -8,20 +8,36 @@ export const errorMiddleware: ErrorRequestHandler = async (err, _, res, next) =>
     return;
   }
 
+  responseFormat;
+
   if (err instanceof ResponseError) {
     res
       .status(err.status)
-      .json({
-        errors: err.message,
-      })
+      .json(
+        responseFormat({
+          success: false,
+          data: null,
+          error: {
+            errorMsg: err.message,
+            errorCode: err.errorCode,
+          },
+        }),
+      )
       .end();
   } else {
     logger.error(err);
     res
       .status(err.status || 500)
-      .json({
-        errors: err.message,
-      })
+      .json(
+        responseFormat({
+          success: false,
+          data: null,
+          error: {
+            errorMsg: err.message,
+            errorCode: err.errorCode,
+          },
+        }),
+      )
       .end();
   }
 };

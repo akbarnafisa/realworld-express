@@ -169,7 +169,11 @@ describe('GET /api/feed - get article', () => {
 
     expect(result.status).toEqual(401);
     expect(result.body).toEqual({
-      errors: 'No authorization token was found',
+      data: null,
+      error: {
+        errorMsg: 'No authorization token was found',
+      },
+      success: false,
     });
   });
 
