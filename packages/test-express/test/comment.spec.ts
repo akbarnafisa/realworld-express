@@ -73,7 +73,6 @@ describe('POST /api/article/:slug/comments - create comments', () => {
 
 describe('GET /api/article/:slug/comments - get comments', () => {
   let token = '';
-  const TEST_API = (slug: string) => `/api/article/${slug}/comments`;
   const userId = 'user-get-comment';
 
   beforeAll(async () => {
@@ -105,6 +104,7 @@ describe('GET /api/article/:slug/comments - get comments', () => {
               username: userId,
             },
           })),
+        commentsCount: 15,
       },
     });
   });
@@ -130,8 +130,32 @@ describe('GET /api/article/:slug/comments - get comments', () => {
               username: userId,
             },
           })),
+        commentsCount: 15,
       },
     });
+  });
+
+  it('should give me article by using cursor', async () => {
+    const article = await createArticles(token);
+    const slug = article?.article?.slug;
+    await createComments(slug, token);
+
+    const resultPage1 = await supertest(app)
+      .get(`/api/article/${slug}/comments?limit=1`)
+      .set('Authorization', `Bearer ${token}`);
+    const resultPage2 = await supertest(app)
+      .get(`/api/article/${slug}/comments?limit=1&cursor=${resultPage1.body.data.comments[0].id}`)
+      .set('Authorization', `Bearer ${token}`);
+    const resultPage3 = await supertest(app)
+      .get(`/api/article/${slug}/comments?limit=20&cursor=${resultPage2.body.data.nextCursor}`)
+      .set('Authorization', `Bearer ${token}`);
+
+
+    expect(resultPage2.body.data.nextCursor).toBeTruthy();
+    expect(resultPage2.body.data.hasMore).toEqual(true);
+
+    expect(resultPage3.body.data.nextCursor).toEqual(null);
+    expect(resultPage3.body.data.hasMore).toEqual(false);
   });
 });
 

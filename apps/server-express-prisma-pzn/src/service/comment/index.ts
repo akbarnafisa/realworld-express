@@ -11,6 +11,8 @@ import {
 import { prismaClient } from '../../application/database';
 import { checkArticle } from '../article';
 
+const DEFAULT_COMMENTS_QUERIES = 10;
+
 export const getCommentsService = async (request: Request) => {
   const { slug } = request.params;
   const { limit, offset, cursor } = request.query;
@@ -32,7 +34,7 @@ export const getCommentsService = async (request: Request) => {
       articleId: article.id,
     },
     skip: skip || 0,
-    take: take || 10,
+    take: take || DEFAULT_COMMENTS_QUERIES,
     cursor: cursor ? { id: Number(cursor) } : undefined,
     orderBy: {
       createdAt: 'asc',
@@ -47,7 +49,36 @@ export const getCommentsService = async (request: Request) => {
     },
   });
 
-  return commentsViewer(data);
+  let hasMore
+  let nextCursor;
+  let commentsCount;
+
+  if (!cursor) {
+    commentsCount = (
+      await prismaClient.comment.findMany({
+        where: {
+          articleId: article.id,
+        },
+      })
+    ).length;
+  } else if (data.length > 0) {
+    const lastLinkResults = data[data.length - 1];
+    const myCursor = lastLinkResults.id;
+
+    const secondQueryResults = await prismaClient.comment.findMany({
+      take: take || DEFAULT_COMMENTS_QUERIES,
+      cursor: {
+        id: myCursor,
+      },
+    });
+    (hasMore = secondQueryResults.length >= Number(take)), (nextCursor = hasMore ? myCursor : null);
+  }
+
+  return commentsViewer(data, {
+    nextCursor,
+    hasMore,
+    commentsCount,
+  });
 };
 
 export const createCommentService = async (request: Request) => {
@@ -68,7 +99,7 @@ export const createCommentService = async (request: Request) => {
       body,
       aritcle: {
         connect: {
-          id: article.id
+          id: article.id,
         },
       },
       author: {

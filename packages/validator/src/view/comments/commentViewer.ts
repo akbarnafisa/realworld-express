@@ -26,9 +26,10 @@ export const commentViewer = (comment: CommentType): CommentResponseType => {
 
 export const commentsViewer = (
   comments: CommentType[],
-  opt: {
-    nextCursor: number | null;
-    hasMore: boolean;
+  opt?: {
+    nextCursor?: number | null;
+    hasMore?: boolean;
+    commentsCount?: number
   },
 ): CommentsResponseType => {
   const commentsItem = comments.map((comment) => {
@@ -36,7 +37,8 @@ export const commentsViewer = (
   });
   return {
     comments: commentsItem,
-    nextCursor: opt.nextCursor,
-    hasMore: opt.hasMore,
+    nextCursor: opt?.nextCursor,
+    hasMore: opt?.hasMore,
+    commentsCount: opt?.commentsCount
   };
 };
