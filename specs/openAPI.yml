@@ -1,0 +1,135 @@
+openapi: '3.0.2'
+info:
+  title: Blogging App
+  version: '1.0'
+# servers:
+#   - url: https://{env}.express-node.com:{port}/
+#     description: The production API server
+#     variables:
+#       username:
+#         # note! no enum here means it is an open value
+#         default: demo
+#         description: this value is assigned by the service provider, in this example `gigantic-server.com`
+#       port:
+#         enum:
+#           - '8443'
+#           - '443'
+#         default: '8443'
+#       basePath:
+#         # open meaning there is the opportunity to use special base paths as assigned by the provider, default is `v2`
+#         default: v2
+paths:
+  /api/users:
+    post:
+      description: "Register user"
+      responses:
+        '200':
+          description: OK
+  /api/users/login:
+    post:
+      description: "Authenticate user"
+      responses:
+        '200':
+          description: OK
+  /api/user/current:
+    get:
+      description: "Get info about current user that already logged in"
+      responses:
+        '200':
+          description: OK
+    patch:
+      description: "Update  user information"
+      responses:
+        '200':
+          description: OK
+  /api/user/{username}:
+    get:
+      description: "Get information about specific user"
+      responses:
+        '200':
+          description: OK
+  /api/user/{username}/follow:
+    post:
+      description: "Follow user"
+      responses:
+        '200':
+          description: OK
+  /api/user/{username}/unfollow:
+    post:
+      description: "Unfollow user"
+
+      responses:
+        '200':
+          description: OK
+  /api/articles:
+    get:
+      description: "Get all articles data"
+
+      responses:
+        '200':
+          description: OK
+  /api/tags:
+    get:
+      description: "Get all tags data"
+      responses:
+        '200':
+          description: OK
+  /api/article:
+    post:
+      description: "Create new article"
+      responses:
+        '200':
+          description: OK
+  /api/article/{slug}:
+    delete:
+      description: "Delete specific article"
+      responses:
+        '200':
+          description: OK
+    patch:
+      description: "Update specific article"
+
+      responses:
+        '200':
+          description: OK
+    get:
+      description: "Get specific article"
+      responses:
+        '200':
+          description: OK
+  /api/article/{slug}/favorite:
+    description: "Favorite article"
+    post:
+      responses:
+        '200':
+          description: OK
+  /api/article/{slug}/unfavorite:
+    description: "Unfavorite article"
+    post:
+      responses:
+        '200':
+          description: OK
+  /api/article/{slug}/comments:
+    post:
+      description: "Create new comment in article"
+      responses:
+        '200':
+          description: OK
+    get:
+      description: "Get all comments in article"
+      responses:
+        '200':
+          description: OK
+  /api/article/{slug}/comments/:commentId:
+    delete:
+      description: "Delete comment in article"
+      responses:
+        '200':
+          description: OK
+  /api/feed:
+    get:
+      description: "Get article from the user that have been followed by the current user"
+
+      responses:
+        '200':
+          description: OK
