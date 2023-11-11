@@ -10,33 +10,23 @@ import {
 } from 'validator';
 import { prismaClient } from '../../application/database';
 import { checkPassword, createUserToken, hashPassword } from '../../utils/auth';
-import { Prisma } from '@prisma/client';
 
 export const registerService = async (request: Request) => {
   const user = await validate<UserRegisterInputType>(usersRegisterInputSchema, request);
 
-  try {
-    const { password, ...restInput } = user;
+  const { password, ...restInput } = user;
 
-    const res = await prismaClient.user.create({
-      data: {
-        ...restInput,
-        password: hashPassword(password),
-      },
-    });
+  const res = await prismaClient.user.create({
+    data: {
+      ...restInput,
+      password: hashPassword(password),
+    },
+  });
 
-    const { id, username, email } = res;
-    const payload: TokenPayload = { id, username, email };
+  const { id, username, email } = res;
+  const payload: TokenPayload = { id, username, email };
 
-    return userViewer(res, createUserToken(payload));
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2002') {
-        throw new ResponseError(422, 'Username or email had been used');
-      }
-    }
-    throw new Error(e as string);
-  }
+  return userViewer(res, createUserToken(payload));
 };
 
 export const loginService = async (request: Request) => {

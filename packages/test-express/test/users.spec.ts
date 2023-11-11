@@ -187,13 +187,10 @@ describe('POST /api/users - register', () => {
       });
 
       expect(result.status).toEqual(422);
-      // expect(result.body).toEqual({
-      //   errors: 'Username or email had been used',
-      // });
       expect(result.body).toEqual({
         data: null,
         error: {
-          errorMsg: 'Username or email had been used',
+          errorMsg: 'The field username is not unique',
         },
         success: false,
       });
@@ -207,13 +204,10 @@ describe('POST /api/users - register', () => {
       });
 
       expect(result.status).toEqual(422);
-      // expect(result.body).toEqual({
-      //   errors: 'Username or email had been used',
-      // });
       expect(result.body).toEqual({
         data: null,
         error: {
-          errorMsg: 'Username or email had been used',
+          errorMsg: 'The field email is not unique',
         },
         success: false,
       });

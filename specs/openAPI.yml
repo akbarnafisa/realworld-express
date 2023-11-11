@@ -59,12 +59,12 @@ paths:
                   minLength: 6
                   maxLength: 50
       responses:
-        '200':
-          $ref: '#/components/responses/UserSuccessResponse'
-        '400':
-          $ref: '#/components/responses/UserInputErrorResponse'
-        '422':
-          $ref: '#/components/responses/UserEmailOrUsernameIsUsed'
+        "200":
+          $ref: "#/components/responses/UserSuccessResponse"
+        "400":
+          $ref: "#/components/responses/UserInputErrorResponse"
+        "422":
+          $ref: "#/components/responses/InputNotUnique"
   /api/users/login:
     post:
       description: "Authenticate user"
@@ -96,22 +96,22 @@ paths:
                   minLength: 6
                   maxLength: 50
       responses:
-        '200':
-          $ref: '#/components/responses/UserSuccessResponse'
-        '400':
-          $ref: '#/components/responses/UserInputErrorResponse'
-        '422':
-          $ref: '#/components/responses/UserInvalidEmailOrPassword'
+        "200":
+          $ref: "#/components/responses/UserSuccessResponse"
+        "400":
+          $ref: "#/components/responses/UserInputErrorResponse"
+        "422":
+          $ref: "#/components/responses/InputNotUnique"
   /api/user/current:
     get:
       description: "Get info about current user that already logged in"
       responses:
-        '200':
-          $ref: '#/components/responses/UserSuccessResponse'
-        '400':
-          $ref: '#/components/responses/UserInputErrorResponse'
-        '401':
-          $ref: '#/components/responses/Unauthenticated'
+        "200":
+          $ref: "#/components/responses/UserSuccessResponse"
+        "400":
+          $ref: "#/components/responses/UserInputErrorResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
     patch:
       description: "Update  user information"
       requestBody:
@@ -161,12 +161,14 @@ paths:
                   nullable: true
                   maxLength: 1024
       responses:
-        '200':
-          $ref: '#/components/responses/UserSuccessResponse'
-        '400':
-          $ref: '#/components/responses/UserInputErrorResponse'
-        '401':
-          $ref: '#/components/responses/Unauthenticated'
+        "200":
+          $ref: "#/components/responses/UserSuccessResponse"
+        "400":
+          $ref: "#/components/responses/UserInputErrorResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "422":
+          $ref: "#/components/responses/InputNotUnique"
   /api/user/{username}:
     parameters:
       - name: username
@@ -522,9 +524,9 @@ components:
     ErrorModel:
       type: object
       required:
-      - data
-      - error
-      - success
+        - data
+        - error
+        - success
       properties:
         success:
           type: boolean
@@ -538,14 +540,14 @@ components:
           properties:
             errorMsg:
               type: string
-    
+
   responses:
     # TagsResponse:
     # SingleCommentResponse:
     # MultipleCommentsResponse:
     # SingleArticleResponse:
     # MultipleArticlesResponse:
-    # ProfileResponse: 
+    # ProfileResponse:
     UserSuccessResponse:
       description: User success response
       content:
@@ -556,21 +558,23 @@ components:
               value:
                 success: true
                 error: null
-                data: {
-                  user: {
-                    email: 'example@example.com',
-                    token: '12345123',
-                    username: 'example-username',
-                    bio: null,
-                    image: null,
+                data:
+                  {
+                    user:
+                      {
+                        email: "example@example.com",
+                        token: "12345123",
+                        username: "example-username",
+                        bio: null,
+                        image: null,
+                      },
                   }
-                }
           schema:
             type: object
             required:
-            - data
-            - error
-            - success
+              - data
+              - error
+              - success
             properties:
               success:
                 type: boolean
@@ -610,60 +614,64 @@ components:
               description: "Password input is empty"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Password is required'
-                }
+                error: { errorMsg: "Password is required" }
                 success: false
             "Password Too Long":
               description: "Password input is exceed max limit"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Password should have 6 characters minimum'
-                }
+                error: { errorMsg: "Password should have 6 characters minimum" }
                 success: false
             "Username Required":
               description: "Username input is empty"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Username is required'
-                }
+                error: { errorMsg: "Username is required" }
                 success: false
             "Username Too Long":
               description: "Username input is exceed max limit"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Username is too long'
-                }
+                error: { errorMsg: "Username is too long" }
                 success: false
             "Email Required":
               description: "Email input is empty"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Email is required'
-                }
+                error: { errorMsg: "Email is required" }
                 success: false
             "Email Too Long":
               description: "Email input is exceed max limit"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Email is too long'
-                }
+                error: { errorMsg: "Email is too long" }
                 success: false
             "Email Format":
-              description: "Input data is not email"
+              description: "Input data is not in email format"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Invalid email'
-                }
+                error: { errorMsg: "Invalid email" }
+                success: false
+            "Bio Too Long":
+              description: "Bio input is exceed max limit"
+              value:
+                data: null
+                error: { errorMsg: "Bio is too long" }
+                success: false
+            "Image Too Long":
+              description: "Image input is exceed max limit"
+              value:
+                data: null
+                error: { errorMsg: "Image URL is too long" }
+                success: false
+            "Image Invalid URL":
+              description: "Input data is not in URL format"
+              value:
+                data: null
+                error: { errorMsg: "Invalid Image URL" }
                 success: false
           schema:
-            $ref: '#/components/schemas/ErrorModel'
+            $ref: "#/components/schemas/ErrorModel"
     UserInvalidEmailOrPassword:
       description: User error response during login
       content:
@@ -673,27 +681,23 @@ components:
               description: "Password or email is not match"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Email or password is not correct!'
-                }
+                error: { errorMsg: "Email or password is not correct!" }
                 success: false
           schema:
-            $ref: '#/components/schemas/ErrorModel'
-    UserEmailOrUsernameIsUsed:
-      description: User error response during login
+            $ref: "#/components/schemas/ErrorModel"
+    InputNotUnique:
+      description: User input is not unique
       content:
         application/json:
           examples:
             "Invalid Input":
-              description: "Password or username is used"
+              description: "The input data is already exist in database"
               value:
                 data: null
-                error: {
-                  errorMsg: 'Username or email had been used'
-                }
+                error: { errorMsg: "The field {fieldName} is not unique" }
                 success: false
           schema:
-            $ref: '#/components/schemas/ErrorModel'
+            $ref: "#/components/schemas/ErrorModel"
     # EmptyOkResponse:
     Unauthenticated:
       description: User does not have any permission
@@ -704,21 +708,14 @@ components:
               description: "User is not logged in"
               value:
                 data: null
-                error: {
-                  errorMsg: 'No authorization token was found'
-                }
+                error: { errorMsg: "No authorization token was found" }
                 success: false
             "Unahtorized":
               description: "User does not have permission to do this action"
               value:
                 data: null
-                error: {
-                  errorMsg: 'User unauthorized!'
-                }
+                error: { errorMsg: "User unauthorized!" }
                 success: false
           schema:
-            $ref: '#/components/schemas/ErrorModel'
+            $ref: "#/components/schemas/ErrorModel"
     # GenericError:
-    
-
-            

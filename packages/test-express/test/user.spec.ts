@@ -172,7 +172,7 @@ describe('PATCH /api/user/current - update current user', () => {
       expect(result.body).toEqual({
         data: null,
         error: {
-          errorMsg: 'Bio is too long, Invalid URL',
+          errorMsg: 'Bio is too long, Invalid Image URL',
         },
         success: false,
       });

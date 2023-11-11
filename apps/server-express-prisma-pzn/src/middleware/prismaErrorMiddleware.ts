@@ -15,7 +15,7 @@ export const prismaErrorMiddleware: ErrorRequestHandler = (err, _, res, next) =>
           success: false,
           data: null,
           error: {
-            errorMsg: `the field ${err.meta?.target} is not unique`,
+            errorMsg: `The field ${err.meta?.target} is not unique`,
           },
         });
       case 'P2025':

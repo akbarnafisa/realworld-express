@@ -45,6 +45,27 @@ describe('POST /api/article - create article', () => {
         success: false,
       });
     });
+
+    it('if tag is null', async () => {
+      const result = await supertest(app)
+        .post(TEST_API)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          title: "My title",
+          description: 'description',
+          body: 'body',
+          tagList: [],
+        });
+
+      expect(result.status).toEqual(400);
+      expect(result.body).toEqual({
+        data: null,
+        error: {
+          errorMsg: 'Add at least one tag',
+        },
+        success: false,
+      });
+    });
   });
 
   it('should allow me to create article', async () => {
