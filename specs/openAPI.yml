@@ -456,6 +456,10 @@ paths:
       responses:
         "200":
           description: OK
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/ArticleNotFound"
     get:
       parameters:
         - name: limit
@@ -484,6 +488,8 @@ paths:
       responses:
         "200":
           description: OK
+        "404":
+          $ref: "#/components/responses/ArticleNotFound"
   /api/article/{slug}/comments/{commentId}:
     parameters:
       - name: slug
@@ -503,6 +509,10 @@ paths:
       responses:
         "200":
           description: OK
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/CommentNotFound"
   /api/feed:
     parameters:
       - name: limit
@@ -836,7 +846,39 @@ components:
                 success: false
           schema:
             $ref: "#/components/schemas/ErrorModel"
-    # EmptyOkResponse:
+    ArticleNotFound:
+      description: Article not found
+      content:
+        application/json:
+          examples:
+            "Article not found":
+              description: "Article is not exist in database"
+              value:
+                data: null
+                error: { errorMsg: "Article not found!" }
+                success: false
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+    CommentNotFound:
+      description: Comment not found
+      content:
+        application/json:
+          examples:
+            "Comment not found":
+              description: "Comment is not exist in database"
+              value:
+                data: null
+                error: { errorMsg: "Comment not found!" }
+                success: false
+            "Article not found":
+              description: "Article is not exist in database"
+              value:
+                data: null
+                error: { errorMsg: "Article not found!" }
+                success: false
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+    
     Unauthenticated:
       description: User does not have any permission
       content:
@@ -889,4 +931,3 @@ components:
                 properties:
                   success:
                     type: boolean
-    # GenericError:
