@@ -180,8 +180,8 @@ paths:
     get:
       description: "Get information about specific user"
       responses:
-        "200":
-          description: OK
+        '200':
+          $ref: '#/components/responses/ProfileResponse'
   /api/user/{username}/follow:
     parameters:
       - name: username
@@ -266,7 +266,7 @@ paths:
       description: "Get all tags data"
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/TagsResponse"
   /api/article:
     post:
       description: "Create new article"
@@ -542,12 +542,107 @@ components:
               type: string
 
   responses:
-    # TagsResponse:
+    TagsResponse:
+      description: Tags
+      content:
+        application/json:
+          examples:
+            "Tags response":
+              description: "Tags response"
+              value:
+                success: true
+                error: null
+                data:
+                  {
+                    tags: ['tag-1', 'tag-2'],
+                  }
+          schema:
+            required:
+              - data
+              - error
+              - success
+            type: object
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - tags
+                properties:
+                  user:
+                    type: object
+                    required:
+                      - tags
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          type: string
     # SingleCommentResponse:
     # MultipleCommentsResponse:
     # SingleArticleResponse:
     # MultipleArticlesResponse:
-    # ProfileResponse:
+    ProfileResponse:
+      description: Profile response
+      content:
+        application/json:
+          examples:
+            "User response":
+              description: "User response"
+              value:
+                success: true
+                error: null
+                data:
+                  {
+                    user:
+                      {
+                        bio: "My biop",
+                        following: true,
+                        image: "https://placehold.co/600x400",
+                        username: 'user-profile-real',
+                      },
+                  }
+          schema:
+            type: object
+            required:
+              - data
+              - error
+              - success
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - bio
+                  - following
+                  - image
+                  - username
+                properties:
+                  user:
+                    type: object
+                    required:
+                      - email
+                      - username
+                      - success
+                    properties:
+                      bio:
+                        type: string
+                        nullable: true
+                      following:
+                        type: boolean
+                      image:
+                        type: string
+                        nullable: true
+                      username:
+                        type: string
     UserSuccessResponse:
       description: User success response
       content:
