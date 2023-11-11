@@ -1,6 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Blogging App
+  description: Blogging App documentation
   version: "1.0"
 # servers:
 #   - url: https://{env}.express-node.com:{port}/
@@ -24,6 +25,7 @@ paths:
       description: "Register user"
       requestBody:
         required: true
+        description: Details of the new user to register
         content:
           "application/json":
             examples:
@@ -57,8 +59,12 @@ paths:
                   minLength: 6
                   maxLength: 50
       responses:
-        "200":
-          description: OK
+        '200':
+          $ref: '#/components/responses/UserSuccessResponse'
+        '400':
+          $ref: '#/components/responses/UserInputErrorResponse'
+        '422':
+          $ref: '#/components/responses/UserEmailOrUsernameIsUsed'
   /api/users/login:
     post:
       description: "Authenticate user"
@@ -90,14 +96,22 @@ paths:
                   minLength: 6
                   maxLength: 50
       responses:
-        "200":
-          description: OK
+        '200':
+          $ref: '#/components/responses/UserSuccessResponse'
+        '400':
+          $ref: '#/components/responses/UserInputErrorResponse'
+        '422':
+          $ref: '#/components/responses/UserInvalidEmailOrPassword'
   /api/user/current:
     get:
       description: "Get info about current user that already logged in"
       responses:
-        "200":
-          description: OK
+        '200':
+          $ref: '#/components/responses/UserSuccessResponse'
+        '400':
+          $ref: '#/components/responses/UserInputErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
     patch:
       description: "Update  user information"
       requestBody:
@@ -147,8 +161,12 @@ paths:
                   nullable: true
                   maxLength: 1024
       responses:
-        "200":
-          description: OK
+        '200':
+          $ref: '#/components/responses/UserSuccessResponse'
+        '400':
+          $ref: '#/components/responses/UserInputErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
   /api/user/{username}:
     parameters:
       - name: username
@@ -499,3 +517,208 @@ paths:
       responses:
         "200":
           description: OK
+components:
+  schemas:
+    ErrorModel:
+      type: object
+      required:
+      - data
+      - error
+      - success
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          nullable: true
+        error:
+          type: object
+          required:
+            - errorMsg
+          properties:
+            errorMsg:
+              type: string
+    
+  responses:
+    # TagsResponse:
+    # SingleCommentResponse:
+    # MultipleCommentsResponse:
+    # SingleArticleResponse:
+    # MultipleArticlesResponse:
+    # ProfileResponse: 
+    UserSuccessResponse:
+      description: User success response
+      content:
+        application/json:
+          examples:
+            "User response":
+              description: "User response"
+              value:
+                success: true
+                error: null
+                data: {
+                  user: {
+                    email: 'example@example.com',
+                    token: '12345123',
+                    username: 'example-username',
+                    bio: null,
+                    image: null,
+                  }
+                }
+          schema:
+            type: object
+            required:
+            - data
+            - error
+            - success
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - user
+                properties:
+                  user:
+                    type: object
+                    required:
+                      - email
+                      - username
+                      - success
+                    properties:
+                      email:
+                        type: string
+                      token:
+                        type: string
+                        description: The value will be available only when user login or register
+                        nullable: true
+                      username:
+                        type: string
+                        nullable: true
+                      image:
+                        type: string
+                        nullable: true
+    UserInputErrorResponse:
+      description: User input error
+      content:
+        application/json:
+          examples:
+            "Password Required":
+              description: "Password input is empty"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Password is required'
+                }
+                success: false
+            "Password Too Long":
+              description: "Password input is exceed max limit"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Password should have 6 characters minimum'
+                }
+                success: false
+            "Username Required":
+              description: "Username input is empty"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Username is required'
+                }
+                success: false
+            "Username Too Long":
+              description: "Username input is exceed max limit"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Username is too long'
+                }
+                success: false
+            "Email Required":
+              description: "Email input is empty"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Email is required'
+                }
+                success: false
+            "Email Too Long":
+              description: "Email input is exceed max limit"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Email is too long'
+                }
+                success: false
+            "Email Format":
+              description: "Input data is not email"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Invalid email'
+                }
+                success: false
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+    UserInvalidEmailOrPassword:
+      description: User error response during login
+      content:
+        application/json:
+          examples:
+            "Invalid Input":
+              description: "Password or email is not match"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Email or password is not correct!'
+                }
+                success: false
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+    UserEmailOrUsernameIsUsed:
+      description: User error response during login
+      content:
+        application/json:
+          examples:
+            "Invalid Input":
+              description: "Password or username is used"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'Username or email had been used'
+                }
+                success: false
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+    # EmptyOkResponse:
+    Unauthenticated:
+      description: User does not have any permission
+      content:
+        application/json:
+          examples:
+            "Unauthenticated":
+              description: "User is not logged in"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'No authorization token was found'
+                }
+                success: false
+            "Unahtorized":
+              description: "User does not have permission to do this action"
+              value:
+                data: null
+                error: {
+                  errorMsg: 'User unauthorized!'
+                }
+                success: false
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+    # GenericError:
+    
+
+            
