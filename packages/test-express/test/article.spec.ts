@@ -47,15 +47,12 @@ describe('POST /api/article - create article', () => {
     });
 
     it('if tag is null', async () => {
-      const result = await supertest(app)
-        .post(TEST_API)
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          title: "My title",
-          description: 'description',
-          body: 'body',
-          tagList: [],
-        });
+      const result = await supertest(app).post(TEST_API).set('Authorization', `Bearer ${token}`).send({
+        title: 'My title',
+        description: 'description',
+        body: 'body',
+        tagList: [],
+      });
 
       expect(result.status).toEqual(400);
       expect(result.body).toEqual({
@@ -85,6 +82,11 @@ describe('POST /api/article - create article', () => {
       success: true,
       data: {
         article: {
+          author: {
+            following: false,
+            image: null,
+            username: expect.any(String),
+          },
           authorId: expect.any(Number),
           body: 'body',
           createdAt: expect.any(String),
@@ -270,6 +272,11 @@ describe('PATCH /api/article/:slug - update article', () => {
       success: true,
       data: {
         article: {
+          author: {
+            following: false,
+            image: null,
+            username: expect.any(String),
+          },
           authorId: data?.article?.authorId,
           body: 'body-123',
           createdAt: expect.any(String),

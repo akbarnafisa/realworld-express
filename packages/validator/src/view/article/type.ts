@@ -3,15 +3,15 @@ export interface ArticleResponseType {
     body: string; // String!
     createdAt: Date; // DateTime!
     description: string; // String!
-    favoritesCount?: number; // Int!
+    favoritesCount: number; // Int!
     id: number; // Int!
     slug: string; // String!
     title: string; // String!
     updatedAt: Date; // DateTime!
     authorId: number;
     favorited: boolean;
-    tags?: string[];
-    author?: {
+    tags: string[];
+    author: {
       username: string;
       image: string | null;
       following: boolean;

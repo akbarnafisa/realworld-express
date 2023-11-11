@@ -962,7 +962,10 @@ components:
                         - body
                         - createdAt
                         - description
+                        - favoritesCount
                         - id
+                        - tags
+                        - author
                         - slug
                         - title
                         - updatedAt

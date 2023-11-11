@@ -38,7 +38,7 @@ export const createArticleService = async (request: Request) => {
       slug: slugify(title),
       author: { connect: { id: auth.id } },
       tags: {
-        create: tagList?.map((name: string) => {
+        create: tagList.map((name: string) => {
           return {
             tag: {
               connectOrCreate: {
@@ -50,29 +50,7 @@ export const createArticleService = async (request: Request) => {
         }),
       },
     },
-    include: {
-      // author: {
-      //   select: {
-      //     username: true,
-      //     following: true,
-      //     image: true,
-      //   }
-      // },
-      tags: {
-        select: {
-          tag: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-      _count: {
-        select: {
-          favoritedBy: true,
-        },
-      },
-    },
+    include: articleIncludes(auth),
   });
 
   return articleViewer(data);
@@ -86,48 +64,7 @@ export const getArticleService = async (request: Request) => {
     where: {
       slug,
     },
-    include: {
-      author: {
-        select: {
-          followedBy: auth?.id
-            ? {
-                select: {
-                  followerId: true,
-                },
-                where: {
-                  followerId: auth.id,
-                },
-              }
-            : undefined,
-          username: true,
-          image: true,
-        },
-      },
-      favoritedBy: auth?.id
-        ? {
-            select: {
-              userId: true,
-            },
-            where: {
-              userId: auth.id,
-            },
-          }
-        : undefined,
-      tags: {
-        select: {
-          tag: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-      _count: {
-        select: {
-          favoritedBy: true,
-        },
-      },
-    },
+    include: articleIncludes(auth),
   });
 
   if (!data) {
@@ -155,48 +92,7 @@ export const getArticlesService = async (request: Request) => {
     skip: skip || 0,
     take: take || DEFAULT_ARTICLES_QUERIES,
     where: articlesQueryFilter(restQuery),
-    include: {
-      author: {
-        select: {
-          followedBy: auth?.id
-            ? {
-                select: {
-                  followerId: true,
-                },
-                where: {
-                  followerId: auth?.id, // TODO: do not use this query if user is not logged
-                },
-              }
-            : undefined,
-          username: true,
-          image: true,
-        },
-      },
-      favoritedBy: auth?.id
-        ? {
-            select: {
-              userId: true,
-            },
-            where: {
-              userId: auth.id,
-            },
-          }
-        : undefined,
-      tags: {
-        select: {
-          tag: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-      _count: {
-        select: {
-          favoritedBy: true,
-        },
-      },
-    },
+    include: articleIncludes(auth),
     orderBy: {
       createdAt: 'desc',
     },
@@ -265,44 +161,7 @@ export const getFeedService = async (request: Request) => {
         },
       },
     },
-    include: {
-      author: {
-        select: {
-          followedBy: {
-            select: {
-              followerId: true,
-            },
-            where: {
-              followerId: auth.id,
-            },
-          },
-          username: true,
-          image: true,
-        },
-      },
-      favoritedBy: {
-        select: {
-          userId: true,
-        },
-        where: {
-          userId: auth.id,
-        },
-      },
-      tags: {
-        select: {
-          tag: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-      _count: {
-        select: {
-          favoritedBy: true,
-        },
-      },
-    },
+    include: articleIncludes(auth),
     orderBy: {
       createdAt: 'desc',
     },
@@ -391,22 +250,7 @@ export const updateArticleService = async (request: Request) => {
       body,
       description,
     },
-    include: {
-      _count: {
-        select: {
-          favoritedBy: true,
-        },
-      },
-      tags: {
-        select: {
-          tag: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
+    include: articleIncludes(auth),
   });
 
   return articleViewer(data);
@@ -493,6 +337,51 @@ export const checkArticle = async (slug: string) => {
   }
 
   return data;
+};
+
+const articleIncludes = (auth: TokenPayload | undefined) => {
+  return {
+    author: {
+      select: {
+        followedBy: auth?.id
+          ? {
+              select: {
+                followerId: true,
+              },
+              where: {
+                followerId: auth.id,
+              },
+            }
+          : undefined,
+        username: true,
+        image: true,
+      },
+    },
+    favoritedBy: auth?.id
+      ? {
+          select: {
+            userId: true,
+          },
+          where: {
+            userId: auth.id,
+          },
+        }
+      : undefined,
+    tags: {
+      select: {
+        tag: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    },
+    _count: {
+      select: {
+        favoritedBy: true,
+      },
+    },
+  };
 };
 
 const checkArticleOwner = (currentUserId: number, authorId: number) => {
