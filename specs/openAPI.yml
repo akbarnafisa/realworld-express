@@ -274,7 +274,7 @@ paths:
 
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/ArticlesSuccessResponse"
   /api/tags:
     get:
       description: "Get all tags data"
@@ -410,7 +410,11 @@ paths:
     post:
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/GenericSuccess"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/ArticleNotFound"
   /api/article/{slug}/unfavorite:
     parameters:
       - name: slug
@@ -423,7 +427,11 @@ paths:
     post:
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/GenericSuccess"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/ArticleNotFound"
   /api/article/{slug}/comments:
     parameters:
       - name: slug
@@ -846,6 +854,159 @@ components:
                 success: false
           schema:
             $ref: "#/components/schemas/ErrorModel"
+    ArticlesSuccessResponse:
+      description: Articles success response
+      content:
+        application/json:
+          examples:
+            "Pagination":
+              description: "Article Pagination"
+              value:
+                {
+                  data:
+                    {
+                      articles:
+                        [
+                          {
+                            author:
+                              {
+                                following: true,
+                                image: null,
+                                username: "John Doe",
+                              },
+                            authorId: 17207,
+                            body: "Hello world",
+                            createdAt: "2023-11-11T11:14:08.033Z",
+                            description: "description",
+                            favorited: false,
+                            favoritesCount: 0,
+                            id: 10763,
+                            slug: "my-article-yzd48v",
+                            tags: ["tech"],
+                            title: "My title",
+                            updatedAt: "2023-11-11T11:14:08.033Z",
+                          },
+                        ],
+                      articlesCount: 1,
+                    },
+                  error: null,
+                  success: true,
+                }
+            "Infinite Scroll":
+              description: "Article Infinite scroll"
+              value:
+                {
+                data: {
+                  articles:
+                    [
+                      {
+                        author:
+                          {
+                            following: true,
+                            image: null,
+                            username: "John Doe",
+                          },
+                        authorId: 17207,
+                        body: "Hello world",
+                        createdAt: "2023-11-11T11:14:08.033Z",
+                        description: "description",
+                        favorited: false,
+                        favoritesCount: 0,
+                        id: 10763,
+                        slug: "my-article-yzd48v",
+                        tags: ["tech"],
+                        title: "My title",
+                        updatedAt: "2023-11-11T11:14:08.033Z",
+                      },
+                    ],
+                  hasMore: true,
+                  nextCursor: 10794,
+                },
+                error: null,
+                success: true,
+              }
+          schema:
+            type: object
+            required:
+              - data
+              - error
+              - success
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - user
+                properties:
+                  nextCursor:
+                    type: number
+                    nullable: true
+                    description: Use this value to fetch articles by using infinte scroll
+                  hasMore:
+                    type: boolean
+                    nullable: true
+                    description: Indicator of whether fetchable data is available, only accessible through infinite scroll fetch.
+                  articlesCount:
+                    type: number
+                    nullable: true
+                    description: The total value for the articles data, not be available in the infinite scroll fetch.
+                  articles:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - body
+                        - createdAt
+                        - description
+                        - id
+                        - slug
+                        - title
+                        - updatedAt
+                        - authorId
+                        - favorited
+                      properties:
+                        body:
+                          type: string
+                        createdAt:
+                          type: string
+                        description:
+                          type: string
+                        favoritesCount:
+                          type: number
+                        id:
+                          type: number
+                        slug:
+                          type: string
+                        title:
+                          type: string
+                        updatedAt:
+                          type: string
+                        authorId:
+                          type: number
+                        favorited:
+                          type: boolean
+                        tags:
+                          type: array
+                          items:
+                            type: string
+                        author:
+                          type: object
+                          required:
+                            - username
+                            - image
+                            - following
+                          properties:
+                            username:
+                              type: string
+                            image:
+                              type: string
+                              nullable: true
+                            following:
+                              type: boolean
     ArticleNotFound:
       description: Article not found
       content:
@@ -878,7 +1039,7 @@ components:
                 success: false
           schema:
             $ref: "#/components/schemas/ErrorModel"
-    
+
     Unauthenticated:
       description: User does not have any permission
       content:
@@ -908,10 +1069,7 @@ components:
               value:
                 success: true
                 error: null
-                data:
-                  {
-                    success: true
-                  }
+                data: { success: true }
           schema:
             type: object
             required:
