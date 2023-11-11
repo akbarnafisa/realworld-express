@@ -180,8 +180,11 @@ paths:
     get:
       description: "Get information about specific user"
       responses:
-        '200':
-          $ref: '#/components/responses/ProfileResponse'
+        "200":
+          $ref: "#/components/responses/ProfileResponse"
+        "404":
+          $ref: "#/components/responses/UserNotFound"
+
   /api/user/{username}/follow:
     parameters:
       - name: username
@@ -194,7 +197,13 @@ paths:
       description: "Follow user"
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/GenericSuccess"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/UserNotFound"
+        "422":
+          $ref: "#/components/responses/UserInvalidFollowAction"
   /api/user/{username}/unfollow:
     parameters:
       - name: username
@@ -205,10 +214,15 @@ paths:
           type: string
     post:
       description: "Unfollow user"
-
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/GenericSuccess"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/UserNotFound"
+        "422":
+          $ref: "#/components/responses/UserInvalidFollowAction"
   /api/articles:
     parameters:
       - name: limit
@@ -552,10 +566,7 @@ components:
               value:
                 success: true
                 error: null
-                data:
-                  {
-                    tags: ['tag-1', 'tag-2'],
-                  }
+                data: { tags: ["tag-1", "tag-2"] }
           schema:
             required:
               - data
@@ -603,7 +614,7 @@ components:
                         bio: "My biop",
                         following: true,
                         image: "https://placehold.co/600x400",
-                        username: 'user-profile-real',
+                        username: "user-profile-real",
                       },
                   }
           schema:
@@ -780,6 +791,38 @@ components:
                 success: false
           schema:
             $ref: "#/components/schemas/ErrorModel"
+    UserNotFound:
+      description: User not found
+      content:
+        application/json:
+          examples:
+            "User not found":
+              description: "User is not exist in database"
+              value:
+                data: null
+                error: { errorMsg: "User not found!" }
+                success: false
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+    UserInvalidFollowAction:
+      description: User can not follow or unfollow
+      content:
+        application/json:
+          examples:
+            "Action Denied":
+              description: "User can not follow or unfollow themself"
+              value:
+                data: null
+                error: { errorMsg: "Unable to {action} yourself" }
+                success: false
+            "Already unfollowed":
+              description: "Users cannot unfollow other users who are not being followed"
+              value:
+                data: null
+                error: { errorMsg: "User already unfollowed" }
+                success: false
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
     InputNotUnique:
       description: User input is not unique
       content:
@@ -813,4 +856,37 @@ components:
                 success: false
           schema:
             $ref: "#/components/schemas/ErrorModel"
+    GenericSuccess:
+      description: Generic success response
+      content:
+        application/json:
+          examples:
+            "Success response":
+              description: "Success response"
+              value:
+                success: true
+                error: null
+                data:
+                  {
+                    success: true
+                  }
+          schema:
+            type: object
+            required:
+              - data
+              - error
+              - success
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - success
+                properties:
+                  success:
+                    type: boolean
     # GenericError:
