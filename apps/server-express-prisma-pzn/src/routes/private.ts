@@ -17,8 +17,8 @@ import { authenticate, optionalAuthenticate } from '../middleware/authMiddleware
 const privateRouter = express.Router();
 
 // user
-privateRouter.get('/api/user/current', authenticate, getUserController);
-privateRouter.patch('/api/user/current', authenticate, updateUserController);
+privateRouter.get('/api/user', authenticate, getUserController);
+privateRouter.patch('/api/user', authenticate, updateUserController);
 // profie
 privateRouter.get('/api/user/:username', optionalAuthenticate, getProfileController);
 privateRouter.post('/api/user/:username/follow', authenticate, followController);

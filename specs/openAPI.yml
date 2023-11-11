@@ -102,7 +102,7 @@ paths:
           $ref: "#/components/responses/UserInputErrorResponse"
         "422":
           $ref: "#/components/responses/InputNotUnique"
-  /api/user/current:
+  /api/user:
     get:
       description: "Get info about current user that already logged in"
       responses:

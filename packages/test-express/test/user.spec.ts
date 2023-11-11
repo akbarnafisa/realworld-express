@@ -1,9 +1,9 @@
 import supertest from 'supertest';
 import { app, removeTestUser, getToken, NOT_FOUND_USER_TOKEN, createTestUser } from './utils';
 
-describe('GET /api/user/current - get current user', () => {
+describe('GET /api/user - get current user', () => {
   let token = '';
-  const TEST_API = '/api/user/current';
+  const TEST_API = '/api/user';
   const userId = 'user-current';
   beforeAll(async () => {
     token = await getToken(userId);
@@ -55,9 +55,9 @@ describe('GET /api/user/current - get current user', () => {
   });
 });
 
-describe('PATCH /api/user/current - update current user', () => {
+describe('PATCH /api/user - update current user', () => {
   let token = '';
-  const TEST_API = '/api/user/current';
+  const TEST_API = '/api/user';
   const userId = 'user-current-update';
   beforeAll(async () => {
     token = await getToken(userId);
@@ -115,7 +115,7 @@ describe('PATCH /api/user/current - update current user', () => {
       expect(result.body).toEqual({
         data: null,
         error: {
-          errorMsg: 'the field email is not unique',
+          errorMsg: 'The field email is not unique',
         },
         success: false,
       });
@@ -137,7 +137,7 @@ describe('PATCH /api/user/current - update current user', () => {
       expect(result.body).toEqual({
         data: null,
         error: {
-          errorMsg: 'the field username is not unique',
+          errorMsg: 'The field username is not unique',
         },
         success: false,
       });

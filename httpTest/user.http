@@ -20,14 +20,14 @@ Accept: application/json
 }
 
 // get
-GET http://localhost:4000/api/user/current
+GET http://localhost:4000/api/user
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5ODk5NTA2NCwiZXhwIjoxNjk5NTk5ODY0fQ.jQ6KhWK2cCkdTmIqJOsH3iJwuvIy1PJQLAYUTG6kQ84
 
 
 // user
-PATCH http://localhost:4000/api/user/current
+PATCH http://localhost:4000/api/user
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiYm9lZGhpIiwiZW1haWwiOiJib2VkaGlAYm9lZGhpLmNvbSIsImlhdCI6MTY5ODk5NTA2NCwiZXhwIjoxNjk5NTk5ODY0fQ.jQ6KhWK2cCkdTmIqJOsH3iJwuvIy1PJQLAYUTG6kQ84
