@@ -233,28 +233,9 @@ paths:
           $ref: "#/components/responses/UserInvalidFollowAction"
   /api/articles:
     parameters:
-      - name: limit
-        in: query
-        required: false
-        description: "Limit the amount of data to retrieve"
-        schema:
-          default: 10
-          nullable: true
-          type: number
-      - name: offset
-        in: query
-        required: false
-        description: "Skip the amount of data; the value will be ignored if a cursor query is available."
-        schema:
-          default: 0
-          nullable: true
-          type: number
-      - name: cursor
-        in: query
-        required: false
-        description: "Article ID to reference in pagination; the offset query will be ignored if this value is set."
-        schema:
-          type: number
+      - $ref: '#/components/parameters/offsetParam'
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/cursorParam'
       - name: tag
         in: query
         required: false
@@ -276,9 +257,9 @@ paths:
         example: "bob"
         schema:
           type: string
-
     get:
-      description: "Get all articles data"
+      summary: Get recent articles globally
+      description: Get most recent articles globally. Use query parameters to filter results. Auth is optional
       tags:
       - Articles
       responses:
@@ -294,7 +275,8 @@ paths:
           $ref: "#/components/responses/TagsResponse"
   /api/article:
     post:
-      description: "Create new article"
+      summary: Create an article
+      description: Create an article. Auth is required
       tags:
       - Articles
       requestBody:
@@ -357,7 +339,8 @@ paths:
         schema:
           type: string
     delete:
-      description: "Delete specific article"
+      summary: Delete an article
+      description: Delete an article. Auth is required
       tags:
       - Articles
       responses:
@@ -368,7 +351,8 @@ paths:
         "404":
           $ref: "#/components/responses/ArticleNotFound"
     patch:
-      description: "Update specific article"
+      summary: Update an article
+      description: Update an article. Auth is required
       tags:
       - Articles
       requestBody:
@@ -425,7 +409,8 @@ paths:
         "404":
           $ref: "#/components/responses/ArticleNotFound"
     get:
-      description: "Get specific article"
+      summary: Get an article
+      description: Get an article. Auth not required
       tags:
       - Articles
       responses:
@@ -511,28 +496,9 @@ paths:
           $ref: "#/components/responses/ArticleNotFound"
     get:
       parameters:
-        - name: limit
-          in: query
-          required: false
-          description: "Limit the amount of data to retrieve"
-          schema:
-            default: 10
-            nullable: true
-            type: number
-        - name: offset
-          in: query
-          required: false
-          description: "Skip the amount of data; the value will be ignored if a cursor query is available."
-          schema:
-            default: 0
-            nullable: true
-            type: number
-        - name: cursor
-          in: query
-          required: false
-          description: "Comment ID to reference in pagination; the offset query will be ignored if this value is set."
-          schema:
-            type: number
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/cursorParam'
       description: "Get all comments in article"
       tags:
       - Comments
@@ -568,30 +534,12 @@ paths:
           $ref: "#/components/responses/CommentNotFound"
   /api/feed:
     parameters:
-      - name: limit
-        in: query
-        required: false
-        description: "Limit the amount of data to retrieve"
-        schema:
-          default: 10
-          nullable: true
-          type: number
-      - name: offset
-        in: query
-        required: false
-        description: "Skip the amount of data; the value will be ignored if a cursor query is available."
-        schema:
-          default: 0
-          nullable: true
-          type: number
-      - name: cursor
-        in: query
-        required: false
-        description: "Article ID to reference in pagination; the offset query will be ignored if this value is set."
-        schema:
-          type: number
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/cursorParam'
     get:
-      description: "Get article from the user that have been followed by the current user"
+      description: "Get article from the user that have been followed by the current user. Auth not required"
+      summary: Get recent articles from users you follow
       tags:
       - Articles
       responses:
@@ -702,7 +650,6 @@ components:
               nullable: true
             following:
               type: boolean
-
   responses:
     TagsResponse:
       description: Tags
@@ -1417,3 +1364,30 @@ components:
                 properties:
                   success:
                     type: boolean
+  parameters:
+    offsetParam:
+      in: query
+      name: offset
+      required: false
+      schema:
+        type: number
+        default: 0
+        nullable: true
+        minimum: 0
+      description: The number of items to skip before starting to collect the result set.
+    limitParam:
+      in: query
+      required: false
+      name: limit
+      description: The numbers of items to return.
+      schema:
+        default: 10
+        nullable: true
+        type: number
+    cursorParam:
+      name: cursor
+      in: query
+      required: false
+      description: "Article ID to reference in pagination; the offset query will be ignored if this value is set."
+      schema:
+        type: number
