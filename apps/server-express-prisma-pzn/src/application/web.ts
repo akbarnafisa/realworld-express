@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors'
 import { publicRouter } from '../routes/public';
 import { privateRouter } from '../routes/private';
 
@@ -9,6 +10,8 @@ import { prismaErrorMiddleware } from '../middleware/prismaErrorMiddleware';
 export const web = express();
 
 web.use(express.json());
+web.use(cors())
+
 web.use(publicRouter);
 web.use(privateRouter);
 
