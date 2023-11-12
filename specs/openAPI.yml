@@ -465,7 +465,8 @@ paths:
         schema:
           type: string
     post:
-      description: "Create new comment in article"
+      summary: Create a comment for an article
+      description: Create a comment for an article. Auth is required
       tags:
       - Comments
       requestBody:
@@ -495,11 +496,12 @@ paths:
         "404":
           $ref: "#/components/responses/ArticleNotFound"
     get:
+      summary: Get comments for an article
+      description: Get the comments for an article. Auth not required
       parameters:
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/cursorParam'
-      description: "Get all comments in article"
       tags:
       - Comments
       responses:
@@ -522,7 +524,8 @@ paths:
         schema:
           type: string
     delete:
-      description: "Delete comment in article"
+      summary: Delete a comment for an article
+      description: Delete a comment for an article. Auth is required
       tags:
       - Comments
       responses:
