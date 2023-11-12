@@ -550,7 +550,9 @@ paths:
 
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/ArticlesSuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
 components:
   schemas:
     ErrorModel:
