@@ -6,9 +6,18 @@ info:
 servers:
   - url: http://localhost:3000
     description: Local development server
+tags:
+  - name: Articles
+  - name: Comments
+  - name: Favorites
+  - name: Profile
+  - name: Tags
+  - name: User and Authentication
 paths:
   /api/users:
     post:
+      tags:
+        - User and Authentication
       description: "Register user"
       requestBody:
         required: true
@@ -55,6 +64,8 @@ paths:
   /api/users/login:
     post:
       description: "Authenticate user"
+      tags:
+        - User and Authentication
       requestBody:
         required: true
         content:
@@ -90,7 +101,10 @@ paths:
         "422":
           $ref: "#/components/responses/InputNotUnique"
   /api/user:
+
     get:
+      tags:
+      - User and Authentication
       description: "Get info about current user that already logged in"
       responses:
         "200":
@@ -100,6 +114,8 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthenticated"
     patch:
+      tags:
+      - User and Authentication
       description: "Update  user information"
       requestBody:
         required: true
@@ -166,12 +182,13 @@ paths:
           type: string
     get:
       description: "Get information about specific user"
+      tags:
+      - Profile
       responses:
         "200":
           $ref: "#/components/responses/ProfileResponse"
         "404":
           $ref: "#/components/responses/UserNotFound"
-
   /api/user/{username}/follow:
     parameters:
       - name: username
@@ -182,6 +199,8 @@ paths:
           type: string
     post:
       description: "Follow user"
+      tags:
+      - Profile
       responses:
         "200":
           $ref: "#/components/responses/GenericSuccess"
@@ -200,6 +219,8 @@ paths:
         schema:
           type: string
     post:
+      tags:
+      - Profile
       description: "Unfollow user"
       responses:
         "200":
@@ -258,12 +279,15 @@ paths:
 
     get:
       description: "Get all articles data"
-
+      tags:
+      - Articles
       responses:
         "200":
           $ref: "#/components/responses/ArticlesSuccessResponse"
   /api/tags:
     get:
+      tags:
+      - Tags
       description: "Get all tags data"
       responses:
         "200":
@@ -271,6 +295,8 @@ paths:
   /api/article:
     post:
       description: "Create new article"
+      tags:
+      - Articles
       requestBody:
         required: true
         content:
@@ -332,6 +358,8 @@ paths:
           type: string
     delete:
       description: "Delete specific article"
+      tags:
+      - Articles
       responses:
         "200":
           $ref: "#/components/responses/GenericSuccess"
@@ -341,6 +369,8 @@ paths:
           $ref: "#/components/responses/ArticleNotFound"
     patch:
       description: "Update specific article"
+      tags:
+      - Articles
       requestBody:
         required: true
         content:
@@ -396,13 +426,13 @@ paths:
           $ref: "#/components/responses/ArticleNotFound"
     get:
       description: "Get specific article"
+      tags:
+      - Articles
       responses:
         "200":
           $ref: "#/components/responses/ArticleSuccessResponse"
         "404":
-          $ref: "#/components/responses/ArticleNotFound"
-
-          
+          $ref: "#/components/responses/ArticleNotFound"      
   /api/article/{slug}/favorite:
     parameters:
       - name: slug
@@ -413,6 +443,8 @@ paths:
           type: string
     description: "Favorite article"
     post:
+      tags:
+      - Favorites
       responses:
         "200":
           $ref: "#/components/responses/GenericSuccess"
@@ -430,6 +462,8 @@ paths:
           type: string
     description: "Unfavorite article"
     post:
+      tags:
+      - Favorites
       responses:
         "200":
           $ref: "#/components/responses/GenericSuccess"
@@ -447,6 +481,8 @@ paths:
           type: string
     post:
       description: "Create new comment in article"
+      tags:
+      - Comments
       requestBody:
         required: true
         content:
@@ -498,6 +534,8 @@ paths:
           schema:
             type: number
       description: "Get all comments in article"
+      tags:
+      - Comments
       responses:
         "200":
           $ref: "#/components/responses/CommentSuccessResponse"
@@ -519,6 +557,8 @@ paths:
           type: string
     delete:
       description: "Delete comment in article"
+      tags:
+      - Comments
       responses:
         "200":
           $ref: "#/components/responses/GenericSuccess"
@@ -552,7 +592,8 @@ paths:
           type: number
     get:
       description: "Get article from the user that have been followed by the current user"
-
+      tags:
+      - Articles
       responses:
         "200":
           $ref: "#/components/responses/ArticlesSuccessResponse"
