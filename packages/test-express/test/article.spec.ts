@@ -171,6 +171,9 @@ describe('GET /api/article/:slug - get article', () => {
 
     const result = await supertest(app).get(TEST_API(data?.article?.slug)).set('Authorization', `Bearer ${token}`);
 
+    const resultArticles = await supertest(app).get('/api/articles').set('Authorization', `Bearer ${token}`);
+
+
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
       error: null,
@@ -196,6 +199,9 @@ describe('GET /api/article/:slug - get article', () => {
         },
       },
     });
+
+    const articles = resultArticles.body.data.articles.filter((article: any) => article.slug === data?.article?.slug)
+    expect(articles[0].favorited).toEqual(true)
   });
 });
 
