@@ -463,7 +463,7 @@ paths:
                   maxLength: 65535
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/NewCommentSuccessResponse"
         "401":
           $ref: "#/components/responses/Unauthenticated"
         "404":
@@ -495,7 +495,7 @@ paths:
       description: "Get all comments in article"
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/CommentSuccessResponse"
         "404":
           $ref: "#/components/responses/ArticleNotFound"
   /api/article/{slug}/comments/{commentId}:
@@ -516,7 +516,7 @@ paths:
       description: "Delete comment in article"
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/GenericSuccess"
         "401":
           $ref: "#/components/responses/Unauthenticated"
         "404":
@@ -574,6 +574,34 @@ components:
           properties:
             errorMsg:
               type: string
+    Comment:
+      type: object
+      required:
+        - body
+        - createdAt
+        - id
+        - updatedAt
+        - user
+      properties:
+        body:
+          type: string
+        createdAt:
+          type: string
+        id:
+          type: number
+        updatedAt:
+          type: string
+        user:
+          type: object
+          required:
+            - username
+            - image
+          properties:
+            username:
+              type: string
+            image:
+              type: string
+              nullable: true
 
   responses:
     TagsResponse:
@@ -922,7 +950,7 @@ components:
                       },
                     ],
                   hasMore: true,
-                  nextCursor: 10794,
+                  nextCursor: 10763,
                 },
                 error: null,
                 success: true,
@@ -942,7 +970,10 @@ components:
               data:
                 type: object
                 required:
-                  - user
+                  - nextCursor
+                  - hasMore
+                  - articlesCount
+                  - articles
                 properties:
                   nextCursor:
                     type: number
@@ -1044,7 +1075,140 @@ components:
                 success: false
           schema:
             $ref: "#/components/schemas/ErrorModel"
-
+    CommentSuccessResponse:
+      description: Comments success response
+      content:
+        application/json:
+          examples:
+            "Pagination":
+              description: "Comment Pagination"
+              value:
+                {
+                  data:
+                    {
+                      comments:
+                        [
+                          {
+                            body: "Hello world",
+                            createdAt: "2023-11-11T11:14:08.033Z",
+                            id: 10763,
+                            updatedAt: "2023-11-11T11:14:08.033Z",
+                            user: {
+                              image: null,
+                              username: "JohnDoe",
+                            },
+                          },
+                        ],
+                      commentsCount: 1,
+                    },
+                  error: null,
+                  success: true,
+                }
+            "Infinite Scroll":
+              description: "Comment Infinite scroll"
+              value:
+                {
+                data: {
+                  comments:
+                    [
+                      {
+                        body: "Hello world",
+                        createdAt: "2023-11-11T11:14:08.033Z",
+                        id: 10763,
+                        updatedAt: "2023-11-11T11:14:08.033Z",
+                        user: {
+                          image: null,
+                          username: "JohnDoe",
+                        },
+                      },
+                    ],
+                  hasMore: true,
+                  nextCursor: 10763,
+                },
+                error: null,
+                success: true,
+              }
+          schema:
+            type: object
+            required:
+              - data
+              - error
+              - success
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - nextCursor
+                  - hasMore
+                  - commentsCount
+                  - comments
+                properties:
+                  nextCursor:
+                    type: number
+                    nullable: true
+                    description: Use this value to fetch articles by using infinte scroll
+                  hasMore:
+                    type: boolean
+                    nullable: true
+                    description: Indicator of whether fetchable data is available, only accessible through infinite scroll fetch.
+                  commentsCount:
+                    type: number
+                    nullable: true
+                    description: The total value for the articles data, not be available in the infinite scroll fetch.
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+    NewCommentSuccessResponse:
+      description: New Comments success response
+      content:
+        application/json:
+          examples:
+            "New Comment":
+              description: "New Comment"
+              value:
+                {
+                  data:
+                    {
+                      comment:
+                        {
+                          body: "Hello world",
+                          createdAt: "2023-11-11T11:14:08.033Z",
+                          id: 10763,
+                          updatedAt: "2023-11-11T11:14:08.033Z",
+                          user: {
+                            image: null,
+                            username: "JohnDoe",
+                          },
+                        },
+                    },
+                  error: null,
+                  success: true,
+                }
+          schema:
+            type: object
+            required:
+              - data
+              - error
+              - success
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - comment
+                properties:
+                  comment:
+                    $ref: '#/components/schemas/Comment'
     Unauthenticated:
       description: User does not have any permission
       content:
