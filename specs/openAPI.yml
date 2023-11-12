@@ -428,6 +428,8 @@ paths:
           type: string
     description: "Favorite article"
     post:
+      summary: Favorite an article
+      description: Favorite an article. Auth is required
       tags:
       - Favorites
       responses:
@@ -447,6 +449,8 @@ paths:
           type: string
     description: "Unfavorite article"
     post:
+      summary: Unfavorite an article
+      description: Unfavorite an article. Auth is required
       tags:
       - Favorites
       responses:
