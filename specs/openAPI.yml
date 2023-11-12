@@ -18,7 +18,8 @@ paths:
     post:
       tags:
         - User and Authentication
-      description: "Register user"
+      summary: "Register user"
+      description: Register new user
       requestBody:
         required: true
         description: Details of the new user to register
@@ -63,7 +64,8 @@ paths:
           $ref: "#/components/responses/InputNotUnique"
   /api/users/login:
     post:
-      description: "Authenticate user"
+      summary: Existing user login
+      description: Login for existing user
       tags:
         - User and Authentication
       requestBody:
@@ -105,7 +107,8 @@ paths:
     get:
       tags:
       - User and Authentication
-      description: "Get info about current user that already logged in"
+      summary: Get current user
+      description: Gets the currently logged-in user. Auth is required
       responses:
         "200":
           $ref: "#/components/responses/UserSuccessResponse"
@@ -116,7 +119,8 @@ paths:
     patch:
       tags:
       - User and Authentication
-      description: "Update  user information"
+      summary: Update current user
+      description: Updates the currently logged-in user. Auth is requried
       requestBody:
         required: true
         content:
@@ -272,7 +276,8 @@ paths:
     get:
       tags:
       - Tags
-      description: "Get all tags data"
+      summary: Get tags
+      description: Get tags. Auth not required
       responses:
         "200":
           $ref: "#/components/responses/TagsResponse"
