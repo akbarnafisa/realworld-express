@@ -3,22 +3,9 @@ info:
   title: Blogging App
   description: Blogging App documentation
   version: "1.0"
-# servers:
-#   - url: https://{env}.express-node.com:{port}/
-#     description: The production API server
-#     variables:
-#       username:
-#         # note! no enum here means it is an open value
-#         default: demo
-#         description: this value is assigned by the service provider, in this example `gigantic-server.com`
-#       port:
-#         enum:
-#           - '8443'
-#           - '443'
-#         default: '8443'
-#       basePath:
-#         # open meaning there is the opportunity to use special base paths as assigned by the provider, default is `v2`
-#         default: v2
+servers:
+  - url: http://localhost:3000
+    description: Local development server
 paths:
   /api/users:
     post:
@@ -251,21 +238,21 @@ paths:
         in: query
         required: false
         description: "Get articles based on its tag data"
-        example: "/api/articles?tag=health"
+        example: "health"
         schema:
           type: string
       - name: author
         in: query
         required: false
         description: "Get articles based on its author"
-        example: "/api/articles?author=bob"
+        example: "bob"
         schema:
           type: string
       - name: favorited
         in: query
         required: false
         description: "Retrieve articles if they are favorited by the given user."
-        example: "/api/articles?favorited=bob"
+        example: "bob"
         schema:
           type: string
 
@@ -330,7 +317,11 @@ paths:
                     maxLength: 100
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/ArticleSuccessResponse"
+        "400":
+          $ref: "#/components/responses/ArticleInputErrorResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
   /api/article/{slug}:
     parameters:
       - name: slug
@@ -343,7 +334,11 @@ paths:
       description: "Delete specific article"
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/GenericSuccess"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/ArticleNotFound"
     patch:
       description: "Update specific article"
       requestBody:
@@ -392,12 +387,22 @@ paths:
                     maxLength: 100
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/ArticleSuccessResponse"
+        "400":
+          $ref: "#/components/responses/ArticleInputErrorResponse"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "404":
+          $ref: "#/components/responses/ArticleNotFound"
     get:
       description: "Get specific article"
       responses:
         "200":
-          description: OK
+          $ref: "#/components/responses/ArticleSuccessResponse"
+        "404":
+          $ref: "#/components/responses/ArticleNotFound"
+
+          
   /api/article/{slug}/favorite:
     parameters:
       - name: slug
@@ -602,6 +607,60 @@ components:
             image:
               type: string
               nullable: true
+    Article:
+      type: object
+      required:
+        - body
+        - createdAt
+        - description
+        - favoritesCount
+        - id
+        - tags
+        - author
+        - slug
+        - title
+        - updatedAt
+        - authorId
+        - favorited
+      properties:
+        body:
+          type: string
+        createdAt:
+          type: string
+        description:
+          type: string
+        favoritesCount:
+          type: number
+        id:
+          type: number
+        slug:
+          type: string
+        title:
+          type: string
+        updatedAt:
+          type: string
+        authorId:
+          type: number
+        favorited:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+        author:
+          type: object
+          required:
+            - username
+            - image
+            - following
+          properties:
+            username:
+              type: string
+            image:
+              type: string
+              nullable: true
+            following:
+              type: boolean
 
   responses:
     TagsResponse:
@@ -641,10 +700,6 @@ components:
                         type: array
                         items:
                           type: string
-    # SingleCommentResponse:
-    # MultipleCommentsResponse:
-    # SingleArticleResponse:
-    # MultipleArticlesResponse:
     ProfileResponse:
       description: Profile response
       content:
@@ -884,6 +939,121 @@ components:
                 success: false
           schema:
             $ref: "#/components/schemas/ErrorModel"
+    ArticleInputErrorResponse:
+      description: User input error
+      content:
+        application/json:
+          examples:
+            "Title Required":
+              description: "Title input is empty"
+              value:
+                data: null
+                error: { errorMsg: "Title is required" }
+                success: false
+            "Title Too Long":
+              description: "Title input is exceed max limit"
+              value:
+                data: null
+                error: { errorMsg: "Title should have 6 characters minimum" }
+                success: false
+            "Description Required":
+              description: "Description input is empty"
+              value:
+                data: null
+                error: { errorMsg: "Description is required" }
+                success: false
+            "Description Too Long":
+              description: "Description input is exceed max limit"
+              value:
+                data: null
+                error: { errorMsg: "Description is too long" }
+                success: false
+            "Article content Required":
+              description: "Article content input is empty"
+              value:
+                data: null
+                error: { errorMsg: "Article content is required" }
+                success: false
+            "Article content Too Long":
+              description: "Article content input is exceed max limit"
+              value:
+                data: null
+                error: { errorMsg: "Article content is too long" }
+                success: false
+            "Tag Required":
+              description: "Tag input is empty"
+              value:
+                data: null
+                error: { errorMsg: "Tag is required" }
+                success: false
+            "Tag content Too Long":
+              description: "Tag content input is exceed max limit"
+              value:
+                data: null
+                error: { errorMsg: "Tag too long" }
+                success: false
+            "Empty Tag":
+              description: "No content inside TagList"
+              value:
+                data: null
+                error: { errorMsg: "Add at least one tag" }
+                success: false
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+    ArticleSuccessResponse:
+      description: Article success response
+      content:
+        application/json:
+          examples:
+            "Article":
+              description: "Article Example"
+              value:
+                {
+                  data:
+                    {
+                      article:
+                        {
+                          author:
+                            {
+                              following: true,
+                              image: null,
+                              username: "John Doe",
+                            },
+                          authorId: 17207,
+                          body: "Hello world",
+                          createdAt: "2023-11-11T11:14:08.033Z",
+                          description: "description",
+                          favorited: false,
+                          favoritesCount: 0,
+                          id: 10763,
+                          slug: "my-article-yzd48v",
+                          tags: ["tech"],
+                          title: "My title",
+                          updatedAt: "2023-11-11T11:14:08.033Z",
+                        },
+                    },
+                  error: null,
+                  success: true,
+                }
+          schema:
+            type: object
+            required:
+              - data
+              - error
+              - success
+            properties:
+              success:
+                type: boolean
+              error:
+                type: object
+                nullable: true
+              data:
+                type: object
+                required:
+                  - article
+                properties:
+                  article:
+                    $ref: '#/components/schemas/Article'
     ArticlesSuccessResponse:
       description: Articles success response
       content:
@@ -990,59 +1160,7 @@ components:
                   articles:
                     type: array
                     items:
-                      type: object
-                      required:
-                        - body
-                        - createdAt
-                        - description
-                        - favoritesCount
-                        - id
-                        - tags
-                        - author
-                        - slug
-                        - title
-                        - updatedAt
-                        - authorId
-                        - favorited
-                      properties:
-                        body:
-                          type: string
-                        createdAt:
-                          type: string
-                        description:
-                          type: string
-                        favoritesCount:
-                          type: number
-                        id:
-                          type: number
-                        slug:
-                          type: string
-                        title:
-                          type: string
-                        updatedAt:
-                          type: string
-                        authorId:
-                          type: number
-                        favorited:
-                          type: boolean
-                        tags:
-                          type: array
-                          items:
-                            type: string
-                        author:
-                          type: object
-                          required:
-                            - username
-                            - image
-                            - following
-                          properties:
-                            username:
-                              type: string
-                            image:
-                              type: string
-                              nullable: true
-                            following:
-                              type: boolean
+                      $ref: '#/components/schemas/Article'
     ArticleNotFound:
       description: Article not found
       content:
