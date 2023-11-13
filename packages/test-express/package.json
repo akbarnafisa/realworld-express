@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "validator": "*",
-    "server-express-prisma-pzn": "*"
+    "server-express-prisma-relation": "*"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "server-express-prisma-pzn",
+  "name": "server-express-prisma-relation",
   "version": "1.0.0",
   "description": "A RealWorld Backend API made with express + prisma",
   "main": "dist/server.js",
@@ -21,7 +21,6 @@
     "API",
     "Backend"
   ],
-  "author": "Ronan Pardo Soares",
   "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

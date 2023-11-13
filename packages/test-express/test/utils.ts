@@ -1,5 +1,5 @@
-import { web } from 'server-express-prisma-pzn/src/application/web';
-import { prismaClient } from 'server-express-prisma-pzn/src/application/database';
+import { web } from 'server-express-prisma-relation/src/application/web';
+import { prismaClient } from 'server-express-prisma-relation/src/application/database';
 import bcrypt from 'bcrypt';
 import supertest from 'supertest';
 import { ArticleCreateInputType } from 'validator';

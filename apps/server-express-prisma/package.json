@@ -21,7 +21,6 @@
     "API",
     "Backend"
   ],
-  "author": "Ronan Pardo Soares",
   "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
