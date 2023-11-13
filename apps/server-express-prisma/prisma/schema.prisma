@@ -57,7 +57,7 @@ model Comment {
 
 model Tags {
   name String    @id
-  article Article[]
+  articles Article[]
 
   @@map("blog_tag")
 }
