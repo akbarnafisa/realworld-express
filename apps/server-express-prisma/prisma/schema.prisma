@@ -10,12 +10,54 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  bio      String?
-  email    String  @unique
-  image    String?
-  password String
-  username String  @unique
+  id         Int       @id @default(autoincrement())
+  bio        String?
+  email      String    @unique
+  image      String?
+  password   String
+  username   String    @unique
+  followedBy User[]    @relation("UserFollows")
+  following  User[]    @relation("UserFollows")
+  articles   Article[] @relation("Author")
+  favorites  Article[] @relation("Favorites")
+  comments   Comment[] @relation("Author")
 
   @@map("blog_user")
+}
+
+model Article {
+  id          Int       @id @default(autoincrement())
+  slug        String    @unique
+  title       String
+  description String
+  body        String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @map("updated_at")
+  tags        Tags[]
+  author      User      @relation("Author", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    Int       @map("author_id")
+  favoritedBy User[]    @relation("Favorites")
+  comments    Comment[] @relation("Comments")
+
+  @@map("blog_article")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  articleId Int      @map("article_id")
+  aritcle   Article  @relation("Comments", fields: [articleId], references: [id], onDelete: Cascade)
+  authorId  Int      @map("author_id")
+  author    User     @relation("Author", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("blog_comment")
+}
+
+model Tags {
+  name String    @id
+  article Article[]
+
+  @@map("blog_tag")
 }

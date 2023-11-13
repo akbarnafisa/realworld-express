@@ -8,8 +8,6 @@ export const errorMiddleware: ErrorRequestHandler = async (err, _, res, next) =>
     return;
   }
 
-  responseFormat;
-
   if (err instanceof ResponseError) {
     res
       .status(err.status)

@@ -1,6 +1,11 @@
-import { Prisma } from '@prisma/client';
 import type { RequestHandler } from 'express';
-import { validate, usersRegisterInputSchema, ResponseError, UserRegisterInputType, userViewer } from 'validator';
+import {
+  validate,
+  usersRegisterInputSchema,
+  UserRegisterInputType,
+  userViewer,
+  responseFormat,
+} from 'validator';
 import userCreatePrisma from '../../utils/db/user/userCreatePrisma';
 import { hashPassword } from '../../utils/hashPassword';
 import createUserToken from '../../utils/createUserToken';
@@ -22,17 +27,15 @@ const usersRegister: RequestHandler = async (req, res, next) => {
       username: createdUser.username,
     };
 
-    return res.status(200).json({
-      data: userViewer(createdUser, createUserToken(tokenPayload)),
-    });
+    res.status(200).json(
+      responseFormat({
+        error: null,
+        success: true,
+        data: userViewer(createdUser, createUserToken(tokenPayload)),
+      }),
+    );
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2002') {
-        next(new ResponseError(422, 'Username or email had been used', 'BAD_INPUT'));
-      }
-    } else {
-      next(e);
-    }
+    next(e);
   }
 };
 

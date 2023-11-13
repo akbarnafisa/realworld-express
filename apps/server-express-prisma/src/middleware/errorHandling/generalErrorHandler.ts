@@ -1,5 +1,5 @@
 import { ErrorRequestHandler } from 'express';
-import { ResponseError } from 'validator';
+import { ResponseError, responseFormat } from 'validator';
 import logger from '../../utils/logger';
 
 export const generalErrorHandler: ErrorRequestHandler = async (err, req, res, next) => {
@@ -9,25 +9,33 @@ export const generalErrorHandler: ErrorRequestHandler = async (err, req, res, ne
   }
 
   if (err instanceof ResponseError) {
-    const data: {
-      error: string;
-      errorCode?: string;
-    } = {
-      error: err.message,
-    };
-
-    if (err.errorCode) {
-      data.errorCode = err.errorCode;
-    }
-    res.status(err.status).json(data).end();
-  } else {
-    logger.error(`Unhandled error in generalErrorHandler`);
-    logger.error(`${err.message}\n${err.name}\n${err.stack}`);
     res
-      .status(500)
-      .json({
-        errors: err.message,
-      })
+      .status(err.status)
+      .json(
+        responseFormat({
+          success: false,
+          data: null,
+          error: {
+            errorMsg: err.message,
+            errorCode: err.errorCode,
+          },
+        }),
+      )
+      .end();
+  } else {
+    logger.error(err);
+    res
+      .status(err.status || 500)
+      .json(
+        responseFormat({
+          success: false,
+          data: null,
+          error: {
+            errorMsg: err.message,
+            errorCode: err.errorCode,
+          },
+        }),
+      )
       .end();
   }
 };
