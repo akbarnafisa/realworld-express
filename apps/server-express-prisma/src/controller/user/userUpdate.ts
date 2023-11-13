@@ -4,6 +4,7 @@ import {
   ResponseError,
   TokenPayload,
   UserUpdateInputType,
+  responseFormat,
   userUpdateInputSchema,
   userViewer,
   validate,
@@ -20,7 +21,7 @@ const userUpdate = async (req: Request, res: Response, next: NextFunction) => {
 
     const originData = await userGetPrisma(auth.id);
     if (!originData) {
-      next(new ResponseError(404, 'User not found!'));
+      next(new ResponseError(404, 'User not found'));
       return;
     }
 
@@ -31,9 +32,13 @@ const userUpdate = async (req: Request, res: Response, next: NextFunction) => {
 
     const updatedUser = await userUpdatePrisma(payload, originData.id);
 
-    return res.status(200).json({
-      data: userViewer(updatedUser),
-    });
+    return res.status(200).json(
+      responseFormat({
+        error: null,
+        success: true,
+        data: userViewer(updatedUser),
+      }),
+    );
   } catch (error) {
     next(error)
   }

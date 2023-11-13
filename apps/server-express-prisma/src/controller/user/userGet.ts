@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { Request } from 'express-jwt';
-import { ResponseError, TokenPayload, userViewer } from 'validator';
+import { ResponseError, TokenPayload, responseFormat, userViewer } from 'validator';
 import userGetPrisma from '../../utils/db/user/userGetPrisma';
 const userGet = async (req: Request, res: Response, next: NextFunction) => {
   const auth = req.auth as TokenPayload;
@@ -11,9 +11,13 @@ const userGet = async (req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
-  return res.status(200).json({
-    data: userViewer(originData),
-  });
+  return res.status(200).json(
+    responseFormat({
+      error: null,
+      success: true,
+      data: userViewer(originData),
+    }),
+  );
 };
 
 export default userGet;

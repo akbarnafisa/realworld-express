@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { TokenPayload } from 'validator';
+import { ResponseError, TokenPayload } from 'validator';
 
 dotenv.config();
 
@@ -30,7 +30,7 @@ const authenticator = (req: Request, _: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
 
   if (!auth || !auth.startsWith('Bearer ')) {
-    next(new Error('Invalid token'));
+    next(new  ResponseError(401, 'No authorization token was found'));
     return;
   }
 

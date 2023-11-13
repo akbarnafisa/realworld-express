@@ -129,7 +129,7 @@ describe('PATCH /api/user - update current user', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           bio: null,
-          email: `${id}@testid.com`,
+          email: `${id}@test123id.com`,
           image: null,
           username: `${id}`,
         });
