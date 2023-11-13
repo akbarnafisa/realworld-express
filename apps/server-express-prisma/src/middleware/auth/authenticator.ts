@@ -26,11 +26,11 @@ const verifyToken = (token: string) => {
   });
 };
 
-const authenticator = (req: Request, _: Response, next: NextFunction) => {
+export const authenticator = (req: Request, _: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
 
   if (!auth || !auth.startsWith('Bearer ')) {
-    next(new  ResponseError(401, 'No authorization token was found'));
+    next(new ResponseError(401, 'No authorization token was found'));
     return;
   }
 
@@ -47,4 +47,15 @@ const authenticator = (req: Request, _: Response, next: NextFunction) => {
   next();
 };
 
-export default authenticator;
+export const optionalAuthenticator = (req: Request, _: Response, next: NextFunction) => {
+  const auth = req.headers.authorization;
+  if (auth && auth.startsWith('Bearer ')) {
+    const token = auth.split('Bearer ')[1];
+    const payload = verifyToken(token) as TokenPayload;
+    req.auth = payload;
+    next();
+    return;
+  }
+
+  next();
+};
