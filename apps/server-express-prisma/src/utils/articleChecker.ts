@@ -6,6 +6,9 @@ export const checkArticle = async (slug: string) => {
     where: {
       slug,
     },
+    include: {
+      tags: true,
+    },
   });
 
   if (!data) {

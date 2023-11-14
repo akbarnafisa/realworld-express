@@ -6,6 +6,7 @@ import {
   articlesDelete,
   articlesFavorite,
   articlesUnFavorite,
+  articlesUpdate,
 } from '../../controller/articlesController';
 
 const router = Router();
@@ -13,6 +14,7 @@ const router = Router();
 router.post('/', authenticator, articlesCreate);
 router.get('/:slug', optionalAuthenticator, articlesGet);
 router.delete('/:slug', authenticator, articlesDelete);
+router.patch('/:slug', authenticator, articlesUpdate);
 router.post('/:slug/favorite', authenticator, articlesFavorite);
 router.post('/:slug/unfavorite', authenticator, articlesUnFavorite);
 
