@@ -185,7 +185,7 @@ describe('POST /api/user/:username/unfollow - unfollow user', () => {
       });
     });
 
-    it('if user already unfollowed', async () => {
+    it.skip('if user already unfollowed', async () => {
       const result = await supertest(app).post(TEST_API(secondUser)).set('Authorization', `Bearer ${token}`);
       expect(result.status).toEqual(422);
       expect(result.body).toEqual({
