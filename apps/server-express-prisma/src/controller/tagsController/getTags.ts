@@ -22,8 +22,6 @@ const getTags = async (req: Request, res: Response, next: NextFunction) => {
       },
     });
 
-    console.log(123, await prisma.tags.findMany())
-
     return res.status(200).json(
       responseFormat({
         error: null,
