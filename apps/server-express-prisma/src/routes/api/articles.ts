@@ -1,21 +1,9 @@
 import { Router } from 'express';
-import { authenticator, optionalAuthenticator } from '../../middleware/auth/authenticator';
-import {
-  articlesCreate,
-  articlesGet,
-  articlesDelete,
-  articlesFavorite,
-  articlesUnFavorite,
-  articlesUpdate,
-} from '../../controller/articlesController';
+import { optionalAuthenticator } from '../../middleware/auth/authenticator';
+import { articlesList } from '../../controller/articlesController';
 
 const router = Router();
 
-router.post('/', authenticator, articlesCreate);
-router.get('/:slug', optionalAuthenticator, articlesGet);
-router.delete('/:slug', authenticator, articlesDelete);
-router.patch('/:slug', authenticator, articlesUpdate);
-router.post('/:slug/favorite', authenticator, articlesFavorite);
-router.post('/:slug/unfavorite', authenticator, articlesUnFavorite);
+router.get('/', optionalAuthenticator, articlesList);
 
 export default router;
