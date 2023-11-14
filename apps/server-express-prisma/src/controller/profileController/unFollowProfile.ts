@@ -23,7 +23,7 @@ const unFollowProfile: RequestHandler = async (request, res, next) => {
     }
 
     if (followingUser.id === auth.id) {
-      throw new ResponseError(422, 'Unable to follow yourself');
+      throw new ResponseError(422, 'Unable to unfollow yourself');
     }
 
     await userUnFollowProfilePrisma(followingUser.id, auth.id);
