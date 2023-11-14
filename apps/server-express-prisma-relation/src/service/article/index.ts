@@ -93,6 +93,7 @@ export const getArticlesService = async (request: Request) => {
     take: take || DEFAULT_ARTICLES_QUERIES,
     where: articlesQueryFilter(restQuery),
     include: articleIncludes(auth),
+    cursor: cursor ? { id: Number(cursor) } : undefined,
     orderBy: {
       createdAt: 'desc',
     },
@@ -152,6 +153,7 @@ export const getFeedService = async (request: Request) => {
   const data = await prismaClient.article.findMany({
     skip: skip || 0,
     take: take || DEFAULT_ARTICLES_QUERIES,
+    cursor: cursor ? { id: Number(cursor) } : undefined,
     where: {
       author: {
         followedBy: {
