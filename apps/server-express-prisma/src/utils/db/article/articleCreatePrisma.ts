@@ -2,6 +2,7 @@ import prisma from '../prisma';
 import { ArticleCreateInputType, TokenPayload } from 'validator';
 import slug from 'slug';
 import tagsCreatePrisma from '../tag/tagsCreatePrisma';
+import { articleIncludes } from '../../articleChecker';
 
 const slugify = (title: string): string => {
   return `${slug(title, { lower: true })}-${((Math.random() * Math.pow(36, 6)) | 0).toString(36)}`;
@@ -19,32 +20,7 @@ const articleCreatePrisma = async (data: ArticleCreateInputType, auth: TokenPayl
       authorId: auth.id,
       tags: { connect: tags },
     },
-    include: {
-      author: {
-        select: {
-          username: true,
-          image: true,
-          followedBy: {
-            select: {
-              id: true,
-            },
-            where: {
-              id: auth.id,
-            },
-          },
-        },
-      },
-      favoritedBy: {
-        select: {
-          id: true,
-        },
-        where: {
-          id: auth.id,
-        },
-      },
-      tags: true,
-      _count: { select: { favoritedBy: true } },
-    },
+    include: articleIncludes(auth)
   });
 
   return {
