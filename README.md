@@ -27,7 +27,7 @@ This codebase is my collection of implementations following the [RealWorld](http
     - client-vue (TODO)
     - client-nuxt (TODO)
     - server-express-mongodb (TODO)
-    - server-express-prisma (TODO)
+    - server-express-prisma → Backend project using Express, Prisma, PosgreQL
     - server-express-prisma-relation → Backend project using Express, Prisma, PosgreQL
     - server-express-raw-query (TODO)
     - server-express-relation-raw-query (TODO)
