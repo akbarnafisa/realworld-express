@@ -36,6 +36,7 @@ const articleUpdatePrisma = async (
         disconnect: originArticle.tags,
         connect: tags,
       },
+      updatedAt: new Date(),
     },
     include: articleIncludes(auth),
   });
