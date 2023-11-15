@@ -44,7 +44,6 @@ export const getArticleController: RequestHandler = async (req, res, next) => {
 export const getArticlesController: RequestHandler = async (req, res, next) => {
   try {
     const data = await getArticlesService(req);
-    console.log('asoi', data)
     res.status(200).json(
       responseFormat({
         error: null,

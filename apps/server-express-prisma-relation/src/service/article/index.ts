@@ -240,7 +240,7 @@ export const updateArticleService = async (request: Request) => {
   const originArticle = await checkArticle(slug);
   checkArticleOwner(auth.id, originArticle.authorId);
 
-  const { body, description, title } = await validate<ArticleCreateInputType>(articleInputSchema, request.body);
+  const { body, description, title, tagList } = await validate<ArticleCreateInputType>(articleInputSchema, request.body);
   const isTitleChanged = title !== originArticle.title;
   const data = await prismaClient.article.update({
     where: {
@@ -251,6 +251,22 @@ export const updateArticleService = async (request: Request) => {
       slug: isTitleChanged ? slugify(title) : undefined,
       body,
       description,
+      tags: {
+        // delete relation
+        deleteMany: { articleId: originArticle.id },
+        // connect again
+        create: tagList?.map((name: string) => {
+          return {
+            tag: {
+              connectOrCreate: {
+                where: { name },
+                create: { name },
+              },
+            },
+          };
+        }),
+      },
+      updatedAt: new Date(),
     },
     include: articleIncludes(auth),
   });
