@@ -1,12 +1,30 @@
 import { web } from 'server-express-prisma-relation/src/application/web';
+import prismaApp from 'server-express-prisma/src/app';
+require('dotenv').config();
+
 import { prismaClient } from 'server-express-prisma-relation/src/application/database';
 import bcrypt from 'bcrypt';
 import supertest from 'supertest';
 import { ArticleCreateInputType } from 'validator';
 
-export const app = web;
+const getCurrentApp = () => {
+  switch (process.env.WORKSPACE) {
+    case 'prisma':
+      return prismaApp;
+      break;
+    case 'relation':
+      return web;
+      break;
+    default:
+      break;
+  }
+};
+
+export let app = getCurrentApp();
+
+
 export const NOT_FOUND_USER_TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjY1LCJ1c2VybmFtZSI6InRlc3RpZC11c2VybmFtZSIsImVtYWlsIjoidGVzdGlkQHRlc3RpZHouY29tIiwiaWF0IjoxNjk5MjQ1MjYwLCJleHAiOjE2OTk4NTAwNjB9.jgU6BSB0B9cx_oIsnJjogf-zTUvh6T0yBlle-soBWVg';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc5LCJ1c2VybmFtZSI6InVzZXItY3VycmVudCIsImVtYWlsIjoidXNlci1jdXJyZW50QHRlc3RpZC5jb20iLCJpYXQiOjE2OTk4Njc1MDEsImV4cCI6MTcwMDQ3MjMwMX0.txSa-Sl4HsYo4sJg0FVZGViXUPbMhKY_YxR8jUyJcg0';
 
 export const removeTestUser = async (id?: string) => {
   await prismaClient.user.deleteMany({
@@ -30,6 +48,8 @@ export const createTestUser = async (id?: string) => {
         password: bcrypt.hashSync('password', 10),
       },
     });
+
+    return result;
   } catch (error) {}
 };
 
