@@ -1,11 +1,8 @@
-import express from 'express'
+import express from 'express';
+import { usersRegister } from '../controller/usersController';
 
+const routes = express.Router();
 
-const routes = express.Router()
+routes.post('/api/users', usersRegister);
 
-routes.get("/", (_, res) => {
-  res.status(200).send('test 123')
-})
-
-
-export default routes
+export default routes;
