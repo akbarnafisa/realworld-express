@@ -8,7 +8,7 @@ import { UserModel } from '../../utils/types';
 const loginService = async (req: Request) => {
   const { email, password } = await validate<UserLoginInputType>(usersLoginInputSchema, req.body);
 
-  const getUserPassword = await pool.query('SELECT * from blog_user WHERE email = $1', [email]);
+  const getUserPassword = await pool.query('SELECT * from blog_user WHERE (email = $1 AND 1=1) LIMIT 1 OFFSET 0', [email]);
   const user = getUserPassword?.rows[0] as UserModel;
 
   if (!user) {
