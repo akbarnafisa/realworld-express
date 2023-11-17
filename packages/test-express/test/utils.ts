@@ -1,11 +1,15 @@
 import { web } from 'server-express-prisma-relation/src/application/web';
 import prismaApp from 'server-express-prisma/src/app';
+import { app as rawApp } from 'server-express-prisma-raw/src/app/app';
+import pool from 'server-express-prisma-raw/src/app/db';
+
 require('dotenv').config();
 
 import { prismaClient } from 'server-express-prisma-relation/src/application/database';
 import bcrypt from 'bcrypt';
 import supertest from 'supertest';
 import { ArticleCreateInputType } from 'validator';
+import { userRegisterServiceQuery } from 'server-express-prisma-raw/src/services/users/registerService';
 
 const getCurrentApp = () => {
   switch (process.env.WORKSPACE) {
@@ -15,6 +19,9 @@ const getCurrentApp = () => {
     case 'relation':
       return web;
       break;
+    case 'raw':
+      return rawApp;
+      break;
     default:
       break;
   }
@@ -22,18 +29,24 @@ const getCurrentApp = () => {
 
 export let app = getCurrentApp();
 
-
 export const NOT_FOUND_USER_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc5LCJ1c2VybmFtZSI6InVzZXItY3VycmVudCIsImVtYWlsIjoidXNlci1jdXJyZW50QHRlc3RpZC5jb20iLCJpYXQiOjE2OTk4Njc1MDEsImV4cCI6MTcwMDQ3MjMwMX0.txSa-Sl4HsYo4sJg0FVZGViXUPbMhKY_YxR8jUyJcg0';
 
 export const removeTestUser = async (id?: string) => {
-  await prismaClient.user.deleteMany({
-    where: {
-      username: {
-        contains: id ? id : 'testid',
+  const username = id ? id : 'testid';
+  if (process.env.WORKSPACE === 'raw') {
+    const query = 'DELETE FROM blog_user WHERE username ILIKE $1';
+    const values = [`%${username}%`];
+    await pool.query(query, values);
+  } else {
+    await prismaClient.user.deleteMany({
+      where: {
+        username: {
+          contains: username,
+        },
       },
-    },
-  });
+    });
+  }
 };
 
 export const createTestUser = async (id?: string) => {
@@ -41,15 +54,18 @@ export const createTestUser = async (id?: string) => {
     const username = id ? `${id}` : 'testid-username';
     const email = id ? `${id}@testid.com` : 'testid@testid.com';
 
-    const result = await prismaClient.user.create({
-      data: {
-        username,
-        email,
-        password: bcrypt.hashSync('password', 10),
-      },
-    });
-
-    return result;
+    if (process.env.WORKSPACE === 'raw') {
+      const values = [email, bcrypt.hashSync('password', 10), username];
+      return await pool.query(userRegisterServiceQuery, values);
+    } else {
+      return await prismaClient.user.create({
+        data: {
+          username,
+          email,
+          password: bcrypt.hashSync('password', 10),
+        },
+      });
+    }
   } catch (error) {}
 };
 
