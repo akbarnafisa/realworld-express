@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test:relation": "yarn workspace server-express-prisma-relation generate:develop && cross-env WORKSPACE=relation vitest",
-    "test:prisma": "yarn workspace server-express-prisma generate:develop && cross-env WORKSPACE=prisma vitest"
+    "test:prisma": "yarn workspace server-express-prisma generate:develop && cross-env WORKSPACE=prisma vitest",
+    "test:raw": "cross-env WORKSPACE=raw vitest"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,8 @@
   },
   "dependencies": {
     "server-express-prisma-relation": "*",
+    "server-express-prisma": "*",
+    "server-express-prisma-raw": "*",
     "validator": "*"
   }
 }
