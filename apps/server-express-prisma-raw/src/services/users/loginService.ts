@@ -1,15 +1,15 @@
 import type { Request } from 'express';
-import { User } from '@prisma/client';
 
 import pool from '../../app/db';
 import { ResponseError, UserLoginInputType, userViewer, usersLoginInputSchema, validate } from 'validator';
 import { generateToken, encryptPassword } from '../../utils/encryption';
+import { UserModel } from '../../utils/types';
 
 const loginService = async (req: Request) => {
   const { email, password } = await validate<UserLoginInputType>(usersLoginInputSchema, req.body);
 
   const getUserPassword = await pool.query('SELECT * from blog_user WHERE email = $1', [email]);
-  const user = getUserPassword?.rows[0] as User;
+  const user = getUserPassword?.rows[0] as UserModel;
 
   if (!user) {
     throw new ResponseError(422, 'Email or password is not correct!');
