@@ -7,7 +7,7 @@ CREATE TABLE blog_user (
   id SERIAL PRIMARY KEY NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   username VARCHAR(20) UNIQUE NOT NULL,
-  password VARCHAR(50) NOT NULL,
+  password TEXT NOT NULL,
   bio VARCHAR(300),
   image VARCHAR(1024)
 )
