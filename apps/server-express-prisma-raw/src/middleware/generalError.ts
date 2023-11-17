@@ -31,7 +31,7 @@ const generalError: ErrorRequestHandler = (err, req, res, next) => {
           data: null,
           error: {
             errorMsg: err.message,
-            errorCode: err.code,
+            // errorCode: err.code,
           },
         }),
       )
