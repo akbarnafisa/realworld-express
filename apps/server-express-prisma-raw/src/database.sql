@@ -68,7 +68,7 @@ CREATE TABLE
         tag_id INTEGER NOT NULL,
         CONSTRAINT blog_articles_tags_pkey PRIMARY KEY (article_id, tag_id),
         CONSTRAINT blog_articles_tags_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES blog_tag (id) ON DELETE CASCADE,
-        CONSTRAINT blog_articles_tags_article_id_fkey FOREIGN KEY (article_id) REFERENCES blog_user (id) ON DELETE CASCADE
+        CONSTRAINT blog_articles_tags_article_id_fkey FOREIGN KEY (article_id) REFERENCES blog_article (id) ON DELETE CASCADE
     )
 
 CREATE TABLE
