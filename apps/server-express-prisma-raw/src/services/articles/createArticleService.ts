@@ -8,11 +8,11 @@ import {
   articleViewer,
 } from 'validator';
 import createTag from '../../utils/db/tags/createTag';
-import { connectArticleTag, createArticle as createArticleDb } from '../../utils/db/article/';
+import { connectArticleTag, createArticle } from '../../utils/db/article';
 
 import { ArticleModel } from '../../utils/types';
 
-const createArticle = async (req: Request) => {
+const createArticleService = async (req: Request) => {
   const auth = req.auth as TokenPayload | undefined;
 
   if (!auth) {
@@ -20,7 +20,7 @@ const createArticle = async (req: Request) => {
   }
 
   const inputData = await validate<ArticleCreateInputType>(articleInputSchema, req.body);
-  const [inputArticle, tagIds] = await Promise.all([createArticleDb(inputData, auth), createTag(inputData.tagList)]);
+  const [inputArticle, tagIds] = await Promise.all([createArticle(inputData, auth), createTag(inputData.tagList)]);
   const InputedArticle = inputArticle?.rows[0] as ArticleModel;
 
   await connectArticleTag(tagIds, InputedArticle.id);
@@ -37,4 +37,4 @@ const createArticle = async (req: Request) => {
   });
 };
 
-export default createArticle;
+export default createArticleService;
