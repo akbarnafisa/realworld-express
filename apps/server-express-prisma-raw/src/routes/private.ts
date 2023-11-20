@@ -1,6 +1,6 @@
 import express from 'express';
 import { userGet, userUpdate } from '../controller/userController';
-import { articleCreate } from '../controller/articleController';
+import { articleCreate, articleDelete } from '../controller/articleController';
 
 import { authenticate } from '../middleware/authMiddleware';
 const routes = express.Router();
@@ -11,5 +11,7 @@ routes.patch('/api/user', authenticate, userUpdate);
 
 // articleCreate
 routes.post('/api/article', authenticate, articleCreate);
+routes.delete('/api/article/:slug', authenticate, articleDelete);
+
 
 export default routes;
