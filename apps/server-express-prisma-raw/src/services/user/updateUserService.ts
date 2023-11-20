@@ -34,7 +34,7 @@ const updateUserService = async (req: Request) => {
     throw new ResponseError(401, 'User unauthenticated!');
   }
 
-  const getUser = await pool.query(userGetServiceQuery, [auth.id]);
+  const getUser = await getUserByEmail(auth.email);
   const user = getUser?.rows[0] as UserModel;
 
   if (!user) {

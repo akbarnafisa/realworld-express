@@ -1,14 +1,14 @@
 import type { Request } from 'express';
 
-import pool from '../../app/db';
 import { ResponseError, UserLoginInputType, userViewer, usersLoginInputSchema, validate } from 'validator';
 import { generateToken, encryptPassword } from '../../utils/encryption';
 import { UserModel } from '../../utils/types';
+import { getUserByEmail } from '../../utils/db/users';
 
 const loginService = async (req: Request) => {
   const { email, password } = await validate<UserLoginInputType>(usersLoginInputSchema, req.body);
 
-  const getUserPassword = await pool.query('SELECT * from blog_user WHERE (email = $1 AND 1=1) LIMIT 1 OFFSET 0', [email]);
+  const getUserPassword = await getUserByEmail(email)
   const user = getUserPassword?.rows[0] as UserModel;
 
   if (!user) {
