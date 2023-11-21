@@ -11,8 +11,9 @@ const addTag = async (tagName: string) => {
 };
 
 const createTag = async (tagList: ArticleCreateInputType['tagList']): Promise<TagModel[]> => {
+  const tags = Array.from(new Set(tagList));
   const tagIds = await Promise.all(
-    tagList.map(async (name) => {
+    tags.map(async (name) => {
       const tagQueryResult = await getTag(name);
       const tag = tagQueryResult?.rows[0];
 
