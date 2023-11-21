@@ -9,6 +9,8 @@ import {
   articleUpdate,
 } from '../controller/articleController';
 
+import { profileFollow, profileGet, profileUnFollow } from '../controller/profileController';
+
 import { authenticate, optionalAuth } from '../middleware/authMiddleware';
 const routes = express.Router();
 
@@ -23,5 +25,10 @@ routes.patch('/api/article/:slug', authenticate, articleUpdate);
 routes.get('/api/article/:slug', optionalAuth, articleGet);
 routes.post('/api/article/:slug/favorite', authenticate, articleFavorite);
 routes.post('/api/article/:slug/unfavorite', authenticate, articleUnfavorite);
+
+// profile
+routes.get('/api/user/:username', optionalAuth, profileGet);
+routes.post('/api/user/:username/follow', authenticate, profileFollow);
+routes.post('/api/user/:username/unfollow', authenticate, profileUnFollow);
 
 export default routes;
