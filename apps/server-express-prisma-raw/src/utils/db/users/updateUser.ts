@@ -11,11 +11,6 @@ const updateUser = async (data: Partial<UserUpdateInputType>, id: number) => {
   const query = `UPDATE blog_user SET ${inputData} WHERE (id = $1 AND 1=1) RETURNING *`;
   const values = [id, ...Object.values(data)];
 
-  console.log({
-    query,
-    values,
-  });
-
   return await pool.query(query, values);
 };
 

@@ -4,3 +4,6 @@ export { default as deleteArticleById } from './deleteArticleById';
 export { default as updateArticle } from './updateArticle';
 export { default as getArticleBySlug } from './getArticleBySlug';
 export { default as getFullArticleBySlug } from './getFullArticleBySlug';
+export { default as unFavoriteArticle } from './unFavoriteArticle';
+export { default as favoriteArticle } from './favoriteArticle';
+

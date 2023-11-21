@@ -17,8 +17,6 @@ const createArticleService = async (req: Request) => {
   const articleQuery = await getFullArticleBySlug(slug, auth.id);
   const articleData = articleQuery?.rows[0] as ArticleExtendInfo;
 
-  console.log(articleData)
-
   return articleViewer(articleData);
 };
 

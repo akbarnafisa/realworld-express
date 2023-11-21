@@ -37,9 +37,9 @@ export const getArticleBySlug = async (slug: string, followerId: number) => {
       json_build_array(
           jsonb_build_object(
               'userId',
-              favorited_article.author_id
+              favorited.author_id
           )
-      ) AS favorited_article
+      ) AS "favoritedBy"
   FROM blog_article
       JOIN blog_articles_tags ON blog_articles_tags.article_id = blog_article.id
       JOIN blog_tag ON blog_articles_tags.tag_id = blog_tag.id
@@ -60,14 +60,14 @@ export const getArticleBySlug = async (slug: string, followerId: number) => {
           WHERE
               follower_id = $2
       ) AS current_user_following ON current_user_following.following_id = blog_user.id
-      LEFT JOIN blog_favorites AS favorited_article ON favorited_article.author_id = blog_user.id
+      LEFT JOIN blog_favorites AS favorited ON favorited.author_id = $2 AND favorited.article_id = blog_article.id
   WHERE blog_article.slug = $1
   GROUP BY
       blog_user.username,
       blog_user.image,
       blog_article.id,
       favorites_count.total_favorites,
-      favorited_article.author_id,
+      favorited.author_id,
       current_user_following.follower_id
   `,
     [slug, followerId],
