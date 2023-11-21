@@ -1,8 +1,8 @@
 import express from 'express';
 import { userGet, userUpdate } from '../controller/userController';
-import { articleCreate, articleDelete } from '../controller/articleController';
+import { articleCreate, articleDelete, articleGet } from '../controller/articleController';
 
-import { authenticate } from '../middleware/authMiddleware';
+import { authenticate, optionalAuth } from '../middleware/authMiddleware';
 const routes = express.Router();
 
 // user
@@ -12,6 +12,7 @@ routes.patch('/api/user', authenticate, userUpdate);
 // articleCreate
 routes.post('/api/article', authenticate, articleCreate);
 routes.delete('/api/article/:slug', authenticate, articleDelete);
+routes.get('/api/article/:slug', optionalAuth, articleGet);
 
 
 export default routes;
