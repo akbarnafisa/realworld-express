@@ -18,7 +18,7 @@ const updateArticle = async (data: Partial<ArticleCreateInputType>, slug: string
     .filter(Boolean)
     .join(', ');
 
-  const query = `UPDATE blog_article SET ${inputData} WHERE (slug = $1 AND 1=1) RETURNING *`;
+  const query = `UPDATE blog_article SET ${inputData} WHERE (slug = $1) RETURNING *`;
   const values = [slug, ...Object.values(payload).filter(Boolean)];
 
   console.log({

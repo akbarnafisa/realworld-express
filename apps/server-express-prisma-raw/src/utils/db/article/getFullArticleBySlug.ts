@@ -61,7 +61,7 @@ export const getArticleBySlug = async (slug: string, followerId: number) => {
               follower_id = $2
       ) AS current_user_following ON current_user_following.following_id = blog_user.id
       LEFT JOIN blog_favorites AS favorited ON favorited.author_id = $2 AND favorited.article_id = blog_article.id
-  WHERE blog_article.slug = $1
+  WHERE (blog_article.slug = $1)
   GROUP BY
       blog_user.username,
       blog_user.image,
