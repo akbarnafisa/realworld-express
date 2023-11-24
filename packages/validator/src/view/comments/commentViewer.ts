@@ -2,7 +2,7 @@ import { Comment, User } from '@prisma/client';
 
 import type { CommentResponseType, CommentsResponseType } from './type';
 
-type CommentType = Comment & {
+export type CommentType = Comment & {
   author: {
     username: string;
     image: string | null;

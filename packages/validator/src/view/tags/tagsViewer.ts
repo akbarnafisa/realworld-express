@@ -2,13 +2,13 @@ import { Tags } from '@prisma/client';
 
 import type { TagsResponseType } from './type';
 
-type tagsType = Tags & {
+export type TagsType = Tags & {
   _count: {
     articles: number;
   };
 };
 
-export const tagsViewer = (tags: tagsType[]): TagsResponseType => {
+export const tagsViewer = (tags: TagsType[]): TagsResponseType => {
   return {
     tags: tags
       .filter((tag) => {
