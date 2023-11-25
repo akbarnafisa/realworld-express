@@ -19,6 +19,7 @@ This codebase is my collection of implementations following the [RealWorld](http
 - Turborepo
 - OpenAPI
 - Docker (TODO)
+- AWS EC2
 
 ## Folder Structure
 - apps
@@ -29,8 +30,7 @@ This codebase is my collection of implementations following the [RealWorld](http
     - server-express-mongodb (TODO)
     - server-express-prisma → Backend project using Express, Prisma, PosgreQL
     - server-express-prisma-relation → Backend project using Express, Prisma, PosgreQL
-    - server-express-raw-query (TODO)
-    - server-express-relation-raw-query (TODO)
+    - server-express-raw -> Backend project using Express and using raw query from Posgreql
 - package
     - validator → Types, Validator, Viewer for backend
     - test-express → Backend testing using Vite and Supertest
