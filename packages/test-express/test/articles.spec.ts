@@ -199,15 +199,14 @@ describe('GET /api/feed - get article', () => {
   });
 
   it('cursor', async () => {
-    await Promise.all([
-      createArticles(secondToken, {
-        title: 'test-articles-1',
-      }),
-      createArticles(secondToken, {
-        title: 'test-articles-2',
-      }),
-      // supertest(app).post(`/api/user/${secondUserId}/follow`).set('Authorization', `Bearer ${token}`),
-    ]);
+    await createArticles(secondToken, {
+      title: 'test-articles-1',
+    })
+    await createArticles(secondToken, {
+      title: 'test-articles-2',
+    })
+    await supertest(app).post(`/api/user/${secondUserId}/follow`).set('Authorization', `Bearer ${token}`)
+    
 
     const resultPage1 = await supertest(app).get(`${TEST_API}?limit=1`).set('Authorization', `Bearer ${token}`);
     const resultPage2 = await supertest(app)

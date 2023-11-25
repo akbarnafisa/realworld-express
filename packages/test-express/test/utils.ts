@@ -9,7 +9,7 @@ import { prismaClient } from 'server-express-prisma-relation/src/application/dat
 import bcrypt from 'bcrypt';
 import supertest from 'supertest';
 import { ArticleCreateInputType } from 'validator';
-import { userRegisterServiceQuery } from 'server-express-prisma-raw/src/services/users/registerService';
+import { registerUser } from 'server-express-prisma-raw/src/utils/db/users';
 
 const getCurrentApp = () => {
   switch (process.env.WORKSPACE) {
@@ -30,8 +30,7 @@ const getCurrentApp = () => {
 export let app = getCurrentApp();
 
 export const NOT_FOUND_USER_TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc5LCJ1c2VybmFtZSI6InVzZXItY3VycmVudCIsImVtYWlsIjoidXNlci1jdXJyZW50QHRlc3RpZC5jb20iLCJpYXQiOjE2OTk4Njc1MDEsImV4cCI6MTcwMDQ3MjMwMX0.txSa-Sl4HsYo4sJg0FVZGViXUPbMhKY_YxR8jUyJcg0';
-
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Indvd0B3b3cuY29tIiwiaWQiOjUxLCJ1c2VybmFtZSI6IndvdyIsImlhdCI6MTcwMDg5NDQ0OSwiZXhwIjoxNzYxMzc0NDQ5fQ.Mk-YAIKdi3g0iuWPKsLp9wDQkt39vKCt_Rwq5rDkxMk';
 export const removeTestUser = async (id?: string) => {
   const username = id ? id : 'testid';
   if (process.env.WORKSPACE === 'raw') {
@@ -55,8 +54,11 @@ export const createTestUser = async (id?: string) => {
     const email = id ? `${id}@testid.com` : 'testid@testid.com';
 
     if (process.env.WORKSPACE === 'raw') {
-      const values = [email, bcrypt.hashSync('password', 10), username];
-      return await pool.query(userRegisterServiceQuery, values);
+      return await registerUser({
+        email,
+        password: 'password',
+        username,
+      });
     } else {
       return await prismaClient.user.create({
         data: {
@@ -118,6 +120,12 @@ export const createComments = (slug: string, token: string) => {
 };
 
 export const removeTags = async (name = 'test-') => {
+if (process.env.WORKSPACE === 'raw') {
+  const query = 'DELETE FROM blog_tag WHERE name ILIKE $1';
+  const values = [`%${name}%`];
+  await pool.query(query, values);
+} else {
+  
   await prismaClient.tags.deleteMany({
     where: {
       name: {
@@ -125,4 +133,5 @@ export const removeTags = async (name = 'test-') => {
       },
     },
   });
+}
 };
