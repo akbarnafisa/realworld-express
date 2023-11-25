@@ -64,7 +64,7 @@ export const articlesViewer = (
 
   return {
     articles: articlesData,
-    articlesCount: opt?.articlesCount,
+    articlesCount: opt?.articlesCount ? Number(opt.articlesCount) : opt?.articlesCount,
     nextCursor: opt?.nextCursor,
     hasMore: opt?.hasMore,
   };

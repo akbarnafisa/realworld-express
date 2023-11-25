@@ -39,6 +39,6 @@ export const commentsViewer = (
     comments: commentsItem,
     nextCursor: opt?.nextCursor,
     hasMore: opt?.hasMore,
-    commentsCount: opt?.commentsCount
+    commentsCount: opt?.commentsCount ? Number(opt.commentsCount) : opt?.commentsCount,
   };
 };
