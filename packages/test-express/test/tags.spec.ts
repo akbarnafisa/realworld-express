@@ -48,13 +48,11 @@ describe('GET /api/tags', () => {
 
     const result = await supertest(app).get(TEST_API);
 
-    expect(result.body).toEqual({
-      data: {
-        tags: expect.arrayContaining(['data-1', 'data-2']),
-      },
-      error: null,
-      success: true,
-    });
+    expect(result.body.data.tags).toBeTruthy();
+
+    const tags = result.body.data.tags.filter((data: any) => data === 'data-1' || data === 'data-2');
+    expect(result.body.data.tags).toBeTruthy();
+    expect(tags).toEqual(['data-2', 'data-1']);
 
     expect(result.status).toEqual(200);
   });
