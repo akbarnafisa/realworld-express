@@ -116,6 +116,7 @@ export const getArticlesService = async (request: Request) => {
 
       const secondQueryResults = await prismaClient.article.findMany({
         take: take || DEFAULT_ARTICLES_QUERIES,
+        where: articlesQueryFilter(restQuery),
         cursor: {
           id: myCursor,
         },
@@ -270,6 +271,8 @@ export const updateArticleService = async (request: Request) => {
     },
     include: articleIncludes(auth),
   });
+
+
 
   return articleViewer(data);
 };
