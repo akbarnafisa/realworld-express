@@ -28,13 +28,13 @@ routes.patch('/api/article/:slug', authenticate, articleUpdate);
 routes.get('/api/article/:slug', optionalAuth, articleGet);
 routes.post('/api/article/:slug/favorite', authenticate, articleFavorite);
 routes.post('/api/article/:slug/unfavorite', authenticate, articleUnfavorite);
-routes.get('/api/articles/feed', authenticate, articleFeed);
+routes.get('/api/feed', authenticate, articleFeed);
 routes.get('/api/articles', optionalAuth, articlesGet);
 
 // comment
-routes.get('/api/article/:slug/comment', optionalAuth, commentsGetService);
-routes.post('/api/article/:slug/comment', authenticate, commentCreate);
-routes.delete('/api/article/:slug/comment/:commentId', authenticate, commentDelete);
+routes.get('/api/article/:slug/comments', optionalAuth, commentsGetService);
+routes.post('/api/article/:slug/comments', authenticate, commentCreate);
+routes.delete('/api/article/:slug/comments/:commentId', authenticate, commentDelete);
 
 
 // profile

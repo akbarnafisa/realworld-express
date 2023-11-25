@@ -12,6 +12,7 @@ const getArticlesLength = async (queries: ArticlesQueries) => {
       LEFT JOIN blog_user AS favorited_query ON favorited_query.id = blog_favorites.author_id
       JOIN blog_articles_tags ON blog_articles_tags.article_id = blog_article.id
       JOIN blog_tag ON blog_articles_tags.tag_id = blog_tag.id
+      JOIN blog_user ON blog_user.id = blog_article.author_id
     ${whereValues.length ? `WHERE ${whereQueries}` : ''}
   `;
 

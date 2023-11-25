@@ -31,7 +31,7 @@ const getArticleFeed = async (request: Request) => {
 
   if (!cursor) {
     const feedCountQuery = await getArticleFeedLength(auth.id);
-    articlesCount = feedCountQuery?.rows[0].total_comments as number;
+    articlesCount = feedCountQuery?.rows[0].total_articles as number;
   } else if (feedData.length > 0) {
     const lastLinkResults = feedData[feedData.length - 1];
     const myCursor = lastLinkResults.id;

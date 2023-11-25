@@ -5,6 +5,7 @@ export const getArticleBySlug = async (slug: string, followerId?: number) => {
     `
   SELECT
       blog_article.body, (blog_article.created_at) AS "createdAt",
+      blog_article.title,
       blog_article.description,
       blog_article.id,
       blog_article.slug, (blog_article.updated_at) AS "updatedAt", (blog_article.author_id) AS "authorId",

@@ -35,6 +35,7 @@ const getArticlesByPagination = async (
   const query = `
   SELECT
       blog_article.body, (blog_article.created_at) AS "createdAt",
+      blog_article.title,
       blog_article.description,
       blog_article.id,
       blog_article.slug,
@@ -125,6 +126,7 @@ const getArticlesByCursor = async (
   const query = `
     SELECT
       blog_article.body, (blog_article.created_at) AS "createdAt",
+      blog_article.title,
       blog_article.description,
       blog_article.id,
       blog_article.slug,
@@ -188,9 +190,7 @@ const getArticlesByCursor = async (
     WHERE (
       blog_article.created_at < (
           SELECT blog_article.created_at FROM blog_article WHERE blog_article.id = $2
-      ) AND (
-        ${whereValues.length ? `${whereQueries}` : ''}
-      )
+      ) ${whereValues.length ? `AND ${whereQueries}` : ''}
     )
     GROUP BY
       blog_user.username,

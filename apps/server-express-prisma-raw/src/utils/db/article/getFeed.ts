@@ -5,6 +5,7 @@ const getFeedByPagination = async (followerId: number, limit: number, offset: nu
     `
   SELECT
       blog_article.body, (blog_article.created_at) AS "createdAt",
+      blog_article.title,
       blog_article.description,
       blog_article.id,
       blog_article.slug,
@@ -84,6 +85,7 @@ const getFeedByCursor = async (authId: number, limit: number, cursor: number) =>
   const query = `
     SELECT
       blog_article.body, (blog_article.created_at) AS "createdAt",
+      blog_article.title,
       blog_article.description,
       blog_article.id,
       blog_article.slug,
