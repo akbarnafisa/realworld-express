@@ -1,6 +1,6 @@
 import pool from '../../../app/db';
 
-export const getArticleBySlug = async (slug: string, followerId: number) => {
+export const getArticleBySlug = async (slug: string, followerId?: number) => {
   return await pool.query(
     `
   SELECT

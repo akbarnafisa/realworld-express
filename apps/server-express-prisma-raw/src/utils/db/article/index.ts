@@ -8,4 +8,6 @@ export { default as unFavoriteArticle } from './unFavoriteArticle';
 export { default as favoriteArticle } from './favoriteArticle';
 export { default as getFeed } from './getFeed';
 export { default as getArticleFeedLength } from './getArticleFeedLength';
+export { default as getArticles } from './getArticles';
+export { default as getArticlesLength } from './getArticlesLength';
 

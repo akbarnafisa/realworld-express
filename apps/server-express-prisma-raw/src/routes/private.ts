@@ -8,6 +8,7 @@ import {
   articleUnfavorite,
   articleUpdate,
   articleFeed,
+  articlesGet,
 } from '../controller/articleController';
 import { profileFollow, profileGet, profileUnFollow } from '../controller/profileController';
 import { commentCreate, commentDelete, commentsGetService } from '../controller/commentController';
@@ -28,6 +29,7 @@ routes.get('/api/article/:slug', optionalAuth, articleGet);
 routes.post('/api/article/:slug/favorite', authenticate, articleFavorite);
 routes.post('/api/article/:slug/unfavorite', authenticate, articleUnfavorite);
 routes.get('/api/articles/feed', authenticate, articleFeed);
+routes.get('/api/articles', optionalAuth, articlesGet);
 
 // comment
 routes.get('/api/article/:slug/comment', optionalAuth, commentsGetService);
