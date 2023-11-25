@@ -7,7 +7,9 @@ const articleFavorite: RequestHandler = async (req, res, next) => {
     await followProfileService(req);
     res.status(200).send(
       responseFormat({
-        data: null,
+        data: {
+          success: true,
+        },
         error: null,
         success: true,
       }),
