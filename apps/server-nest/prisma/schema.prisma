@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  bio        String?
+  email      String      @unique
+  image      String?
+  password   String
+  username   String      @unique
+  followedBy Follows[]   @relation("following")
+  following  Follows[]   @relation("follower")
+  articles   Article[]
+  favorites  Favorites[]
+  comments    Comment[]
+
+  @@map("blog_user")
+}
+
+model Follows {
+  followerId  Int @map("follower_id")
+  followingId Int @map("following_id")
+
+  follower  User @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@map("blog_follows")
+}
+
+model Article {
+  id          Int            @id @default(autoincrement())
+  slug        String         @unique
+  title       String
+  description String
+  body        String
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @default(now()) @map("updated_at")
+  tags        ArticlesTags[]
+  author      User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    Int            @map("author_id")
+  favoritedBy Favorites[]
+  comments    Comment[]
+
+  @@map("blog_article")
+}
+
+model Favorites {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("user_id")
+
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int     @map("article_id")
+
+  @@id([userId, articleId])
+  @@map("blog_favorites")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  articleId Int      @map("article_id")
+  aritcle   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId  Int      @map("author_id")
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("blog_comment")
+}
+
+model ArticlesTags {
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int     @map("article_id")
+  tag       Tags    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     Int     @map("tag_id")
+
+  @@id([articleId, tagId])
+  @@map("blog_articles_tag")
+}
+
+model Tags {
+  id       Int            @id @default(autoincrement())
+  name     String         @unique
+  articles ArticlesTags[]
+
+  @@map("blog_tag")
+}
