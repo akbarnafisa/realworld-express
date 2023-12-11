@@ -1,11 +1,11 @@
-FROM node:16
+FROM node:18
 
-WORKDIR /app/server
+WORKDIR /app/server-prisma
 
 COPY package*.json ./
 
-RUN npm i
+RUN yarn
 
 COPY . .
 
-CMD [ "npm", "run", "dev"]
+CMD [ "yarn", "dev"]

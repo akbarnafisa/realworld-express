@@ -1,11 +1,11 @@
-FROM node:16
+FROM node:18
 
-WORKDIR /app/client
+WORKDIR /apps/client
 
 COPY package*.json ./
 
-RUN npm i
+RUN yarn
 
 COPY . .
 
-CMD [ "npm", "run", "dev", "--host" ]
+CMD [ "yarn", "dev", "--host" ]

@@ -1,0 +1,159 @@
+
+POST http://localhost:3131/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username" : "wow",
+  "password" : "rahasia",
+  "email" : "wow@wow.com"
+}
+
+POST http://localhost:3131/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "password" : "rahasia",
+  "email" : "assoxxsdx@asoi.com"
+}
+
+GET http://localhost:3131/api/user
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzc294eHNkeEBhc29pLmNvbSIsImlkIjoxLCJ1c2VybmFtZSI6ImtoYW54Y2NjbmVkY2N5IiwiaWF0IjoxNzAwNDUzODQwLCJleHAiOjE3MDEwNTg2NDB9.oZ8GKAAklvIjgumEnsbpelk9koI7e6G-nCvxzftCT48
+
+PATCH  http://localhost:3131/api/user
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzc294eHNkeEBhc29pLmNvbSIsImlkIjoxLCJ1c2VybmFtZSI6ImtoYW54Y2NjbmVkY2N5IiwiaWF0IjoxNzAwNDU2MjM5LCJleHAiOjE3MDEwNjEwMzl9.OmxhKM_BZe4908m8ul5CTP-R3wQVKh3Nj4au6gWYImw
+
+{
+  "email": "assoxxsdx@asoi.com",
+  "image": "https://wewasd.com",
+  "username": "khanxcccnedccy",
+  "bio": "kucssing"
+}
+
+
+POST  http://localhost:3131/api/article
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+{
+  "body": "bodsdysdsc",
+  "description": "descripassaddction",
+  "title": "ozixdsadsnn",
+  "tagList": ["x", "x"]
+}
+
+PATCH  http://localhost:3131/api/article/hmm-xidorx
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+{
+  "body": "bbb",
+  "description": "bbb",
+  "title": "hmm",
+  "tagList": ["1", "2"]
+}
+
+
+
+
+DELETE  http://localhost:3131/api/article/ozixdsnn-zal5sj
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+
+GET http://localhost:3131/api/article/title-bc3gxy
+Content-Type: application/json
+Accept: application/json
+
+
+
+
+POST http://localhost:3131/api/article/title-bc3gxy/favorite
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+POST http://localhost:3131/api/article/title-bc3gxy/unfavorite
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+
+GET http://localhost:3131/api/tags
+Content-Type: application/json
+Accept: application/json
+
+
+
+GET http://localhost:3131/api/user
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+
+POST http://localhost:3131/api/user/khanxcccnedccy/follow
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+
+POST http://localhost:3131/api/user/khanxcccnedccy/unfollow
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+
+POST http://localhost:3131/api/article/title-bc3gxy/comment
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+{
+  "body": "wew"
+}
+
+DELETE http://localhost:3131/api/article/title-bc3gxy/comment/12
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+GET http://localhost:3131/api/article/title-bc3gxy/comment?limit=1&offset=0
+Content-Type: application/json
+Accept: application/json
+
+
+GET http://localhost:3131/api/article/title-bc3gxy/comment?limit=1&cursor=11
+Content-Type: application/json
+Accept: application/json
+
+
+GET http://localhost:3131/api/articles/feed?limit=1&cursor=2
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+GET http://localhost:3131/api/articles?limit=5&author=ozin
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+
+
+GET http://localhost:3131/api/articles?limit=1&cursor=48&author=ozin
+Content-Type: application/json
+Accept: application/json

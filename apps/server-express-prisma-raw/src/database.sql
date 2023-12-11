@@ -79,3 +79,4 @@ CREATE TABLE
         CONSTRAINT blog_tag_name_key UNIQUE (name)
     )
 
+    

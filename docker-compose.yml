@@ -6,7 +6,7 @@ services:
     ports:
       - 5173:5173
     volumes:
-      - ./apps/client:/app/client
+      - ./apps/client:/apps/client
       # https://stackoverflow.com/a/37898591
       # exclude node_modules due to Vite error
       - /app/client/node_modules/
@@ -14,11 +14,11 @@ services:
       - API_URL=http://localhost:3000/
 
   server:
-    build: ./apps/server
+    build: ./apps/server-raw
     ports:
       - 3000:3000
     volumes:
-      - ./apps/server:/app/server
-      - /app/server/node_modules/
+      - ./apps/server-raw:/apps/server-raw
+      - /apps/server-raw/node_modules/
     environment:
       - PORT=3000
