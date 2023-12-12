@@ -1,34 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Post, Body, UsePipes, Controller } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserCreateDto } from './dto/userCreate.dto';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
+import { UserRequestCreateDto } from './dto/userRequestCreate.dto';
+import { CustomValidationPipe } from 'src/common/common.pipe';
+import { ResUserWithTokenDto } from './dto/resUserWithToken.dto';
 
-@Controller('user')
+@ApiBearerAuth()
+@ApiTags('user')
+@Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Post('user')
+  @ApiBody({ type: UserRequestCreateDto })
+  @ApiCreatedResponse({})
+  @UsePipes(new CustomValidationPipe())
+  async create(
+    @Body('user') createUserDto: UserCreateDto,
+  ): Promise<ResUserWithTokenDto> {
+    return this.userService.createUser(createUserDto);
   }
 }

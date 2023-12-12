@@ -4,6 +4,7 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 export class UserCreateDto {
   @ApiProperty({ example: 'username', description: 'The username of the User' })
   @IsNotEmpty()
+  @IsString()
   readonly username: string;
 
   @ApiProperty({
