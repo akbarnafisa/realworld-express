@@ -1,12 +1,12 @@
 import { PrismaService } from '@app/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { RequestCreateUserDto } from './dto/request/request-create-user.dto';
 import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(createUserDto: RequestCreateUserDto): Promise<UserEntity> {
     return this.prisma.user.create({
       data: {
         username: createUserDto.username,
@@ -16,12 +16,14 @@ export class UserRepository {
     });
   }
 
-  async getUserById(id: number): Promise<UserEntity> {
-    return this.prisma.user.findUnique({
+  async getUserByEmail(email: string): Promise<UserEntity | null> {
+    const data = await this.prisma.user.findUnique({
       where: {
-        id,
+        email,
       },
     });
+
+    return data;
   }
 
   async getUserByEmailOrName(

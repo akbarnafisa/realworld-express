@@ -1,13 +1,33 @@
 
-POST http://localhost:3131/api/users
+POST http://localhost:3000/api/user
 Content-Type: application/json
 Accept: application/json
 
 {
-  "username" : "wow",
-  "password" : "rahasia",
-  "email" : "wow@wow.com"
+  "user": {
+    "username" : "112345",
+    "password" : "rahasia123",
+    "email" : "wow@wow.com"
+  }
 }
+
+GET http://localhost:3000/api/user
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTcsInVzZXJuYW1lIjoiMTIzc3MiLCJlbWFpbCI6IjIxc3NAd293LmNvbSIsImlhdCI6MTcwMjQ1MzA5MiwiZXhwIjoxNzAzMDU3ODkyfQ.t86onxxPGWEabPCo16SzAM6jTNOUU_lIw5sSBzNXVI8
+
+POST http://localhost:3000/api/user/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "user": {
+    "password" : "rahasssia123",
+    "email" : "wasdow@wow.com"
+  }
+}
+
+
 
 POST http://localhost:3131/api/users/login
 Content-Type: application/json

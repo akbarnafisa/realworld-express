@@ -57,4 +57,8 @@ export class AuthService {
 
     return payload;
   }
+
+  checkPassword(password: string, hash: string) {
+    return bcrypt.compareSync(password, hash);
+  }
 }

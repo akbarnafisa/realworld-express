@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { RequestCreateUserDto } from './dto/request/request-create-user.dto';
 import { UserRepository } from './user.repository';
 import { UserEntity } from './entities/user.entity';
 import { UserCheck } from './user.check';
 import { AuthService } from '@app/auth/auth.service';
-import { ResponseUserWithTokenDto } from './dto/response-user-with-token.dto';
-import { ResponseUserDto } from './dto/response-user.dto';
+import { ResponseUserWithTokenDto } from './dto/response/response-user-with-token.dto';
+import { ResponseUserDto } from './dto/response/response-user.dto';
 import { AuthEntities } from '@app/auth/entities/auth.entities';
+import { RequestLoginUserDto } from './dto/request/request-login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,7 @@ export class UserService {
   ) {}
 
   async create(
-    createUserDto: CreateUserDto,
+    createUserDto: RequestCreateUserDto,
   ): Promise<ResponseUserWithTokenDto> {
     const { email, password, username } = createUserDto;
     await this.checkUniqueUser(email, username);
@@ -32,8 +33,36 @@ export class UserService {
     return this.userWithTokenViewer(userData);
   }
 
+  async login(
+    loginUserDto: RequestLoginUserDto,
+  ): Promise<ResponseUserWithTokenDto> {
+    const { email, password } = loginUserDto;
+    const userData = await this.userRepository.getUserByEmail(email);
+
+    if (!userData) {
+      throw new HttpException(
+        'Email or password is not correct!',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const isPasswordCorrect = this.authService.checkPassword(
+      password,
+      userData.password,
+    );
+
+    if (!isPasswordCorrect) {
+      throw new HttpException(
+        'Email or password is not correct!',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    return this.userWithTokenViewer(userData);
+  }
+
   async getCurrentUser(auth: AuthEntities): Promise<ResponseUserDto> {
-    const userData = await this.userRepository.getUserById(auth.id);
+    const userData = await this.userRepository.getUserByEmail(auth.email);
     this.userCheck.isExistUser(!!userData);
     return this.userViewer(userData);
   }
