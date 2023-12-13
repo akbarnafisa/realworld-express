@@ -1,29 +1,37 @@
-import { Post, Body, UsePipes, Controller } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserCreateDto } from './dto/userCreate.dto';
 import {
-  ApiTags,
-  ApiBearerAuth,
-  ApiBody,
-  ApiCreatedResponse,
-} from '@nestjs/swagger';
-import { UserRequestCreateDto } from './dto/userRequestCreate.dto';
-import { CustomValidationPipe } from 'src/common/common.pipe';
-import { ResUserWithTokenDto } from './dto/resUserWithToken.dto';
+  Controller,
+  Get,
+  Post,
+  Body,
+  UsePipes,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
+import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { CommonPipe } from '@app/common/common.pipe';
+import { ResponseUserWithTokenDto } from './dto/response-user-with-token.dto';
+import { AuthEntities } from '@app/auth/entities/auth.entities';
+import { ResponseUserDto } from './dto/response-user.dto';
+import { AuthGuard } from '@app/auth/auth.guard';
 
-@ApiBearerAuth()
-@ApiTags('user')
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('user')
-  @ApiBody({ type: UserRequestCreateDto })
-  @ApiCreatedResponse({})
-  @UsePipes(new CustomValidationPipe())
+  @UsePipes(new CommonPipe())
   async create(
-    @Body('user') createUserDto: UserCreateDto,
-  ): Promise<ResUserWithTokenDto> {
-    return this.userService.createUser(createUserDto);
+    @Body('user') createUserDto: CreateUserDto,
+  ): Promise<ResponseUserWithTokenDto> {
+    return await this.userService.create(createUserDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('user')
+  @UsePipes(new CommonPipe())
+  async getUserCurrent(@Request() req): Promise<ResponseUserDto> {
+    const auth = req.auth as AuthEntities;
+    return await this.userService.getCurrentUser(auth);
   }
 }

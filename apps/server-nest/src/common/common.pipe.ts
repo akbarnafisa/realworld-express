@@ -2,12 +2,14 @@ import {
   ArgumentMetadata,
   HttpException,
   HttpStatus,
+  Injectable,
   PipeTransform,
 } from '@nestjs/common';
+import { ValidationError, validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
-import { validate, ValidationError } from 'class-validator';
 
-export class CustomValidationPipe implements PipeTransform {
+@Injectable()
+export class CommonPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
     if (typeof value === 'string') {
       return value.trim();
@@ -25,30 +27,25 @@ export class CustomValidationPipe implements PipeTransform {
     if (typeof object !== 'object') {
       return value;
     }
+
     const errors = await validate(object);
 
-    console.log({
-      errors,
-      object,
-    });
-
-    if (errors.length === 0) {
-      return value;
+    if (errors.length > 0) {
+      throw new HttpException(
+        {
+          errors: this.buildError(errors),
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
-    throw new HttpException(
-      {
-        errors: this.buildError(errors),
-      },
-      HttpStatus.UNPROCESSABLE_ENTITY,
-    );
+    return value;
   }
 
   buildError(errors: ValidationError[]) {
     const result = {};
 
     errors.forEach((error) => {
-      console.log({ error });
       if (error.children && error.children.length > 0) {
         result[error.property] = this.buildError(error.children);
       } else {
