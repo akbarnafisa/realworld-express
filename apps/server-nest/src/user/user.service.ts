@@ -8,6 +8,7 @@ import { ResponseUserWithTokenDto } from './dto/response/response-user-with-toke
 import { ResponseUserDto } from './dto/response/response-user.dto';
 import { AuthEntities } from '@app/auth/entities/auth.entities';
 import { RequestLoginUserDto } from './dto/request/request-login-user.dto';
+import { RequestUserUpdateDto } from './dto/request/request-update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -63,8 +64,33 @@ export class UserService {
 
   async getCurrentUser(auth: AuthEntities): Promise<ResponseUserDto> {
     const userData = await this.userRepository.getUserByEmail(auth.email);
-    this.userCheck.isExistUser(!!userData);
+
+    if (!userData) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
     return this.userViewer(userData);
+  }
+
+  async updateUser(
+    auth: AuthEntities,
+    updateUserDto: RequestUserUpdateDto,
+  ): Promise<ResponseUserDto> {
+    const { password, ...restInput } = updateUserDto;
+    const currentUserData = await this.userRepository.getUserByEmail(
+      auth.email,
+    );
+
+    if (!currentUserData) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const updatedData = await this.userRepository.updateUser(auth.email, {
+      ...restInput,
+      password: password ? this.authService.hashPassword(password) : undefined,
+    });
+
+    return this.userViewer(updatedData);
   }
 
   private async checkUniqueUser(

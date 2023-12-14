@@ -10,11 +10,11 @@ class ResponseUser {
 
   @IsString()
   @IsNotEmpty()
-  bio: string;
+  bio: string | null;
 
   @IsString()
   @IsNotEmpty()
-  image: string;
+  image: string | null;
 }
 
 export class ResponseUserDto {

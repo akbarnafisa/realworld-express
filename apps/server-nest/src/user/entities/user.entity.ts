@@ -1,8 +1,8 @@
 export class UserEntity {
   id: number;
-  username: string;
+  bio: string | null;
   email: string;
+  image: string | null;
   password: string;
-  bio: string;
-  image: string;
+  username: string;
 }

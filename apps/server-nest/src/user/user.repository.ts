@@ -2,6 +2,7 @@ import { PrismaService } from '@app/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { RequestCreateUserDto } from './dto/request/request-create-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { RequestUserUpdateDto } from './dto/request/request-update-user.dto';
 
 @Injectable()
 export class UserRepository {
@@ -17,19 +18,17 @@ export class UserRepository {
   }
 
   async getUserByEmail(email: string): Promise<UserEntity | null> {
-    const data = await this.prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: {
         email,
       },
     });
-
-    return data;
   }
 
   async getUserByEmailOrName(
     email: string,
     username: string,
-  ): Promise<UserEntity> {
+  ): Promise<UserEntity | null> {
     return this.prisma.user.findFirst({
       where: {
         OR: [
@@ -41,6 +40,15 @@ export class UserRepository {
           },
         ],
       },
+    });
+  }
+
+  async updateUser(email: string, updateUserDto: RequestUserUpdateDto) {
+    return await this.prisma.user.update({
+      where: {
+        email,
+      },
+      data: updateUserDto,
     });
   }
 }
