@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RequestCreateUserDto } from './dto/request/request-create-user.dto';
-import { CommonPipe } from '@app/common/common.pipe';
+import { RequestValidationPipe } from '@app/common/common.pipe';
 import { ResponseUserWithTokenDto } from './dto/response/response-user-with-token.dto';
 import { AuthEntities } from '@app/auth/entities/auth.entities';
 import { ResponseUserDto } from './dto/response/response-user.dto';
@@ -23,7 +23,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('user')
-  @UsePipes(new CommonPipe())
+  @UsePipes(new RequestValidationPipe())
   async create(
     @Body('user') createUserDto: RequestCreateUserDto,
   ): Promise<ResponseUserWithTokenDto> {
@@ -32,14 +32,14 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get('user')
-  @UsePipes(new CommonPipe())
+  @UsePipes(new RequestValidationPipe())
   async getUserCurrent(@Request() req): Promise<ResponseUserDto> {
     const auth = req.auth as AuthEntities;
     return await this.userService.getCurrentUser(auth);
   }
 
   @Post('user/login')
-  @UsePipes(new CommonPipe())
+  @UsePipes(new RequestValidationPipe())
   async login(
     @Body('user') loginUserDto: RequestLoginUserDto,
   ): Promise<ResponseUserWithTokenDto> {
@@ -48,7 +48,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Patch('user')
-  @UsePipes(new CommonPipe())
+  @UsePipes(new RequestValidationPipe())
   async update(
     @Request() req,
     @Body('user') updateUserDto: RequestUserUpdateDto,

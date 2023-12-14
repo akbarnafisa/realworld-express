@@ -1,7 +1,7 @@
-import { CommonPipe } from './common.pipe';
+import { RequestValidationPipe } from './common.pipe';
 
-describe('CommonPipe', () => {
+describe('RequestValidationPipe', () => {
   it('should be defined', () => {
-    expect(new CommonPipe()).toBeDefined();
+    expect(new RequestValidationPipe()).toBeDefined();
   });
 });
