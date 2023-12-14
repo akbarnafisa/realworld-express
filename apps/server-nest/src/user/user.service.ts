@@ -69,7 +69,7 @@ export class UserService {
         HttpStatus.UNAUTHORIZED,
       );
     }
-    const userData = await this.userRepository.getUserByEmail(auth.email);
+    const userData = await this.userRepository.getUserById(auth.id);
 
     if (!userData) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -90,20 +90,18 @@ export class UserService {
     }
 
     const { password, ...restInput } = updateUserDto;
-    const currentUserData = await this.userRepository.getUserByEmail(
-      auth.email,
-    );
+    const currentUserData = await this.userRepository.getUserById(auth.id);
 
     if (!currentUserData) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    const updatedData = await this.userRepository.updateUser(auth.email, {
+    const updatedData = await this.userRepository.updateUser(auth.id, {
       ...restInput,
       password: password ? this.authService.hashPassword(password) : undefined,
     });
 
-    return this.userViewer(updatedData);
+    return this.userWithTokenViewer(updatedData);
   }
 
   private async checkUniqueUser(

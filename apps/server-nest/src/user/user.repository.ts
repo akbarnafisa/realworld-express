@@ -25,6 +25,14 @@ export class UserRepository {
     });
   }
 
+  async getUserById(id: number): Promise<UserEntity | null> {
+    return await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async getUserByEmailOrName(
     email: string,
     username: string,
@@ -43,10 +51,10 @@ export class UserRepository {
     });
   }
 
-  async updateUser(email: string, updateUserDto: RequestUserUpdateDto) {
+  async updateUser(id: number, updateUserDto: RequestUserUpdateDto) {
     return await this.prisma.user.update({
       where: {
-        email,
+        id,
       },
       data: updateUserDto,
     });

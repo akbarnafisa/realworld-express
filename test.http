@@ -5,16 +5,19 @@ Accept: application/json
 
 {
   "user": {
-    "username" : "112345",
-    "password" : "rahasia123",
-    "email" : "wow@wow.com"
+    "username" : "gaming",
+    "password" : "password123",
+    "email" : "gaming@gaming.com"
   }
 }
+
+
 
 GET http://localhost:3000/api/user
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTcsInVzZXJuYW1lIjoiMTIzc3MiLCJlbWFpbCI6IjIxc3NAd293LmNvbSIsImlhdCI6MTcwMjQ1MzA5MiwiZXhwIjoxNzAzMDU3ODkyfQ.t86onxxPGWEabPCo16SzAM6jTNOUU_lIw5sSBzNXVI8
+Authorization: Bearer eyJhbGxciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMjU0NTU4OCwiZXhwIjoxNzAzMTUwMzg4fQ.FGHpN4FnqLE5mrZr1I2d6ULSCf5AR_imlCJgJXAcSus
+
 
 POST http://localhost:3000/api/user/login
 Content-Type: application/json
@@ -22,10 +25,24 @@ Accept: application/json
 
 {
   "user": {
-    "password" : "rahasssia123",
-    "email" : "wasdow@wow.com"
+    "password" : "password123",
+    "email" : "ozixxnz@ozin.com"
   }
 }
+
+PATCH  http://localhost:3000/api/user
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMjU0NTY2NSwiZXhwIjoxNzAzMTUwNDY1fQ.-3TnOA4m-uxpqz4h63fqwE4TOELJQDsRll1kLNo5dzQ
+
+{
+  "user" : {
+    "username" : "ozxxxin",
+    "email" : "ozixxnz@ozin.com",
+    "bio": "gaming"
+  }
+} 
+
 
 
 
