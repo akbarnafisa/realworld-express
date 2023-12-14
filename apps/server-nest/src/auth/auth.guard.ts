@@ -1,15 +1,18 @@
 import {
   CanActivate,
-  HttpStatus,
   ExecutionContext,
   Injectable,
   HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+class BaseGuard implements CanActivate {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly isRequired: boolean,
+  ) {}
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
@@ -18,7 +21,8 @@ export class AuthGuard implements CanActivate {
     this.isTokenExist(!!tokenString);
 
     try {
-      request.auth = this.authService.getToken(tokenString);
+      const token = this.authService.getToken(tokenString, this.isRequired);
+      this.authService.setAuthData(token);
       return true;
     } catch (error) {
       throw new HttpException(
@@ -33,5 +37,27 @@ export class AuthGuard implements CanActivate {
       throw new HttpException('Not authorized', HttpStatus.UNAUTHORIZED);
     }
     return true;
+  }
+}
+
+@Injectable()
+export class AuthGuard extends BaseGuard {
+  constructor(authService: AuthService) {
+    super(authService, true);
+  }
+
+  async canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+}
+
+@Injectable()
+export class OptionalAuthGuard extends BaseGuard {
+  constructor(authService: AuthService) {
+    super(authService, false);
+  }
+
+  async canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
   }
 }

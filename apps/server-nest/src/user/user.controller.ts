@@ -5,14 +5,12 @@ import {
   Body,
   UsePipes,
   UseGuards,
-  Request,
   Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RequestCreateUserDto } from './dto/request/request-create-user.dto';
-import { RequestValidationPipe } from '@app/common/common.pipe';
+import { RequestValidationPipe, ResponsePipe } from '@app/common/common.pipe';
 import { ResponseUserWithTokenDto } from './dto/response/response-user-with-token.dto';
-import { AuthEntities } from '@app/auth/entities/auth.entities';
 import { ResponseUserDto } from './dto/response/response-user.dto';
 import { AuthGuard } from '@app/auth/auth.guard';
 import { RequestLoginUserDto } from './dto/request/request-login-user.dto';
@@ -32,10 +30,9 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get('user')
-  @UsePipes(new RequestValidationPipe())
-  async getUserCurrent(@Request() req): Promise<ResponseUserDto> {
-    const auth = req.auth as AuthEntities;
-    return await this.userService.getCurrentUser(auth);
+  @UsePipes(new RequestValidationPipe(), new ResponsePipe())
+  async getUserCurrent(): Promise<ResponseUserDto> {
+    return await this.userService.getCurrentUser();
   }
 
   @Post('user/login')
@@ -50,10 +47,8 @@ export class UserController {
   @Patch('user')
   @UsePipes(new RequestValidationPipe())
   async update(
-    @Request() req,
     @Body('user') updateUserDto: RequestUserUpdateDto,
   ): Promise<ResponseUserDto> {
-    const auth = req.auth as AuthEntities;
-    return await this.userService.updateUser(auth, updateUserDto);
+    return await this.userService.updateUser(updateUserDto);
   }
 }

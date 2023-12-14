@@ -6,6 +6,8 @@ import { AuthEntities } from './entities/auth.entities';
 
 @Injectable()
 export class AuthService {
+  private authData: AuthEntities | undefined;
+
   hashPassword(password: string) {
     console.log({
       bcrypt,
@@ -30,10 +32,15 @@ export class AuthService {
   verifyToken(token: string) {
     return jwt.verify(token, this.getSecretKey(), {
       algorithms: ['HS256'],
-    }) as unknown as AuthEntities;
+    });
   }
 
-  getToken(auth: string | undefined) {
+  getToken(auth: string | undefined, isRequired: boolean) {
+    if (!isRequired) {
+      const token = auth?.split('Bearer ')[1] || '';
+      return this.verifyToken(token) as AuthEntities;
+    }
+
     if (!auth || !auth.startsWith('Bearer ')) {
       throw new HttpException(
         'No authorization token was found',
@@ -43,7 +50,7 @@ export class AuthService {
 
     const token = auth.split('Bearer ')[1];
 
-    const payload = this.verifyToken(token);
+    const payload = this.verifyToken(token) as AuthEntities;
 
     if (!payload || !payload.id || !payload.email || !payload.username) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
@@ -54,6 +61,14 @@ export class AuthService {
 
   checkPassword(password: string, hash: string) {
     return bcrypt.compareSync(password, hash);
+  }
+
+  setAuthData(data: AuthEntities) {
+    this.authData = data;
+  }
+
+  getAuthData() {
+    return this.authData;
   }
 
   private getSecretKey() {

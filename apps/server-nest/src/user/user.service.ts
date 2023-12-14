@@ -6,7 +6,6 @@ import { UserCheck } from './user.check';
 import { AuthService } from '@app/auth/auth.service';
 import { ResponseUserWithTokenDto } from './dto/response/response-user-with-token.dto';
 import { ResponseUserDto } from './dto/response/response-user.dto';
-import { AuthEntities } from '@app/auth/entities/auth.entities';
 import { RequestLoginUserDto } from './dto/request/request-login-user.dto';
 import { RequestUserUpdateDto } from './dto/request/request-update-user.dto';
 
@@ -62,7 +61,14 @@ export class UserService {
     return this.userWithTokenViewer(userData);
   }
 
-  async getCurrentUser(auth: AuthEntities): Promise<ResponseUserDto> {
+  async getCurrentUser(): Promise<ResponseUserDto> {
+    const auth = this.authService.getAuthData();
+    if (!auth) {
+      throw new HttpException(
+        'No authorization token was found',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
     const userData = await this.userRepository.getUserByEmail(auth.email);
 
     if (!userData) {
@@ -73,9 +79,16 @@ export class UserService {
   }
 
   async updateUser(
-    auth: AuthEntities,
     updateUserDto: RequestUserUpdateDto,
   ): Promise<ResponseUserDto> {
+    const auth = this.authService.getAuthData();
+    if (!auth) {
+      throw new HttpException(
+        'No authorization token was found',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
     const { password, ...restInput } = updateUserDto;
     const currentUserData = await this.userRepository.getUserByEmail(
       auth.email,

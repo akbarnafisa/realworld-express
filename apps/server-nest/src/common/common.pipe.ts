@@ -9,7 +9,7 @@ import { plainToInstance } from 'class-transformer';
 import { HttpExceptionCustom } from './common.exception';
 
 @Injectable()
-export class CommonPipe implements PipeTransform {
+export class RequestValidationPipe implements PipeTransform {
   async transform(value: any, { metatype }: ArgumentMetadata) {
     if (!metatype) {
       return value;
@@ -69,5 +69,15 @@ export class CommonPipe implements PipeTransform {
     if (Object.keys(value).length > 0) {
       return false;
     }
+  }
+}
+
+@Injectable()
+export class ResponsePipe implements PipeTransform {
+  async transform(value: any, { metatype }: ArgumentMetadata) {
+    console.log({
+      value,
+      metatype,
+    });
   }
 }
