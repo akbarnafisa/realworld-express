@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PrismaClientExceptionFilter } from './prisma/prisma.filter';
 import { HttpExceptionFilter } from './common/common.filter';
+import { TransformInterceptor } from './common/common.interception';
 
 if (process.env.NODE_ENV || process.env.NODE_ENV === 'prod') {
   require('module-alias/register');
@@ -23,6 +24,7 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   app.enableShutdownHooks();
   await app.listen(APP_PORT, () =>
