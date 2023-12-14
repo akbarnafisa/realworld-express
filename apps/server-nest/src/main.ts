@@ -3,6 +3,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PrismaClientExceptionFilter } from './prisma/prisma.filter';
+import { HttpExceptionFilter } from './common/common.filter';
 
 if (process.env.NODE_ENV || process.env.NODE_ENV === 'prod') {
   require('module-alias/register');
@@ -21,6 +22,8 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document);
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   app.enableShutdownHooks();
   await app.listen(APP_PORT, () =>
     console.log(`===>>>> Server is running on port ${APP_PORT}`),

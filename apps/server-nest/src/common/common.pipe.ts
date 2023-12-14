@@ -1,12 +1,12 @@
 import {
   ArgumentMetadata,
-  HttpException,
   HttpStatus,
   Injectable,
   PipeTransform,
 } from '@nestjs/common';
 import { ValidationError, validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { HttpExceptionCustom } from './common.exception';
 
 @Injectable()
 export class CommonPipe implements PipeTransform {
@@ -20,8 +20,10 @@ export class CommonPipe implements PipeTransform {
     }
 
     if (this.isEmpty(value)) {
-      throw new HttpException(
-        'Validation failed: No body submitted',
+      throw new HttpExceptionCustom(
+        {
+          errorMsg: 'Validation failed: No body submitted',
+        },
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -35,9 +37,9 @@ export class CommonPipe implements PipeTransform {
     const errors = await validate(object);
 
     if (errors.length > 0) {
-      throw new HttpException(
+      throw new HttpExceptionCustom(
         {
-          errors: this.buildError(errors),
+          fieldError: this.buildError(errors),
         },
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
