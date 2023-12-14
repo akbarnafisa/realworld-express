@@ -14,18 +14,13 @@ export class AuthService {
   }
 
   createUserToken(user: Pick<UserEntity, 'id' | 'email' | 'username'>) {
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      throw new Error('JWT_SECRET missing in environment');
-    }
-
     return jwt.sign(
       {
         id: user.id,
         username: user.username,
         email: user.email,
       },
-      secret,
+      this.getSecretKey(),
       {
         expiresIn: '7d',
       },
@@ -33,10 +28,9 @@ export class AuthService {
   }
 
   verifyToken(token: string) {
-    const secret = process.env.JWT_SECRET;
-    return jwt.verify(token, secret, {
+    return jwt.verify(token, this.getSecretKey(), {
       algorithms: ['HS256'],
-    }) as AuthEntities;
+    }) as unknown as AuthEntities;
   }
 
   getToken(auth: string | undefined) {
@@ -60,5 +54,14 @@ export class AuthService {
 
   checkPassword(password: string, hash: string) {
     return bcrypt.compareSync(password, hash);
+  }
+
+  private getSecretKey() {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error('JWT_SECRET missing in environment');
+    }
+
+    return secret;
   }
 }

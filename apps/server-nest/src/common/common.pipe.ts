@@ -6,11 +6,15 @@ import {
   PipeTransform,
 } from '@nestjs/common';
 import { ValidationError, validate } from 'class-validator';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class CommonPipe implements PipeTransform {
-  async transform(value: any, metadata: ArgumentMetadata) {
+  async transform(value: any, { metatype }: ArgumentMetadata) {
+    if (!metatype) {
+      return value;
+    }
+
     if (typeof value === 'string') {
       return value.trim();
     }
@@ -22,7 +26,7 @@ export class CommonPipe implements PipeTransform {
       );
     }
 
-    const object = plainToClass(metadata.metatype, value);
+    const object = plainToInstance(metatype, value);
 
     if (typeof object !== 'object') {
       return value;
@@ -48,7 +52,7 @@ export class CommonPipe implements PipeTransform {
     errors.forEach((error) => {
       if (error.children && error.children.length > 0) {
         result[error.property] = this.buildError(error.children);
-      } else {
+      } else if (error.constraints) {
         result[error.property] = Object.values(error.constraints);
       }
     });
