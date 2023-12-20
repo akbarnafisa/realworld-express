@@ -7,6 +7,7 @@ import {
 import { ValidationError, validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { HttpExceptionCustom } from './common.exception';
+import { ValidationError as ValidationErrorYup } from 'yup';
 
 @Injectable()
 export class RequestValidationPipe implements PipeTransform {
@@ -79,5 +80,36 @@ export class ResponsePipe implements PipeTransform {
       value,
       metatype,
     });
+  }
+}
+
+const serializeValidationError = (err: ValidationErrorYup) => {
+  const res = {};
+
+  err.inner.map(({ path, message }) => {
+    if (path) {
+      res[path] = [message];
+    }
+  });
+  return res;
+};
+
+@Injectable()
+export class YupValidationPipe implements PipeTransform {
+  async transform(value: any, { metatype }: ArgumentMetadata) {
+    const { schema } = metatype?.prototype;
+    if (!schema) return value;
+
+    try {
+      await schema.validate(value, { abortEarly: false });
+    } catch (err) {
+      throw new HttpExceptionCustom(
+        {
+          fieldError: serializeValidationError(err),
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return value;
   }
 }

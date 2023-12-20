@@ -1,7 +1,10 @@
 import { UseYupSchema } from '@app/common/common.decorator';
-import { object, string, array } from 'yup';
+import { ArticleCreateInputType } from 'validator';
+import { type AnySchema, object, string, array } from 'yup';
 
-export const articleInputSchema = object({
+export const articleInputSchema = object<
+  Record<keyof ArticleCreateInputType, AnySchema>
+>({
   title: string()
     .trim()
     .required('Title is required')
@@ -22,7 +25,9 @@ export const articleInputSchema = object({
 });
 
 @UseYupSchema(articleInputSchema)
-export class AuthCredentialsDto {
-  username: string;
-  password: string;
+export class RequestCreateArticleDto implements ArticleCreateInputType {
+  body: string; // String!
+  description: string; // String!
+  tagList: string[]; // [String!]!
+  title: string; // String!
 }
