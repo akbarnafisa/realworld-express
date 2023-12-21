@@ -126,7 +126,7 @@ export class ArticleRepository {
     return data;
   }
 
-  async deleteArticleBySlug(slug: string) {
+  async deleteArticleBySlug(slug: string): Promise<ArticleEntity> {
     const data = this.prisma.article.delete({
       where: {
         slug,
@@ -226,7 +226,7 @@ export class ArticleRepository {
   async getFeedArticle(
     userId: number,
     { limit, offset }: IArticleQueryRequiredParams,
-  ) {
+  ): Promise<{ data: ArticleWithRelationEntity[]; articlesCount: number }> {
     const data = await this.prisma.article.findMany({
       skip: offset,
       take: limit,
@@ -268,7 +268,7 @@ export class ArticleRepository {
   async getArticles(
     userId: number | undefined,
     { limit, offset, ...restQuery }: IArticleQueryRequiredParams,
-  ) {
+  ): Promise<{ data: ArticleWithRelationEntity[]; articlesCount: number }> {
     const data = await this.prisma.article.findMany({
       skip: offset,
       take: limit,

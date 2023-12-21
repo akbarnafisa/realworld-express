@@ -5,6 +5,7 @@ import { ArticleRepository } from './article.repository';
 import { ArticleWithRelationEntity } from './entities/article.entity';
 import { ArticleCheck } from './article.check';
 import { IArticleQueryRequiredParams } from './article.interface';
+import { ArticleResponseType, ArticlesResponseType } from 'validator';
 
 @Injectable()
 export class ArticleService {
@@ -105,7 +106,9 @@ export class ArticleService {
     });
   }
 
-  private articleViewer(article: ArticleWithRelationEntity) {
+  private articleViewer(
+    article: ArticleWithRelationEntity,
+  ): ArticleResponseType {
     const favoritesCount = article?._count?.favoritedBy || 0;
     const tags = article.tags.map((data) => data.tag.name);
     const favorited = article.favoritedBy
@@ -143,7 +146,7 @@ export class ArticleService {
     opt: {
       articlesCount: number;
     },
-  ) {
+  ): ArticlesResponseType {
     const articlesData = articles.map(
       (article) => this.articleViewer(article).article,
     );
