@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Get,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { RequestCreateArticleDto } from './dto/request/request-create-article.dto';
 import { YupValidationPipe } from '@app/common/common.pipe';
@@ -19,9 +27,16 @@ export class ArticleController {
 
   @UseGuards(OptionalAuthGuard)
   @Get('article/:slug')
-  async getUserCurrent(
+  async getArticleBySlug(
     @Param('slug') slug: string,
   ): Promise<ArticleResponseType | void> {
     return await this.articleService.getArticleBySlug(slug);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('article/:slug')
+  async deleteArticleBySlug(@Param('slug') slug: string) {
+    await this.articleService.deleteArticleBySlug(slug);
+    return null;
   }
 }

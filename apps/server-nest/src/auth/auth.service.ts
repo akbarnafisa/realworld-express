@@ -71,8 +71,19 @@ export class AuthService {
     this.authData = data;
   }
 
-  getAuthData() {
-    return this.authData;
+  getAuthData<T extends boolean>(
+    isRequired: T,
+  ): T extends true ? AuthEntities : AuthEntities | undefined {
+    if (isRequired && this.authData === undefined) {
+      throw new HttpException(
+        'No authorization token was found',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    return this.authData as T extends true
+      ? AuthEntities
+      : AuthEntities | undefined;
   }
 
   private getSecretKey() {

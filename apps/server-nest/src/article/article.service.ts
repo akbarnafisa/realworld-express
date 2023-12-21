@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RequestCreateArticleDto } from './dto/request/request-create-article.dto';
 import { AuthService } from '@app/auth/auth.service';
 import { ArticleRepository } from './article.repository';
@@ -13,34 +13,37 @@ export class ArticleService {
     private articleCheck: ArticleCheck,
   ) {}
   async create(createArticleDto: RequestCreateArticleDto) {
-    const auth = this.authService.getAuthData();
-    if (!auth) {
-      throw new HttpException(
-        'No authorization token was found',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    const auth = this.authService.getAuthData(true);
 
     const data = await this.articleRepository.createUser(
       auth.id,
       createArticleDto,
     );
 
-    return this.userViewer(data);
+    return this.articleViewer(data);
   }
 
   async getArticleBySlug(slug: string) {
-    const auth = this.authService.getAuthData();
+    const auth = this.authService.getAuthData(false);
     const data = await this.articleRepository.getArticleBySlug(auth?.id, slug);
 
     if (!data) {
       return this.articleCheck.ArticleNotFoundError();
     }
 
-    return this.userViewer(data);
+    return this.articleViewer(data);
   }
 
-  private userViewer(article: ArticleWithRelationEntity) {
+  async deleteArticleBySlug(slug: string) {
+    const auth = this.authService.getAuthData(true);
+
+    const originArticle = await this.checkExistArticle(slug);
+    this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
+
+    await this.articleRepository.deleteArticleBySlug(slug);
+  }
+
+  private articleViewer(article: ArticleWithRelationEntity) {
     const favoritesCount = article?._count?.favoritedBy || 0;
     const tags = article.tags.map((data) => data.tag.name);
     const favorited = article.favoritedBy
@@ -71,5 +74,15 @@ export class ArticleService {
         author,
       },
     };
+  }
+
+  private async checkExistArticle(slug: string) {
+    const data = await this.articleRepository.getArticleBySlug(undefined, slug);
+
+    if (!data) {
+      this.articleCheck.ArticleNotFoundError();
+    }
+
+    return data;
   }
 }

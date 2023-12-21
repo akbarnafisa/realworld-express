@@ -91,4 +91,14 @@ export class ArticleRepository {
 
     return data;
   }
+
+  async deleteArticleBySlug(slug: string) {
+    const data = this.prisma.article.delete({
+      where: {
+        slug,
+      },
+    });
+
+    return data;
+  }
 }

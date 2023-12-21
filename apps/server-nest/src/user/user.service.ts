@@ -62,13 +62,8 @@ export class UserService {
   }
 
   async getCurrentUser(): Promise<ResponseUserDto> {
-    const auth = this.authService.getAuthData();
-    if (!auth) {
-      throw new HttpException(
-        'No authorization token was found',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    const auth = this.authService.getAuthData(true);
+
     const userData = await this.userRepository.getUserById(auth.id);
 
     if (!userData) {
@@ -81,13 +76,7 @@ export class UserService {
   async updateUser(
     updateUserDto: RequestUserUpdateDto,
   ): Promise<ResponseUserDto> {
-    const auth = this.authService.getAuthData();
-    if (!auth) {
-      throw new HttpException(
-        'No authorization token was found',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    const auth = this.authService.getAuthData(true);
 
     const { password, ...restInput } = updateUserDto;
     const currentUserData = await this.userRepository.getUserById(auth.id);
