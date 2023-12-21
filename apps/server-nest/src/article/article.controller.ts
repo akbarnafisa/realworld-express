@@ -1,31 +1,19 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { RequestCreateArticleDto } from './dto/request/request-create-article.dto';
 import { YupValidationPipe } from '@app/common/common.pipe';
+import { AuthGuard } from '@app/auth/auth.guard';
+import { ArticleResponseType } from 'validator';
 
 @Controller()
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
+  @UseGuards(AuthGuard)
   @Post('article')
-  create(@Body(YupValidationPipe) createArticleDto: RequestCreateArticleDto) {
-    console.log(createArticleDto);
-    return this.articleService.create();
+  async create(
+    @Body(YupValidationPipe) createArticleDto: RequestCreateArticleDto,
+  ): Promise<ArticleResponseType> {
+    return await this.articleService.create(createArticleDto);
   }
-
-  // @Post('user')
-  // @UsePipes(new RequestValidationPipe())
-  // async create(
-  //   @Body('user') createUserDto: RequestCreateUserDto,
-  // ): Promise<ResponseUserWithTokenDto> {
-  //   return await this.userService.create(createUserDto);
-  // }
-
-  // @Post('/signup')
-  // signUp(
-  //   @Body(YupValidationPipe)
-  //   authCredentialsDto: AuthCredentialsDto,
-  // ): Promise<void> {
-  //   return this.authService.signUp(authCredentialsDto);
-  // }
 }
