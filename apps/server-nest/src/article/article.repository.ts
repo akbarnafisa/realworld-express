@@ -75,13 +75,18 @@ export class ArticleRepository {
       },
       include: articleIncludes(userId),
     });
+    return data;
+  }
 
-    console.log({
-      data,
-      body,
-      description,
-      title,
-      tagList,
+  async getArticleBySlug(
+    userId: number | undefined,
+    slug: string,
+  ): Promise<ArticleWithRelationEntity | null> {
+    const data = this.prisma.article.findUnique({
+      where: {
+        slug,
+      },
+      include: articleIncludes(userId),
     });
 
     return data;

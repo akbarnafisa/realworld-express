@@ -18,11 +18,15 @@ class BaseGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const tokenString = request.headers.authorization;
 
-    this.isTokenExist(!!tokenString);
+    this.isRequired && this.isTokenExist(!!tokenString);
 
     try {
       const token = this.authService.getToken(tokenString, this.isRequired);
-      this.authService.setAuthData(token);
+      if (!token && !this.isRequired) {
+        return true;
+      }
+
+      token && this.authService.setAuthData(token);
       return true;
     } catch (error) {
       throw new HttpException(

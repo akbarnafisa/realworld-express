@@ -3,12 +3,14 @@ import { RequestCreateArticleDto } from './dto/request/request-create-article.dt
 import { AuthService } from '@app/auth/auth.service';
 import { ArticleRepository } from './article.repository';
 import { ArticleWithRelationEntity } from './entities/article.entity';
+import { ArticleCheck } from './article.check';
 
 @Injectable()
 export class ArticleService {
   constructor(
     private articleRepository: ArticleRepository,
     private authService: AuthService,
+    private articleCheck: ArticleCheck,
   ) {}
   async create(createArticleDto: RequestCreateArticleDto) {
     const auth = this.authService.getAuthData();
@@ -23,6 +25,17 @@ export class ArticleService {
       auth.id,
       createArticleDto,
     );
+
+    return this.userViewer(data);
+  }
+
+  async getArticleBySlug(slug: string) {
+    const auth = this.authService.getAuthData();
+    const data = await this.articleRepository.getArticleBySlug(auth?.id, slug);
+
+    if (!data) {
+      return this.articleCheck.ArticleNotFoundError();
+    }
 
     return this.userViewer(data);
   }

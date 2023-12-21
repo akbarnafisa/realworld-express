@@ -38,6 +38,10 @@ export class AuthService {
   getToken(auth: string | undefined, isRequired: boolean) {
     if (!isRequired) {
       const token = auth?.split('Bearer ')[1] || '';
+      if (!token) {
+        return null;
+      }
+
       return this.verifyToken(token) as AuthEntities;
     }
 
