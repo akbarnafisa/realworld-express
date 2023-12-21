@@ -52,4 +52,18 @@ export class ArticleController {
       updateArticleDto,
     );
   }
+
+  @UseGuards(AuthGuard)
+  @Post('article/:slug/favorite')
+  async favoriteArticle(@Param('slug') slug: string) {
+    await this.articleService.favoriteArticleBySlug(slug);
+    return null;
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('article/:slug/unfavorite')
+  async unFavoriteArticle(@Param('slug') slug: string) {
+    await this.articleService.unFavoriteArticleBySlug(slug);
+    return null;
+  }
 }

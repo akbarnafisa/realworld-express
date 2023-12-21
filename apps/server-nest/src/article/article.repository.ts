@@ -144,4 +144,51 @@ export class ArticleRepository {
 
     return data;
   }
+
+  async favoriteArticleBySlug(userId: number, slug: string) {
+    return this.prisma.article
+      .update({
+        where: {
+          slug,
+        },
+        data: {
+          favoritedBy: {
+            create: {
+              userId,
+            },
+          },
+        },
+      })
+      .then(
+        () => {},
+        () => {},
+      );
+  }
+
+  async unFavoriteArticleBySlug(
+    userId: number,
+    articleId: number,
+    slug: string,
+  ) {
+    return this.prisma.article
+      .update({
+        where: {
+          slug,
+        },
+        data: {
+          favoritedBy: {
+            delete: {
+              userId_articleId: {
+                userId,
+                articleId,
+              },
+            },
+          },
+        },
+      })
+      .then(
+        () => {},
+        () => {},
+      );
+  }
 }

@@ -60,6 +60,28 @@ export class ArticleService {
     return this.articleViewer(data);
   }
 
+  async favoriteArticleBySlug(slug: string) {
+    const auth = this.authService.getAuthData(true);
+
+    const originArticle = await this.checkExistArticle(slug);
+    this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
+
+    await this.articleRepository.favoriteArticleBySlug(auth.id, slug);
+  }
+
+  async unFavoriteArticleBySlug(slug: string) {
+    const auth = this.authService.getAuthData(true);
+
+    const originArticle = await this.checkExistArticle(slug);
+    this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
+
+    await this.articleRepository.unFavoriteArticleBySlug(
+      auth.id,
+      originArticle.id,
+      slug,
+    );
+  }
+
   private articleViewer(article: ArticleWithRelationEntity) {
     const favoritesCount = article?._count?.favoritedBy || 0;
     const tags = article.tags.map((data) => data.tag.name);
