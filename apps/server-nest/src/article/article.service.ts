@@ -94,6 +94,17 @@ export class ArticleService {
     });
   }
 
+  async getArticles(params: IArticleQueryRequiredParams) {
+    const auth = this.authService.getAuthData(false);
+    const { data, articlesCount } = await this.articleRepository.getArticles(
+      auth?.id,
+      params,
+    );
+    return this.articlesViewer(data, {
+      articlesCount,
+    });
+  }
+
   private articleViewer(article: ArticleWithRelationEntity) {
     const favoritesCount = article?._count?.favoritedBy || 0;
     const tags = article.tags.map((data) => data.tag.name);

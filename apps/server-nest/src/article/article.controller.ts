@@ -78,4 +78,13 @@ export class ArticleController {
     const params = parseQueryParams(query);
     return await this.articleService.getFeedArticle(params);
   }
+
+  @UseGuards(OptionalAuthGuard)
+  @Get('articles')
+  async getArticles(
+    @Query() query: IArtilceQueryParams,
+  ): Promise<ArticlesResponseType> {
+    const params = parseQueryParams(query);
+    return await this.articleService.getArticles(params);
+  }
 }

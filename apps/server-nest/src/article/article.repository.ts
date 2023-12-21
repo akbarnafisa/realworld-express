@@ -7,6 +7,7 @@ import {
 } from './entities/article.entity';
 import * as slug from 'slug';
 import { IArticleQueryRequiredParams } from './article.interface';
+import { Prisma } from '@prisma/client';
 
 const slugify = (title: string): string => {
   return `${slug(title, { lower: true })}-${(
@@ -48,7 +49,36 @@ const articleIncludes = (userId: number | undefined) => {
   };
 };
 
-console.log(articleIncludes);
+const articlesQueryFilter = ({
+  tag,
+  author,
+  favorited,
+}: {
+  tag?: string;
+  author?: string;
+  favorited?: string;
+}) => {
+  return Prisma.validator<Prisma.ArticleWhereInput>()({
+    AND: [
+      // { del: false },
+      { author: author ? { username: author } : undefined },
+      { tags: tag ? { some: { tag: { name: tag } } } : undefined },
+      {
+        favoritedBy: favorited
+          ? {
+              // this "some" operator somehow could not work with the nested undefined value in an "AND" array
+              some: {
+                // favoritedBy: { username: favorited },
+                user: {
+                  username: favorited,
+                },
+              },
+            }
+          : undefined,
+      },
+    ],
+  });
+};
 
 @Injectable()
 export class ArticleRepository {
@@ -226,6 +256,32 @@ export class ArticleRepository {
             },
           },
         },
+      })
+    ).length;
+
+    return {
+      data,
+      articlesCount,
+    };
+  }
+
+  async getArticles(
+    userId: number | undefined,
+    { limit, offset, ...restQuery }: IArticleQueryRequiredParams,
+  ) {
+    const data = await this.prisma.article.findMany({
+      skip: offset,
+      take: limit,
+      where: articlesQueryFilter(restQuery),
+      include: articleIncludes(userId),
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    const articlesCount = (
+      await this.prisma.article.findMany({
+        where: articlesQueryFilter(restQuery),
       })
     ).length;
 
