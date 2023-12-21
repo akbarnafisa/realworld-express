@@ -4,6 +4,7 @@ import { AuthService } from '@app/auth/auth.service';
 import { ArticleRepository } from './article.repository';
 import { ArticleWithRelationEntity } from './entities/article.entity';
 import { ArticleCheck } from './article.check';
+import { IArticleQueryRequiredParams } from './article.interface';
 
 @Injectable()
 export class ArticleService {
@@ -82,6 +83,17 @@ export class ArticleService {
     );
   }
 
+  async getFeedArticle(params: IArticleQueryRequiredParams) {
+    const auth = this.authService.getAuthData(true);
+    const { data, articlesCount } = await this.articleRepository.getFeedArticle(
+      auth.id,
+      params,
+    );
+    return this.articlesViewer(data, {
+      articlesCount,
+    });
+  }
+
   private articleViewer(article: ArticleWithRelationEntity) {
     const favoritesCount = article?._count?.favoritedBy || 0;
     const tags = article.tags.map((data) => data.tag.name);
@@ -112,6 +124,22 @@ export class ArticleService {
         tags,
         author,
       },
+    };
+  }
+
+  private articlesViewer(
+    articles: ArticleWithRelationEntity[],
+    opt: {
+      articlesCount: number;
+    },
+  ) {
+    const articlesData = articles.map(
+      (article) => this.articleViewer(article).article,
+    );
+
+    return {
+      articles: articlesData,
+      articlesCount: Number(opt.articlesCount),
     };
   }
 

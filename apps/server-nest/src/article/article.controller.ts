@@ -7,12 +7,15 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { RequestCreateArticleDto } from './dto/request/request-create-article.dto';
 import { YupValidationPipe } from '@app/common/common.pipe';
 import { AuthGuard, OptionalAuthGuard } from '@app/auth/auth.guard';
-import { ArticleResponseType } from 'validator';
+import { ArticleResponseType, ArticlesResponseType } from 'validator';
+import { IArtilceQueryParams } from './article.interface';
+import { parseQueryParams } from './article.helper';
 
 @Controller()
 export class ArticleController {
@@ -30,7 +33,7 @@ export class ArticleController {
   @Get('article/:slug')
   async getArticleBySlug(
     @Param('slug') slug: string,
-  ): Promise<ArticleResponseType | void> {
+  ): Promise<ArticleResponseType> {
     return await this.articleService.getArticleBySlug(slug);
   }
 
@@ -65,5 +68,14 @@ export class ArticleController {
   async unFavoriteArticle(@Param('slug') slug: string) {
     await this.articleService.unFavoriteArticleBySlug(slug);
     return null;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('articles/feed')
+  async getFeedArticle(
+    @Query() query: IArtilceQueryParams,
+  ): Promise<ArticlesResponseType> {
+    const params = parseQueryParams(query);
+    return await this.articleService.getFeedArticle(params);
   }
 }

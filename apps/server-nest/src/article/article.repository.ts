@@ -6,6 +6,7 @@ import {
   ArticleWithRelationEntity,
 } from './entities/article.entity';
 import * as slug from 'slug';
+import { IArticleQueryRequiredParams } from './article.interface';
 
 const slugify = (title: string): string => {
   return `${slug(title, { lower: true })}-${(
@@ -190,5 +191,47 @@ export class ArticleRepository {
         () => {},
         () => {},
       );
+  }
+
+  async getFeedArticle(
+    userId: number,
+    { limit, offset }: IArticleQueryRequiredParams,
+  ) {
+    const data = await this.prisma.article.findMany({
+      skip: offset,
+      take: limit,
+      where: {
+        author: {
+          followedBy: {
+            some: {
+              followerId: userId,
+            },
+          },
+        },
+      },
+      include: articleIncludes(userId),
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    const articlesCount = (
+      await this.prisma.article.findMany({
+        where: {
+          author: {
+            followedBy: {
+              some: {
+                followerId: userId,
+              },
+            },
+          },
+        },
+      })
+    ).length;
+
+    return {
+      data,
+      articlesCount,
+    };
   }
 }
