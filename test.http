@@ -128,13 +128,13 @@ Accept: application/json
 
 
 
-POST http://localhost:3000/api/article/title-bc3gxy/favorite
+POST http://localhost:3000/api/article/title-nxtwj0/favorite
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
-POST http://localhost:3000/api/article/title-bc3gxy/unfavorite
+POST http://localhost:3000/api/article/title-nxtwj0/unfavorite
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
@@ -199,7 +199,7 @@ Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
-GET http://localhost:3000/api/articles?limit=5&author=ozin
+GET http://localhost:3000/api/articles?limit=5&author=ozinzs
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
