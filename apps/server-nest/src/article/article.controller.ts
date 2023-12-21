@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { RequestCreateArticleDto } from './dto/request/request-create-article.dto';
@@ -38,5 +39,17 @@ export class ArticleController {
   async deleteArticleBySlug(@Param('slug') slug: string) {
     await this.articleService.deleteArticleBySlug(slug);
     return null;
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('article/:slug')
+  async updaterticleBySlug(
+    @Param('slug') slug: string,
+    @Body(YupValidationPipe) updateArticleDto: RequestCreateArticleDto,
+  ) {
+    return await this.articleService.updateArticleBySlug(
+      slug,
+      updateArticleDto,
+    );
   }
 }

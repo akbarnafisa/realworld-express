@@ -1,7 +1,10 @@
 import { PrismaService } from '@app/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { RequestCreateArticleDto } from './dto/request/request-create-article.dto';
-import { ArticleWithRelationEntity } from './entities/article.entity';
+import {
+  ArticleEntity,
+  ArticleWithRelationEntity,
+} from './entities/article.entity';
 import * as slug from 'slug';
 
 const slugify = (title: string): string => {
@@ -49,7 +52,7 @@ console.log(articleIncludes);
 @Injectable()
 export class ArticleRepository {
   constructor(private prisma: PrismaService) {}
-  async createUser(
+  async createArticle(
     userId: number,
     { body, description, title, tagList }: RequestCreateArticleDto,
   ): Promise<ArticleWithRelationEntity> {
@@ -97,6 +100,46 @@ export class ArticleRepository {
       where: {
         slug,
       },
+    });
+
+    return data;
+  }
+
+  async updateArticle(
+    userId: number,
+    slug: string,
+    originArticle: ArticleEntity,
+    { body, description, title, tagList }: RequestCreateArticleDto,
+  ): Promise<ArticleWithRelationEntity> {
+    const isTitleChanged = title !== originArticle.title;
+    const data = this.prisma.article.update({
+      where: {
+        slug,
+      },
+      data: {
+        title: isTitleChanged ? title : undefined,
+        slug: isTitleChanged ? slugify(title) : undefined,
+        body,
+        description,
+        author: { connect: { id: userId } },
+        tags: {
+          // delete relation
+          deleteMany: { articleId: originArticle.id },
+          // connect again
+          create: tagList?.map((name: string) => {
+            return {
+              tag: {
+                connectOrCreate: {
+                  where: { name },
+                  create: { name },
+                },
+              },
+            };
+          }),
+        },
+        updatedAt: new Date(),
+      },
+      include: articleIncludes(userId),
     });
 
     return data;

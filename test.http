@@ -16,7 +16,7 @@ Accept: application/json
 GET http://localhost:3000/api/user
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGxciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMjU0NTU4OCwiZXhwIjoxNzAzMTUwMzg4fQ.FGHpN4FnqLE5mrZr1I2d6ULSCf5AR_imlCJgJXAcSus
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 POST http://localhost:3000/api/user/login
@@ -58,7 +58,7 @@ Accept: application/json
 GET http://localhost:3000/api/user
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzc294eHNkeEBhc29pLmNvbSIsImlkIjoxLCJ1c2VybmFtZSI6ImtoYW54Y2NjbmVkY2N5IiwiaWF0IjoxNzAwNDUzODQwLCJleHAiOjE3MDEwNTg2NDB9.oZ8GKAAklvIjgumEnsbpelk9koI7e6G-nCvxzftCT48
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 PATCH  http://localhost:3000/api/user
 Content-Type: application/json
@@ -76,37 +76,49 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzc294e
 POST  http://localhost:3000/api/article
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 {
-  "body": "bodsdysdsc",
-  "description": "descripassaddction",
-  "title": "ozixdsadsnn",
-  "tagList": ["x", "x"]
+  "body": "body",
+  "description": "description",
+  "title": "title",
+  "tagList": ["x13", "x213"]
 }
 
-
-
-PATCH  http://localhost:3000/api/article/hmm-xidorx
+GET  http://localhost:3000/api/article/ozixdsaccdsnn-rtlsrk
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
+
+
+PATCH  http://localhost:3000/api/article/ozixdsaccdsnn-pcfcuw
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 {
-  "body": "bbb",
+  "body": "ggg",
   "description": "bbb",
   "title": "hmm",
   "tagList": ["1", "2"]
 }
 
-
-
-
-DELETE  http://localhost:3000/api/article/ozixdsnn-zal5sj
+PUT  http://localhost:3000/api/article/title-nxtwj0
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
+{
+  "body": "zzz",
+  "description": "bbb",
+  "title": "title",
+  "tagList": ["x13", "x213"]
+}
+
+DELETE  http://localhost:3000/api/article/ozixdsaccdsnn-iiktra
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 GET http://localhost:3000/api/article/title-bc3gxy
@@ -119,13 +131,13 @@ Accept: application/json
 POST http://localhost:3000/api/article/title-bc3gxy/favorite
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 POST http://localhost:3000/api/article/title-bc3gxy/unfavorite
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 
@@ -138,28 +150,28 @@ Accept: application/json
 GET http://localhost:3000/api/user
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 
 POST http://localhost:3000/api/user/khanxcccnedccy/follow
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 
 POST http://localhost:3000/api/user/khanxcccnedccy/unfollow
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 
 POST http://localhost:3000/api/article/title-bc3gxy/comment
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 {
   "body": "wew"
@@ -168,7 +180,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab
 DELETE http://localhost:3000/api/article/title-bc3gxy/comment/12
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 GET http://localhost:3000/api/article/title-bc3gxy/comment?limit=1&offset=0
@@ -184,13 +196,13 @@ Accept: application/json
 GET http://localhost:3000/api/articles/feed?limit=1&cursor=2
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 GET http://localhost:3000/api/articles?limit=5&author=ozin
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96aW5Ab3ppbi5jb20iLCJpZCI6NCwidXNlcm5hbWUiOiJvemluIiwiaWF0IjoxNzAwMzAwMDI5LCJleHAiOjE3MDA5MDQ4Mjl9.pmnmq_OdHydtigV7oJrhE88DU44nx_fVGIOTIfXzI_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjEsInVzZXJuYW1lIjoib3p4eHhpbiIsImVtYWlsIjoib3ppeHhuekBvemluLmNvbSIsImlhdCI6MTcwMzA2NzAyNywiZXhwIjoxNzAzNjcxODI3fQ.KFWOijMF3nx6EdmxXrjMubYrFWa4ESUZqR--AkOK12M
 
 
 GET http://localhost:3000/api/articles?limit=1&cursor=48&author=ozin

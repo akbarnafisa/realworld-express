@@ -15,7 +15,7 @@ export class ArticleService {
   async create(createArticleDto: RequestCreateArticleDto) {
     const auth = this.authService.getAuthData(true);
 
-    const data = await this.articleRepository.createUser(
+    const data = await this.articleRepository.createArticle(
       auth.id,
       createArticleDto,
     );
@@ -27,11 +27,9 @@ export class ArticleService {
     const auth = this.authService.getAuthData(false);
     const data = await this.articleRepository.getArticleBySlug(auth?.id, slug);
 
-    if (!data) {
-      return this.articleCheck.ArticleNotFoundError();
-    }
+    const checkedData = this.articleCheck.checkArticleExist(data);
 
-    return this.articleViewer(data);
+    return this.articleViewer(checkedData);
   }
 
   async deleteArticleBySlug(slug: string) {
@@ -41,6 +39,25 @@ export class ArticleService {
     this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
 
     await this.articleRepository.deleteArticleBySlug(slug);
+  }
+
+  async updateArticleBySlug(
+    slug: string,
+    updateArticleDto: RequestCreateArticleDto,
+  ) {
+    const auth = this.authService.getAuthData(true);
+
+    const originArticle = await this.checkExistArticle(slug);
+    this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
+
+    const data = await this.articleRepository.updateArticle(
+      auth.id,
+      slug,
+      originArticle,
+      updateArticleDto,
+    );
+
+    return this.articleViewer(data);
   }
 
   private articleViewer(article: ArticleWithRelationEntity) {
@@ -78,11 +95,6 @@ export class ArticleService {
 
   private async checkExistArticle(slug: string) {
     const data = await this.articleRepository.getArticleBySlug(undefined, slug);
-
-    if (!data) {
-      this.articleCheck.ArticleNotFoundError();
-    }
-
-    return data;
+    return this.articleCheck.checkArticleExist(data);
   }
 }
