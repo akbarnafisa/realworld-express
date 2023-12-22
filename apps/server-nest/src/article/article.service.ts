@@ -37,7 +37,7 @@ export class ArticleService {
   async deleteArticleBySlug(slug: string) {
     const auth = this.authService.getAuthData(true);
 
-    const originArticle = await this.checkExistArticle(slug);
+    const originArticle = await this.articleCheck.checkExistArticle(slug);
     this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
 
     await this.articleRepository.deleteArticleBySlug(slug);
@@ -49,7 +49,7 @@ export class ArticleService {
   ) {
     const auth = this.authService.getAuthData(true);
 
-    const originArticle = await this.checkExistArticle(slug);
+    const originArticle = await this.articleCheck.checkExistArticle(slug);
     this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
 
     const data = await this.articleRepository.updateArticle(
@@ -65,7 +65,7 @@ export class ArticleService {
   async favoriteArticleBySlug(slug: string) {
     const auth = this.authService.getAuthData(true);
 
-    const originArticle = await this.checkExistArticle(slug);
+    const originArticle = await this.articleCheck.checkExistArticle(slug);
     this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
 
     await this.articleRepository.favoriteArticleBySlug(auth.id, slug);
@@ -74,7 +74,7 @@ export class ArticleService {
   async unFavoriteArticleBySlug(slug: string) {
     const auth = this.authService.getAuthData(true);
 
-    const originArticle = await this.checkExistArticle(slug);
+    const originArticle = await this.articleCheck.checkExistArticle(slug);
     this.articleCheck.checkArticleOwner(auth.id, originArticle?.authorId);
 
     await this.articleRepository.unFavoriteArticleBySlug(
@@ -155,10 +155,5 @@ export class ArticleService {
       articles: articlesData,
       articlesCount: Number(opt.articlesCount),
     };
-  }
-
-  private async checkExistArticle(slug: string) {
-    const data = await this.articleRepository.getArticleBySlug(undefined, slug);
-    return this.articleCheck.checkArticleExist(data);
   }
 }

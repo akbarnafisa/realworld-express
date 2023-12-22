@@ -9,6 +9,7 @@ import { ArticleCheck } from './article.check';
 @Module({
   controllers: [ArticleController],
   providers: [ArticleService, ArticleRepository, ArticleCheck],
+  exports: [ArticleCheck],
   imports: [PrismaModule, AuthModule],
 })
 export class ArticleModule {}

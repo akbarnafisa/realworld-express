@@ -1,34 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Get,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { YupValidationPipe } from '@app/common/common.pipe';
+import { RequestCreateCommentDto } from './dto/request/request-create-article.dto';
+import { AuthGuard } from '@app/auth/auth.guard';
+import { parseQueryParams } from './comment.helper';
+import { ICommentQueryParams } from './comment.interface';
 
-@Controller('comment')
+@Controller()
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentService.create(createCommentDto);
+  @Post('article/:slug/comment')
+  @UseGuards(AuthGuard)
+  createComment(
+    @Body(YupValidationPipe) createCommentDto: RequestCreateCommentDto,
+    @Param('slug') slug: string,
+  ) {
+    return this.commentService.createComment(slug, createCommentDto);
   }
 
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
+  @Get('article/:slug/comment')
+  @UseGuards(AuthGuard)
+  getComments(
+    @Param('slug') slug: string,
+    @Query() query: ICommentQueryParams,
+  ) {
+    const params = parseQueryParams(query);
+    return this.commentService.getComments(slug, params);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentService.update(+id, updateCommentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+  @Delete('article/:slug/comment/:commentId')
+  @UseGuards(AuthGuard)
+  deleteCommentById(
+    @Param('slug') slug: string,
+    @Param('commentId') commentId: string,
+  ) {
+    return this.commentService.deleteCommentById(Number(commentId), slug);
   }
 }
