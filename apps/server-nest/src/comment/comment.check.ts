@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { CommentRepository } from './comment.repository';
+import { CommentEntity } from './entities/comment.entity';
 
 export class CommentCheck {
   constructor(private commentRepository: CommentRepository) {}
 
-  checkComment<T>(data: T): NonNullable<T> {
+  checkComment<T extends CommentEntity | null>(data: T): NonNullable<T> {
     if (!data) {
       throw new HttpException('Comment not found!', HttpStatus.NOT_FOUND);
     }

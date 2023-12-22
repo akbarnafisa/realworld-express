@@ -1,26 +1,62 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { AuthService } from '@app/auth/auth.service';
+import { ProfileRepository } from './profile.repository';
+import { ProfileEntity } from './entities/profile.entity';
+import { ProfileResponseType } from 'validator';
+import { ProfileCheck } from './profile.check';
 
 @Injectable()
 export class ProfileService {
-  create(createProfileDto: CreateProfileDto) {
-    return 'This action adds a new profile';
+  constructor(
+    private profileRepository: ProfileRepository,
+    private profileCheck: ProfileCheck,
+    private authService: AuthService,
+  ) {}
+  async getProfileByUsername(username: string) {
+    const auth = this.authService.getAuthData(false);
+
+    const dataProfile = await this.profileRepository.getProfileByUsername(
+      auth?.id,
+      username,
+    );
+
+    const checkedData = this.profileCheck.checkProfileExist(dataProfile.data);
+
+    return this.profileViewer(checkedData, dataProfile.following);
   }
 
-  findAll() {
-    return `This action returns all profile`;
+  async followProfile(username: string) {
+    const auth = this.authService.getAuthData(true);
+
+    const followingUser = await this.profileCheck.checkExistProfile(username);
+    this.profileCheck.checkUserFollowingStatus(auth.id, followingUser.data.id);
+
+    await this.profileRepository.followProfile(auth.id, followingUser.data.id);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  async unFollowProfile(username: string) {
+    const auth = this.authService.getAuthData(true);
+
+    const followingUser = await this.profileCheck.checkExistProfile(username);
+    this.profileCheck.checkUserFollowingStatus(auth.id, followingUser.data.id);
+
+    await this.profileRepository.unFollowProfile(
+      auth.id,
+      followingUser.data.id,
+    );
   }
 
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+  private profileViewer(
+    data: ProfileEntity,
+    following: boolean,
+  ): ProfileResponseType {
+    return {
+      user: {
+        following,
+        username: data.username,
+        bio: data.bio,
+        image: data.image,
+      },
+    };
   }
 }

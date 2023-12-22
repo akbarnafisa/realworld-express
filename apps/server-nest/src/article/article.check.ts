@@ -1,11 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ArticleRepository } from './article.repository';
+import { ArticleWithRelationEntity } from './entities/article.entity';
 
 @Injectable()
 export class ArticleCheck {
   constructor(private articleRepository: ArticleRepository) {}
 
-  checkArticleExist<T>(data: T): NonNullable<T> {
+  checkArticleExist<T extends ArticleWithRelationEntity | null>(
+    data: T,
+  ): NonNullable<T> {
     if (!data) {
       throw new HttpException('Article not found!', HttpStatus.NOT_FOUND);
     }
